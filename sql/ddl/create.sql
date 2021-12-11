@@ -95,7 +95,6 @@ CREATE TABLE excursion_log (
                                reality_description varchar(1000),
                                log_status log_status,
                                retrieval_id int REFERENCES retrieval(id) on delete restrict on update cascade,
-                               required_extra_research bool,
                                note varchar(100),
                                priming_id int REFERENCES priming(id) on delete restrict on update cascade
 );
