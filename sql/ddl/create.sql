@@ -53,14 +53,14 @@ CREATE TABLE foundation (
                             location_id int REFERENCES location(id) on delete restrict on update cascade
 );
 
-CREATE TABLE "scp-object" (
-                              id serial,
-                              tag smallint,
-                              country_key varchar(2) NULL,
-                              name varchar(40),
-                              object_class object_class,
-                              foundation_id int NULL REFERENCES foundation(id) on delete set null on update cascade,
-                              PRIMARY KEY (id, tag)
+CREATE TABLE scp_object (
+                            id serial,
+                            tag smallint,
+                            country_key varchar(2) NULL,
+                            name varchar(40),
+                            object_class object_class,
+                            foundation_id int NULL REFERENCES foundation(id) on delete set null on update cascade,
+                            PRIMARY KEY (id, tag)
 );
 
 CREATE TABLE equipment (
@@ -81,10 +81,10 @@ CREATE TABLE equipment_contents (
 
 CREATE TABLE priming (
                          id serial PRIMARY KEY,
-                         "scp-object_id" int NULL CONSTRAINT "personnel_id_undefined" CHECK ( ("scp-object_id" IS NOT NULL and personnel_id IS NOT NULL) or ("scp-object_id" IS NULL) ),
-                         "scp-object_tag" smallint NULL,
+                         scp_object_id int NULL CONSTRAINT "personnel_id_undefined" CHECK ( (scp_object_id IS NOT NULL and personnel_id IS NOT NULL) or (scp_object_id IS NULL) ),
+                         scp_object_tag smallint NULL,
                          personnel_id int NULL REFERENCES personnel(id) on delete restrict on update cascade,
-                         FOREIGN KEY ("scp-object_id", "scp-object_tag") REFERENCES "scp-object"(id, tag) on delete restrict on update cascade
+                         FOREIGN KEY (scp_object_id, scp_object_tag) REFERENCES scp_object(id, tag) on delete restrict on update cascade
 );
 
 CREATE TABLE excursion_log (
@@ -105,5 +105,3 @@ CREATE TABLE excursion_contents (
                                     item_id int REFERENCES item(id) on delete restrict on update cascade,
                                     PRIMARY KEY (excursion_log_id, item_id)
 );
-
-
