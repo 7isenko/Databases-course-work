@@ -8,7 +8,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -34,25 +33,27 @@ public class DatabaseFiller {
             }
         }
 
-        ArrayList<SCPDocument> scpDocuments;
-        try {
-            scpDocuments = receiveScpDocuments(amountOfDocuments);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        for (int i = 1; i <= scpDocuments.size(); i++) {
-            SCPDocument scpDocument = scpDocuments.get(i - 1);
-
-            Document document = scpDocument.getDocument();
-            int scpId = scpDocument.getId();
+        for (int i = 1; i <= amountOfDocuments; i++) {
+            int scpId = getRandomSCPNumber();
+            Document document;
+            try {
+                document = receiveDocumentByScpId(scpId);
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+                System.out.println("Internet problems");
+                return;
+            }
+            if (document == null) {
+                i--;
+                continue;
+            }
 
             String name = getNameFromDocument(document);
             String description = getDescriptionFromDocument(document);
 
             if (name == null || description == null) {
-                System.out.printf("Страница объекта №%d - SCP-%03d имеет нестандартную структуру. Она будет пропущена.%n%n", i, scpId);
+                System.out.printf("Страница объекта №%d - SCP-%03d имеет нестандартную структуру. " +
+                        "Она будет пропущена.%n%n", i, scpId);
                 continue;
             }
 
@@ -91,28 +92,6 @@ public class DatabaseFiller {
         return null;
     }
 
-    /**
-     * TODO: скорее всего, это нужно заинлайнить. Страницы кэшируются огромной кучей,
-     *       забивают память и потом резко выплёвываются, лучше чтобы всё шло гладко - потоком.
-     *
-     * @param amount - количество scp страниц для добавления в бд
-     * @return - список рандомно сгенерированных страниц
-     * @throws IOException - если есть проблемы с Интернетом
-     */
-    private static ArrayList<SCPDocument> receiveScpDocuments(int amount) throws IOException {
-        ArrayList<SCPDocument> documents = new ArrayList<>();
-        for (int i = 0; i < amount; i++) {
-            int scpId = getRandomSCPNumber();
-            Document doc = receiveDocumentByScpId(scpId);
-            if (doc == null) {
-                i--;
-            } else {
-                documents.add(new SCPDocument(scpId, doc));
-            }
-        }
-        return documents;
-    }
-
 
     @Nullable
     private static Document receiveDocumentByScpId(int scpId) throws IOException {
@@ -123,24 +102,4 @@ public class DatabaseFiller {
             return null;
         }
     }
-
-
-    private static class SCPDocument {
-        private final int id;
-        private final Document document;
-
-        private SCPDocument(int id, Document document) {
-            this.id = id;
-            this.document = document;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public Document getDocument() {
-            return document;
-        }
-    }
-
 }
