@@ -1,4 +1,4 @@
-package com.company;
+package net.scpfoundation.scp_1985;
 
 public class Main {
 
