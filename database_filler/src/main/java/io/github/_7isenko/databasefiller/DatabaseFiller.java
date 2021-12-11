@@ -21,14 +21,22 @@ public class DatabaseFiller {
     private static final int MAX_SCP_ID = 4000;
     private static final Set<Integer> SCP_IDS = new HashSet<>();
 
+    /**
+     * @param args - принимает один целочисленный аргумент - количество SCP-объектов для добавления в бд.
+     */
     public static void main(String[] args) {
+        int amountOfDocuments = 10;
+        if (args.length != 0) {
+            try {
+                amountOfDocuments = Integer.parseInt(args[0]);
+            } catch (Exception e) {
+                System.out.println("Unpassable number");
+            }
+        }
 
-        /*
-         make args for file
-         */
-        ArrayList<SCPDocument> scpDocuments = null;
+        ArrayList<SCPDocument> scpDocuments;
         try {
-            scpDocuments = receiveScpDocuments(10);
+            scpDocuments = receiveScpDocuments(amountOfDocuments);
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -83,6 +91,14 @@ public class DatabaseFiller {
         return null;
     }
 
+    /**
+     * TODO: скорее всего, это нужно заинлайнить. Страницы кэшируются огромной кучей,
+     *       забивают память и потом резко выплёвываются, лучше чтобы всё шло гладко - потоком.
+     *
+     * @param amount - количество scp страниц для добавления в бд
+     * @return - список рандомно сгенерированных страниц
+     * @throws IOException - если есть проблемы с Интернетом
+     */
     private static ArrayList<SCPDocument> receiveScpDocuments(int amount) throws IOException {
         ArrayList<SCPDocument> documents = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
@@ -101,7 +117,7 @@ public class DatabaseFiller {
     @Nullable
     private static Document receiveDocumentByScpId(int scpId) throws IOException {
         try {
-            String link = String.format("http://scp-ru.wikidot.com/scp-%03d", scpId);
+            String link = String.format("https://scp-ru.wikidot.com/scp-%03d", scpId);
             return Jsoup.connect(link).get();
         } catch (HttpStatusException e) {
             return null;
@@ -117,7 +133,6 @@ public class DatabaseFiller {
             this.id = id;
             this.document = document;
         }
-
 
         public int getId() {
             return id;
