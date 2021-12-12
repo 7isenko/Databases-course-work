@@ -29,7 +29,7 @@ public class DBRepository {
             USER = config.getString("user");
             PASS = config.getString("password");
         } catch (ConfigurationException cex) {
-            System.out.println("Config not found. Using default.");
+            System.out.println("Конфиг не был найден. Используются стандартные значения.");
         }
         start();
     }
@@ -38,14 +38,16 @@ public class DBRepository {
         int locationId = 0;
         try {
             try {
-                String sql = String.format("select id from location where latitude = %f and longitude = %f", location.getLatitude(), location.getLongitude());
+                String sql = String.format("select id from location where latitude = %f and longitude = %f",
+                        location.getLatitude(), location.getLongitude());
                 Statement st = connection.createStatement();
                 ResultSet rs = st.executeQuery(sql);
                 rs.next();
                 locationId = (int) rs.getObject("id");
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
-                System.out.println("Этот фонд не будет добавлен в таблицу. Отсутствует необходимая локация");
+                System.out.printf("Невозможно добавить фонд, находящийся в локации с latitude = %f и " +
+                        "longitude = %f = %d%n", location.getLatitude(), location.getLongitude());
                 return false;
             }
 
@@ -57,7 +59,7 @@ public class DBRepository {
             return true;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            System.out.println("Этот фонд не будет добавлен в таблицу.");
+            System.out.printf("Невозможно добавить фонд, находящийся в локации с id = %d%n", locationId);
             return false;
         }
     }
@@ -82,7 +84,7 @@ public class DBRepository {
             return true;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            System.out.println("Эта локация не будет добавлена в таблицу.");
+            System.out.printf("Локация %f, %f не будет добавлена в таблицу", latitude, longitude);
             return false;
         }
     }
@@ -107,7 +109,7 @@ public class DBRepository {
             return true;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            System.out.println("Этот объект не будет добавлен в таблицу.");
+            System.out.printf("Объект SCP-%d не будет добавлен в таблицу.%n", scpId);
             return false;
         }
     }
@@ -117,27 +119,27 @@ public class DBRepository {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            System.out.println("PostgreSQL JDBC Driver is not found.");
+            System.out.println("PostgreSQL JDBC Driver не найден.");
             e.printStackTrace();
             return;
         }
 
-        System.out.println("PostgreSQL JDBC Driver successfully connected");
+        System.out.println("PostgreSQL JDBC Driver успешно подключен.");
 
         try {
             connection = DriverManager
                     .getConnection(DB_URL, USER, PASS);
 
         } catch (SQLException e) {
-            System.out.println("Connection Failed");
+            System.out.println("Соединение к базе данных установить не получилось.");
             e.printStackTrace();
             return;
         }
 
         if (connection != null) {
-            System.out.println("You successfully connected to the database");
+            System.out.println("Вы успешно подключились к базе данных.");
         } else {
-            System.out.println("Failed to make connection to database");
+            System.out.println("Вы не смогли подключиться к базе данных.");
         }
     }
 
