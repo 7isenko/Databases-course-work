@@ -5,10 +5,7 @@ import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * @author 7isenko
@@ -36,11 +33,18 @@ public class DBRepository {
     }
 
     public void addSCP(int scpId, String scpClass, String name, String description) {
-        String sql = "insert into scp_object (tag, object_class, name, description) VALUES (?,?,?,?)";
-        PreparedStatement st = connection.prepareStatement(sql);
-        st.setString(1, email);
-        st.setString(2, encodedPassword);
-        st.executeUpdate();
+        try {
+            String sql = "insert into scp_object (id, name, description, object_class) VALUES (?,?,?,?)";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, scpId);
+            st.setString(2, name);
+            st.setString(3, description);
+            st.setObject(4, scpClass, Types.OTHER);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("SQLException! " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     //  public boolean login(String email, String password) {
@@ -86,7 +90,7 @@ public class DBRepository {
         }
 
         if (connection != null) {
-            System.out.println("You successfully connected to database now");
+            System.out.println("You successfully connected to the database");
         } else {
             System.out.println("Failed to make connection to database");
         }
