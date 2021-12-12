@@ -99,7 +99,7 @@ CREATE TABLE priming
         CONSTRAINT "personnel_id_undefined" CHECK ( (scp_object_id IS NOT NULL and personnel_id IS NOT NULL) or
                                                     (scp_object_id IS NULL) ),
     personnel_id  int NULL REFERENCES personnel (id) on delete restrict on update cascade,
-    FOREIGN KEY (scp_object_id) REFERENCES scp_object (id, tag) on delete restrict on update cascade
+    FOREIGN KEY (scp_object_id) REFERENCES scp_object (id) on delete restrict on update cascade
 );
 
 CREATE TABLE excursion_log
