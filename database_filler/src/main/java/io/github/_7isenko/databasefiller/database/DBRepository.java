@@ -109,7 +109,7 @@ public class DBRepository {
             return true;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            System.out.printf("Объект SCP-%d не будет добавлен в таблицу.%n", scpId);
+            System.out.printf("Объект SCP-%d не будет добавлен в таблицу.%n%n", scpId);
             return false;
         }
     }

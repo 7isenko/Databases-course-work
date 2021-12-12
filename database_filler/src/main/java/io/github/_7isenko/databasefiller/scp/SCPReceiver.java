@@ -138,7 +138,12 @@ public class SCPReceiver {
             if (strong.size() == 0) continue;
             if (strong.get(0).text().startsWith("Класс объекта")) {
                 try {
-                    return element.select("a").text().trim();
+                    String clazz = element.select("a").text().trim();
+                    if (!clazz.equals("")) {
+                        return clazz;
+                    } else {
+                        return element.text().trim();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
