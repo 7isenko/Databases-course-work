@@ -41,10 +41,10 @@ CREATE TABLE mobile_group_members
 CREATE table location
 (
     id        serial PRIMARY KEY,
-    latitude  decimal(10, 8)
+    latitude  decimal(9, 6)
         CONSTRAINT earth_latitude CHECK ( latitude >= -90 and latitude <= 90 ),
-    longitude decimal(10, 8)
-        CONSTRAINT earth_longitude CHECK ( longitude >= -90 and longitude <= 90 )
+    longitude decimal(9, 6)
+        CONSTRAINT earth_longitude CHECK ( longitude >= -180 and longitude <= 180 )
 );
 
 CREATE TABLE retrieval
@@ -69,7 +69,7 @@ CREATE TABLE scp_object
     id            int PRIMARY KEY,
     name          varchar(80),
     description   text,
-    object_class  object_class,
+    object_class  object_class DEFAULT 'Неприменимо',
     foundation_id int NULL REFERENCES foundation (id) on delete set null on update cascade
 );
 
