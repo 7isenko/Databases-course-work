@@ -1,136 +1,91 @@
 package io.github._7isenko.databasefiller;
 
 import com.sun.istack.internal.Nullable;
-import org.jsoup.HttpStatusException;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import io.github._7isenko.databasefiller.database.DBRepository;
+import io.github._7isenko.databasefiller.database.entities.Location;
+import io.github._7isenko.databasefiller.database.entities.SCPInstance;
+import io.github._7isenko.databasefiller.misc.CollectionsHelper;
+import io.github._7isenko.databasefiller.scp.SCPReceiver;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * @author 7isenko
  */
 public class DatabaseFiller {
 
-    private static final int MAX_SCP_ID = 4000;
-    private static final int DEFAULT_SCP_AMOUNT = 100;
-    private static final Set<Integer> SCP_IDS = new HashSet<>();
+    private static final int DEFAULT_FOUNDATIONS_AMOUNT = 5;
+    private static final int DEFAULT_SCP_AMOUNT = 5;
 
     /**
      * @param args - принимает один целочисленный аргумент - количество SCP-объектов для добавления в бд.
      */
-    public static void main(String[] args) {
-        int amountOfDocuments = DEFAULT_SCP_AMOUNT;
+    public static void main(@Nullable String[] args) {
+
+        Locale.setDefault(new Locale("en", "US"));
+
         if (args.length != 0) {
-            try {
-                amountOfDocuments = Integer.parseInt(args[0]);
-            } catch (Exception e) {
-                System.out.println("Unpassable number");
+            if (args[0].equals("help")) {
+                // TODO: print full help
+                System.out.println("List of arguments:");
+                System.out.println("1 - amount of foundations to add, default - 5; number 1 will always exist"); // TODO: always exist
+                System.out.println("2 - amount of scp to add, default - 100; number 1985 will always exist");
+                return;
             }
         }
 
+        int foundationsAmount = parseArg(args, 0, DEFAULT_FOUNDATIONS_AMOUNT, "количество фондов");
+        int scpAmount = parseArg(args, 1, DEFAULT_SCP_AMOUNT, "количество SCP");
 
         DBRepository dbRepository = new DBRepository();
 
-        for (int i = 1; i <= amountOfDocuments; i++) {
-            int scpId = getRandomSCPNumber();
-            Document document;
-            try {
-                document = receiveDocumentByScpId(scpId);
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-                System.out.println("Internet problems");
-                return;
-            }
-            if (document == null) {
-                i--;
-                continue;
-            }
+        // Adding foundations' locations
+        Location baseFoundationLocation = new Location(37.928141, -119.026927);
+        dbRepository.addLocation(baseFoundationLocation); // base foundation location
+        List<Location> locationList = getRandomLocations(foundationsAmount);
+        dbRepository.addLocationList(locationList);
 
-            // TODO: добавитьт класс
-            String name = getNameFromDocument(document);
-            String description = getDescriptionFromDocument(document);
-            String clazz = getClassFromDocument(document);
-            dbRepository.addSCP(scpId, clazz, name, description);
-            // TODO: here we can add to transaction
-            //    and on IOException we can commit
-
-
-            if (name == null || description == null) {
-                System.out.printf("Страница объекта №%d - SCP-%03d имеет нестандартную структуру. " +
-                        "Она будет пропущена.%n%n", i, scpId);
-                continue;
-            }
-
-            System.out.printf("Объект %d:%n", i);
-            System.out.printf("SCP-%03d - %s, Класс: %s%n", scpId, name, clazz);
-            System.out.printf("%s%n%n", description);
+        // Adding foundations
+        dbRepository.addFoundation(baseFoundationLocation);
+        for (Location location : locationList) {
+            dbRepository.addFoundation(location);
         }
+
+        // Adding SCPs
+        SCPReceiver scpReceiver = new SCPReceiver(4000, null);
+        dbRepository.addSCP(scpReceiver.receiveScp1985());
+        List<SCPInstance> scpInstanceList = scpReceiver.getSCPList(scpAmount);
+        dbRepository.addScpList(scpInstanceList);
+        System.out.printf("%d случайных экземпляров SCP было добавлено в таблицу%n", scpInstanceList.size());
+
+
         dbRepository.close();
     }
 
-
-    private static int getRandomSCPNumber() {
-        ThreadLocalRandom random = ThreadLocalRandom.current();
-        int randomId;
-        do {
-            randomId = random.nextInt(1, MAX_SCP_ID);
-        } while (SCP_IDS.contains(randomId));
-        SCP_IDS.add(randomId);
-        return randomId;
-    }
-
-    @Nullable
-    private static String getNameFromDocument(Document document) {
-        Element nameElement = document.getElementById("page-title");
-        if (nameElement == null) return null;
-        return nameElement.text().split(" ", 3)[2];
-    }
-
-    @Nullable
-    private static String getDescriptionFromDocument(Document document) {
-        for (Element element : document.select("#page-content p")) {
-            Elements strong = element.getElementsByTag("strong");
-            if (strong.size() == 0) continue;
-            if (strong.get(0).text().startsWith("Описание")) {
-                try {
-                    return element.text().substring(9).trim();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+    private static int parseArg(String[] args, int index, int defaultValue, String name) {
+        if (args.length >= index + 1) {
+            try {
+                return Integer.parseInt(args[index]);
+            } catch (Exception e) {
+                System.out.printf("Невозможно распарсить %s, используется стандартное значение %d%n", name, defaultValue);
+                return defaultValue;
             }
         }
-        return null;
+        return defaultValue;
     }
 
-    @Nullable
-    private static String getClassFromDocument(Document document) {
-        for (Element element : document.select("#page-content p")) {
-            Elements strong = element.getElementsByTag("Класс объекта");
-            if (strong.size() == 0) continue;
-            if (strong.get(0).text().startsWith("Класс объекта")) {
-                try {
-                    return element.text().substring(14).trim();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return null;
-    }
+    private static ArrayList<Location> getRandomLocations(int amount) {
+        ArrayList<Double> latitudes = CollectionsHelper.getRandomList(amount, -90D, 90D);
+        ArrayList<Double> longitudes = CollectionsHelper.getRandomList(amount, -180D, 180D);
 
-    @Nullable
-    private static Document receiveDocumentByScpId(int scpId) throws IOException {
-        try {
-            String link = String.format("https://scp-ru.wikidot.com/scp-%03d", scpId);
-            return Jsoup.connect(link).get();
-        } catch (HttpStatusException e) {
-            return null;
+        ArrayList<Location> locations = new ArrayList<>();
+
+        for (int i = 0; i < amount; i++) {
+            locations.add(new Location(latitudes.get(i), longitudes.get(i)));
         }
+
+        return locations;
     }
 }
