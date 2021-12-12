@@ -18,13 +18,14 @@ import java.util.concurrent.ThreadLocalRandom;
 public class DatabaseFiller {
 
     private static final int MAX_SCP_ID = 4000;
+    private static final int DEFAULT_SCP_AMOUNT = 100;
     private static final Set<Integer> SCP_IDS = new HashSet<>();
 
     /**
      * @param args - принимает один целочисленный аргумент - количество SCP-объектов для добавления в бд.
      */
     public static void main(String[] args) {
-        int amountOfDocuments = 10;
+        int amountOfDocuments = DEFAULT_SCP_AMOUNT;
         if (args.length != 0) {
             try {
                 amountOfDocuments = Integer.parseInt(args[0]);
@@ -32,6 +33,9 @@ public class DatabaseFiller {
                 System.out.println("Unpassable number");
             }
         }
+
+
+        DBRepository dbRepository = new DBRepository();
 
         for (int i = 1; i <= amountOfDocuments; i++) {
             int scpId = getRandomSCPNumber();
@@ -48,8 +52,11 @@ public class DatabaseFiller {
                 continue;
             }
 
+            // TODO: добавитьт класс
             String name = getNameFromDocument(document);
             String description = getDescriptionFromDocument(document);
+            // TODO: here we can add to transaction
+            //    and on IOException we can commit
 
             if (name == null || description == null) {
                 System.out.printf("Страница объекта №%d - SCP-%03d имеет нестандартную структуру. " +
@@ -86,12 +93,15 @@ public class DatabaseFiller {
             Elements strong = element.getElementsByTag("strong");
             if (strong.size() == 0) continue;
             if (strong.get(0).text().startsWith("Описание")) {
-                return element.text().substring(10);
+                try {
+                    return element.text().substring(9).trim();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
         return null;
     }
-
 
     @Nullable
     private static Document receiveDocumentByScpId(int scpId) throws IOException {
