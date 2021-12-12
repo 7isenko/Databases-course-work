@@ -1,11 +1,11 @@
 package io.github._7isenko.databasefiller;
 
-import com.sun.istack.internal.Nullable;
 import io.github._7isenko.databasefiller.database.DBRepository;
 import io.github._7isenko.databasefiller.database.entities.Location;
 import io.github._7isenko.databasefiller.database.entities.SCPInstance;
 import io.github._7isenko.databasefiller.misc.CollectionsHelper;
 import io.github._7isenko.databasefiller.scp.SCPReceiver;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;

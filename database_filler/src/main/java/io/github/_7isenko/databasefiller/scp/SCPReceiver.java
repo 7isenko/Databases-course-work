@@ -1,7 +1,7 @@
 package io.github._7isenko.databasefiller.scp;
 
-import com.sun.istack.internal.Nullable;
 import io.github._7isenko.databasefiller.database.entities.SCPInstance;
+import org.jetbrains.annotations.Nullable;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
