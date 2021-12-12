@@ -12,8 +12,8 @@ CREATE TYPE log_status as enum ('В ПОДГОТОВКЕ', 'ДЛЯ ОГРАНИ�
 CREATE TABLE personnel
 (
     id              serial PRIMARY KEY,
-    name            varchar(40),
-    surname         varchar(40),
+    name            varchar(60),
+    surname         varchar(60),
     clearance_level clearance_level,
     classification  classification
 );
@@ -27,7 +27,7 @@ CREATE TABLE access_key
 CREATE TABLE mobile_group
 (
     id      serial PRIMARY KEY,
-    name    varchar(40),
+    name    varchar(60),
     created timestamp
 );
 
@@ -67,8 +67,8 @@ CREATE TABLE foundation
 CREATE TABLE scp_object
 (
     id            int PRIMARY KEY,
-    name          varchar(40),
-    description   varchar(200),
+    name          varchar(80),
+    description   text,
     object_class  object_class,
     foundation_id int NULL REFERENCES foundation (id) on delete set null on update cascade
 );
@@ -76,13 +76,13 @@ CREATE TABLE scp_object
 CREATE TABLE equipment
 (
     id   serial PRIMARY KEY,
-    name varchar(40)
+    name varchar(80)
 );
 
 CREATE TABLE item
 (
     id   serial PRIMARY KEY,
-    name varchar(40)
+    name varchar(80)
 );
 
 CREATE TABLE equipment_contents
@@ -108,10 +108,10 @@ CREATE TABLE excursion_log
     trigger_type        trigger_type,
     trigger_committed   timestamp,
     equipment_id        int REFERENCES equipment (id) on delete restrict on update cascade,
-    reality_description varchar(1000),
+    reality_description text,
     log_status          log_status,
     retrieval_id        int REFERENCES retrieval (id) on delete restrict on update cascade,
-    note                varchar(100),
+    note                text,
     priming_id          int REFERENCES priming (id) on delete restrict on update cascade
 );
 
