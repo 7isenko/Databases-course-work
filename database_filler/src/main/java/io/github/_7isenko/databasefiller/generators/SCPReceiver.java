@@ -1,4 +1,4 @@
-package io.github._7isenko.databasefiller.scp;
+package io.github._7isenko.databasefiller.generators;
 
 import io.github._7isenko.databasefiller.database.entities.SCPInstance;
 import org.jetbrains.annotations.Nullable;

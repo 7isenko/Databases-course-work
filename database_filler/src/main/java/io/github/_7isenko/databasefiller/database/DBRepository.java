@@ -1,6 +1,7 @@
 package io.github._7isenko.databasefiller.database;
 
 import io.github._7isenko.databasefiller.database.entities.Location;
+import io.github._7isenko.databasefiller.database.entities.Personnel;
 import io.github._7isenko.databasefiller.database.entities.SCPInstance;
 import io.github._7isenko.databasefiller.misc.MathHelper;
 import org.apache.commons.configuration2.Configuration;
@@ -9,7 +10,9 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 
 import java.io.File;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author 7isenko
@@ -19,6 +22,8 @@ public class DBRepository {
     static private String DB_URL = "jdbc:postgresql://localhost:5432/postgres"; // jdbc:postgresql://pg:5432/studs
     static private String USER = "postgres";
     static private String PASS = "ZXcv";
+
+    // excurtion_contrnt, excursion_log, retrieval
 
     public DBRepository() {
 
@@ -89,22 +94,23 @@ public class DBRepository {
         }
     }
 
-    public void addScpList(List<SCPInstance> scpList) {
-        scpList.removeIf(scpInstance -> !addSCP(scpInstance));
+    public void addScpList(List<SCPInstance> scpList, int foundationsAmount) {
+        scpList.removeIf(scpInstance -> !addSCP(scpInstance, ThreadLocalRandom.current().nextInt(1, foundationsAmount + 1)));
     }
 
-    public boolean addSCP(SCPInstance scpInstance) {
-        return addSCP(scpInstance.getId(), scpInstance.getClazz(), scpInstance.getName(), scpInstance.getDescription());
+    public boolean addSCP(SCPInstance scpInstance, int fid) {
+        return addSCP(scpInstance.getId(), scpInstance.getClazz(), scpInstance.getName(), scpInstance.getDescription(), fid);
     }
 
-    public boolean addSCP(int scpId, String scpClass, String name, String description) {
+    public boolean addSCP(int scpId, String scpClass, String name, String description, int foundation_id) {
         try {
-            String sql = "insert into scp_object (id, name, description, object_class) VALUES (?,?,?,?)";
+            String sql = "insert into scp_object (id, name, description, object_class, foundation_id) VALUES (?,?,?,?,?)";
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, scpId);
             st.setString(2, name);
             st.setString(3, description);
             st.setObject(4, scpClass, Types.OTHER);
+            st.setInt(5, foundation_id);
             st.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -114,6 +120,33 @@ public class DBRepository {
         }
     }
 
+    public void addKeys(int start, int end) {
+
+    }
+
+    public void addPersonnels(ArrayList<Personnel> personnels) {
+        for (Personnel personnel : personnels) {
+            addPersonnel(personnel);
+        }
+    }
+
+    public boolean addPersonnel(Personnel p) {
+        try {
+            String sql = "insert into personnel (name, surname, classification, clearance_level) VALUES (?,?,?,?)";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, p.getName());
+            st.setString(2, p.getSurname());
+            st.setObject(3, p.getClassification(), Types.OTHER);
+            st.setObject(4, p.getClearanceLevel(), Types.OTHER);
+            st.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.printf("Персонал %s %s - %s %d не будет добавлен в таблицу.%n%n", p.getName(), p.getSurname(),
+                    p.getClassification(), p.getClearanceLevel());
+            return false;
+        }
+    }
 
     private void start() {
         try {
@@ -150,4 +183,6 @@ public class DBRepository {
             e.printStackTrace();
         }
     }
+
+
 }

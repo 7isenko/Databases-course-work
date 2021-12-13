@@ -2,9 +2,11 @@ package io.github._7isenko.databasefiller;
 
 import io.github._7isenko.databasefiller.database.DBRepository;
 import io.github._7isenko.databasefiller.database.entities.Location;
+import io.github._7isenko.databasefiller.database.entities.Personnel;
 import io.github._7isenko.databasefiller.database.entities.SCPInstance;
+import io.github._7isenko.databasefiller.generators.PersonnelGenerator;
 import io.github._7isenko.databasefiller.misc.CollectionsHelper;
-import io.github._7isenko.databasefiller.scp.SCPReceiver;
+import io.github._7isenko.databasefiller.generators.SCPReceiver;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -16,8 +18,9 @@ import java.util.Locale;
  */
 public class DatabaseFiller {
 
-    private static final int DEFAULT_FOUNDATIONS_AMOUNT = 5;
-    private static final int DEFAULT_SCP_AMOUNT = 5;
+    private static final int DEFAULT_FOUNDATIONS_AMOUNT = 3;
+    private static final int DEFAULT_SCP_AMOUNT = 3;
+    private static final int DEFAULT_PERSONNEL_AMOUNT = 20;
 
     /**
      * @param args - принимает один целочисленный аргумент - количество SCP-объектов для добавления в бд.
@@ -30,14 +33,16 @@ public class DatabaseFiller {
             if (args[0].equals("help")) {
                 // TODO: print full help
                 System.out.println("List of arguments:");
-                System.out.println("1 - amount of foundations to add, default - 5; number 1 will always exist"); // TODO: always exist
+                System.out.println("1 - amount of foundations to add, default - 5; number 1 will always exist");
                 System.out.println("2 - amount of scp to add, default - 100; number 1985 will always exist");
+                System.out.println("3 - amount of personnel to add, default - 20");
                 return;
             }
         }
 
         int foundationsAmount = parseArg(args, 0, DEFAULT_FOUNDATIONS_AMOUNT, "количество фондов");
         int scpAmount = parseArg(args, 1, DEFAULT_SCP_AMOUNT, "количество SCP");
+        int personnelAmount = parseArg(args, 2, DEFAULT_PERSONNEL_AMOUNT, "количество персонала");
 
         DBRepository dbRepository = new DBRepository();
 
@@ -55,10 +60,18 @@ public class DatabaseFiller {
 
         // Adding SCPs
         SCPReceiver scpReceiver = new SCPReceiver(4000, null);
-        dbRepository.addSCP(scpReceiver.receiveScp1985());
+        dbRepository.addSCP(scpReceiver.receiveScp1985(), 1);
         List<SCPInstance> scpInstanceList = scpReceiver.getSCPList(scpAmount);
-        dbRepository.addScpList(scpInstanceList);
+        dbRepository.addScpList(scpInstanceList, foundationsAmount);
         System.out.printf("%d случайных экземпляров SCP было добавлено в таблицу%n", scpInstanceList.size());
+        // TODO: scpInstanceList - достаём ID для прайминга
+
+        // Adding personnel
+        PersonnelGenerator personnelGenerator = new PersonnelGenerator();
+        ArrayList<Personnel> personnels = personnelGenerator.generatePersonnel(personnelAmount);
+        dbRepository.addPersonnels(personnels);
+        // TODO: добавить карты access_key
+
 
 
         dbRepository.close();
