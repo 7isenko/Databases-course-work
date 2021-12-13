@@ -95,11 +95,10 @@ CREATE TABLE equipment_contents
 CREATE TABLE priming
 (
     id            serial PRIMARY KEY,
-    scp_object_id int NULL
+    scp_object_id int NULL REFERENCES scp_object (id) on delete restrict on update cascade
         CONSTRAINT "personnel_id_undefined" CHECK ( (scp_object_id IS NOT NULL and personnel_id IS NOT NULL) or
                                                     (scp_object_id IS NULL) ),
-    personnel_id  int NULL REFERENCES personnel (id) on delete restrict on update cascade,
-    FOREIGN KEY (scp_object_id) REFERENCES scp_object (id) on delete restrict on update cascade
+    personnel_id  int NULL REFERENCES personnel (id) on delete restrict on update cascade
 );
 
 CREATE TABLE excursion_log
@@ -121,3 +120,19 @@ CREATE TABLE excursion_contents
     item_id          int REFERENCES item (id) on delete restrict on update cascade,
     PRIMARY KEY (excursion_log_id, item_id)
 );
+
+CREATE OR REPLACE FUNCTION check_level()  RETURNS TRIGGER AS $$
+DECLARE
+    level clearance_level;
+BEGIN
+    level = (SELECT clearance_level FROM personnel
+             WHERE NEW.personnel_id = personnel.id);
+    IF (level = '4' or level = '5') THEN
+        RETURN NEW;
+    END IF;
+    RETURN NULL;
+end;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER priming_personnel_level BEFORE INSERT OR UPDATE on priming FOR EACH ROW
+    WHEN ( NEW.personnel_id is NOT NULL and NEW.scp_object_id is NOT NULL) execute procedure check_level();
