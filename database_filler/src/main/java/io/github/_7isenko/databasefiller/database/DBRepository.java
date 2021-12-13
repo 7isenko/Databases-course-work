@@ -120,13 +120,39 @@ public class DBRepository {
         }
     }
 
-    public void addKeys(int start, int end) {
+    private String genRandomString(int bound) {
+        int leftLimit = 97; // letter 'a'
+        int rightLimit = 122; // letter 'z'
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        StringBuilder buffer = new StringBuilder(bound);
+        for (int i = 0; i < bound; i++) {
+            int randomLimitedInt = leftLimit + (int)
+                    (random.nextFloat() * (rightLimit - leftLimit + 1));
+            buffer.append((char) randomLimitedInt);
+        }
+        return buffer.toString();
+    }
 
+    public void addKeys(int start, int end) {
+        for (int i = start; i <= end; i++) {
+            String ssh = genRandomString(32);
+            try {
+                String sql = "insert into access_key (ssh_key, personnel_id) VALUES (?,?)";
+                PreparedStatement st = connection.prepareStatement(sql);
+                st.setString(1, ssh);
+                st.setInt(2, i);
+                st.executeUpdate();
+                System.out.printf("Персонал с айди %d получил ключ %s.%n", i, ssh);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+                System.out.printf("Персонал с айди %d не получил ключ.%n", i);
+            }
+        }
     }
 
     public void addPersonnels(ArrayList<Personnel> personnels) {
-        for (Personnel personnel : personnels) {
-            addPersonnel(personnel);
+        for (Personnel p : personnels) {
+            addPersonnel(p);
         }
     }
 
@@ -139,10 +165,12 @@ public class DBRepository {
             st.setObject(3, p.getClassification(), Types.OTHER);
             st.setObject(4, p.getClearanceLevel(), Types.OTHER);
             st.executeUpdate();
+            System.out.printf("Персонал %s %s - %s %d добавлен в таблицу.%n", p.getName(), p.getSurname(),
+                    p.getClassification(), p.getClearanceLevel());
             return true;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            System.out.printf("Персонал %s %s - %s %d не будет добавлен в таблицу.%n%n", p.getName(), p.getSurname(),
+            System.out.printf("Персонал %s %s - %s %d не будет добавлен в таблицу.%n", p.getName(), p.getSurname(),
                     p.getClassification(), p.getClearanceLevel());
             return false;
         }

@@ -70,8 +70,9 @@ public class DatabaseFiller {
         PersonnelGenerator personnelGenerator = new PersonnelGenerator();
         ArrayList<Personnel> personnels = personnelGenerator.generatePersonnel(personnelAmount);
         dbRepository.addPersonnels(personnels);
-        // TODO: добавить карты access_key
 
+        // Adding acces_keys
+        dbRepository.addKeys(1, personnelAmount);
 
 
         dbRepository.close();
