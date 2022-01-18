@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.Basic;
 import javax.persistence.FetchType;
+import java.util.List;
 
 @Repository
 public interface LocationEntityRepository extends JpaRepository<LocationEntity, Integer> {
+    List<LocationEntity> findByIdGreaterThanAndIdLessThan(int id, int id2);
 }

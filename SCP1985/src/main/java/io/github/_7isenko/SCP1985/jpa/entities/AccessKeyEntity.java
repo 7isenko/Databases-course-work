@@ -16,6 +16,11 @@ public class AccessKeyEntity {
     private Integer personnelId;
     private PersonnelEntity personnelByPersonnelId;
 
+    public AccessKeyEntity(String sshKey, Integer personnelId) {
+        this.sshKey = sshKey;
+        this.personnelId = personnelId;
+    }
+
     @Id
     @Column(name = "ssh_key", nullable = false, length = -1)
     public String getSshKey() {

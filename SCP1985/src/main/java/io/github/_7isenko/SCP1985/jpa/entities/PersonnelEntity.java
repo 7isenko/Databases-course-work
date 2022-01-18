@@ -1,6 +1,6 @@
 package io.github._7isenko.SCP1985.jpa.entities;
 
-import io.github._7isenko.SCP1985.jpa.PostgreSQLEnumType;
+import io.github._7isenko.SCP1985.jpa.misc.PostgreSQLEnumType;
 import io.github._7isenko.SCP1985.jpa.object_types.Classification;
 import io.github._7isenko.SCP1985.jpa.object_types.ClearanceLevel;
 import lombok.NoArgsConstructor;
@@ -22,17 +22,20 @@ public class PersonnelEntity {
     private int id;
     private String name;
     private String surname;
-    @Enumerated(EnumType.STRING)
-    @Type(type = "psql_enum")
     private ClearanceLevel clearanceLevel;
-    @Enumerated(EnumType.STRING)
-    @Type(type = "psql_enum")
     private Classification classification;
     private Collection<AccessKeyEntity> accessKeysById;
     private Collection<MobileGroupMembersEntity> mobileGroupMembersById;
     private Collection<PrimingEntity> primingsById;
 
-    @Id
+    public PersonnelEntity(String name, String surname, ClearanceLevel clearanceLevel, Classification classification) {
+        this.name = name;
+        this.surname = surname;
+        this.clearanceLevel = clearanceLevel;
+        this.classification = classification;
+    }
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;

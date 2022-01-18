@@ -18,7 +18,7 @@ public class EquipmentContentsEntity {
     private EquipmentEntity equipmentByEquipmentId;
     private ItemEntity itemByItemId;
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "equipment_id", nullable = false)
     public int getEquipmentId() {
         return equipmentId;

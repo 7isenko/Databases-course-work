@@ -18,7 +18,7 @@ public class ExcursionContentsEntity {
     private ExcursionLogEntity excursionLogByExcursionLogId;
     private ItemEntity itemByItemId;
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "excursion_log_id", nullable = false)
     public int getExcursionLogId() {
         return excursionLogId;

@@ -1,16 +1,18 @@
-package io.github._7isenko.databasefiller.generators;
+package io.github._7isenko.SCP1985.init.utils;
 
-import io.github._7isenko.databasefiller.database.entities.SCPInstance;
-import org.jetbrains.annotations.Nullable;
+import io.github._7isenko.SCP1985.jpa.entities.ScpObjectEntity;
+import io.github._7isenko.SCP1985.jpa.object_types.ObjectCLass;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.lang.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -24,16 +26,12 @@ public class SCPReceiver {
 
     public SCPReceiver(int maxScpId, @Nullable Set<Integer> knownScpIds) {
         this.maxScpId = maxScpId;
-        if (knownScpIds == null) {
-            this.knownScpIds = new HashSet<>();
-        } else {
-            this.knownScpIds = knownScpIds;
-        }
+        this.knownScpIds = Objects.requireNonNullElseGet(knownScpIds, HashSet::new);
     }
 
-    public ArrayList<SCPInstance> getSCPList(int amount) {
+    public ArrayList<ScpObjectEntity> getSCPList(int amount) {
 
-        ArrayList<SCPInstance> scpInstances = new ArrayList<>();
+        ArrayList<ScpObjectEntity> scpInstances = new ArrayList<>();
 
         for (int i = 1; i <= amount; i++) {
             int scpId = getRandomSCPNumber();
@@ -60,7 +58,12 @@ public class SCPReceiver {
                         "Он будет пропущен.%n%n", i, scpId);
                 continue;
             }
-            scpInstances.add(new SCPInstance(scpId, name, description, clazz));
+
+            if (ObjectCLass.hasValue(clazz)) {
+                scpInstances.add(new ScpObjectEntity(scpId, name, description, ObjectCLass.valueOf(clazz)));
+            } else {
+                scpInstances.add(new ScpObjectEntity(scpId, name, description, ObjectCLass.Неприменимо));
+            }
 
             System.out.printf("Объект %d:%n", i);
             System.out.printf("SCP-%03d - %s, Класс: %s%n", scpId, name, clazz);
@@ -70,30 +73,6 @@ public class SCPReceiver {
         return scpInstances;
     }
 
-    public SCPInstance receiveScp1985() {
-        int scpId = 1985;
-        Document document;
-
-        try {
-            document = receiveDocumentByScpId(scpId);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            System.out.println("Проблемы с соединением к Интернету");
-            return null;
-        }
-
-        String name = getNameFromDocument(document);
-        String description = getDescriptionFromDocument(document);
-        String clazz = getClassFromDocument(document);
-
-        System.out.printf("Объект %d:%n", 0);
-        System.out.printf("SCP-%03d - %s, Класс: %s%n", scpId, name, clazz);
-        System.out.printf("%s%n%n", description);
-
-        knownScpIds.add(scpId);
-
-        return new SCPInstance(scpId, name, description, clazz);
-    }
 
     private int getRandomSCPNumber() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
