@@ -1,15 +1,52 @@
-CREATE TYPE clearance_level as enum ('0', '1', '2', '3', '4', '5', '6');
+DO
+$$
+    BEGIN
+        CREATE TYPE clearance_level as enum ('0', '1', '2', '3', '4', '5', '6');
+    EXCEPTION
+        WHEN DUPLICATE_OBJECT THEN
+            RAISE NOTICE 'type clearance_level already exists. it will be skipped';
+    end
+$$;
 
-CREATE TYPE classification as enum ('A', 'B', 'C', 'D', 'E');
+DO
+$$
+    BEGIN
+        CREATE TYPE classification as enum ('A', 'B', 'C', 'D', 'E');
+    EXCEPTION
+        WHEN DUPLICATE_OBJECT THEN
+            RAISE NOTICE 'type classification already exists. it will be skipped';
+    end
+$$;
+DO
+$$
+    BEGIN
+        CREATE TYPE object_class as enum ('Безопасный', 'Кетер', 'Евклид', 'Таумиэль',
+            'Аполлион', 'Архонт', 'Нейтрализованный', 'Обоснованный', 'Неприменимо');
+    EXCEPTION
+        WHEN DUPLICATE_OBJECT THEN
+            RAISE NOTICE 'type object_class already exists. it will be skipped';
+    end
+$$;
+DO
+$$
+    BEGIN
+        CREATE TYPE trigger_type as enum ('Инъекция', 'Внепланово');
+    EXCEPTION
+        WHEN DUPLICATE_OBJECT THEN
+            RAISE NOTICE 'type trigger_type already exists. it will be skipped';
+    end
+$$;
+DO
+$$
+    BEGIN
+        CREATE TYPE log_status as enum ('В ПОДГОТОВКЕ', 'ДЛЯ ОГРАНИЧЕННОГО ПОЛЬЗОВАНИЯ');
+    EXCEPTION
+        WHEN DUPLICATE_OBJECT THEN
+            RAISE NOTICE 'type log_status already exists. it will be skipped';
+    end
+$$;
 
-CREATE TYPE object_class as enum ('Безопасный', 'Кетер', 'Евклид', 'Таумиэль',
-    'Аполлион', 'Архонт', 'Нейтрализованный', 'Обоснованный', 'Неприменимо');
-
-CREATE TYPE trigger_type as enum ('Инъекция', 'Внепланово');
-
-CREATE TYPE log_status as enum ('В ПОДГОТОВКЕ', 'ДЛЯ ОГРАНИЧЕННОГО ПОЛЬЗОВАНИЯ');
-
-CREATE TABLE personnel
+CREATE TABLE IF NOT EXISTS personnel
 (
     id              serial PRIMARY KEY,
     name            varchar(60),
@@ -18,27 +55,27 @@ CREATE TABLE personnel
     classification  classification
 );
 
-CREATE TABLE access_key
+CREATE TABLE IF NOT EXISTS access_key
 (
     ssh_key      varchar PRIMARY KEY,
     personnel_id int REFERENCES personnel (id) on delete cascade on update cascade
 );
 
-CREATE TABLE mobile_group
+CREATE TABLE IF NOT EXISTS mobile_group
 (
     id      serial PRIMARY KEY,
     name    varchar(60),
     created timestamp
 );
 
-CREATE TABLE mobile_group_members
+CREATE TABLE IF NOT EXISTS mobile_group_members
 (
     mobile_group_id int REFERENCES mobile_group (id) on delete restrict on update cascade,
     personnel_id    int REFERENCES personnel (id) on delete restrict on update cascade,
     PRIMARY KEY (mobile_group_id, personnel_id)
 );
 
-CREATE table location
+CREATE table IF NOT EXISTS location
 (
     id        serial PRIMARY KEY,
     latitude  decimal(9, 6)
@@ -47,7 +84,7 @@ CREATE table location
         CONSTRAINT earth_longitude CHECK ( longitude >= -180 and longitude <= 180 )
 );
 
-CREATE TABLE retrieval
+CREATE TABLE IF NOT EXISTS retrieval
 (
     id                   serial PRIMARY KEY,
     location_id          int REFERENCES location (id) on delete restrict on update cascade,
@@ -58,13 +95,13 @@ CREATE TABLE retrieval
     succeed              bool
 );
 
-CREATE TABLE foundation
+CREATE TABLE IF NOT EXISTS foundation
 (
     id          serial PRIMARY KEY,
     location_id int REFERENCES location (id) on delete restrict on update cascade
 );
 
-CREATE TABLE scp_object
+CREATE TABLE IF NOT EXISTS scp_object
 (
     id            int PRIMARY KEY,
     name          varchar(80),
@@ -73,26 +110,26 @@ CREATE TABLE scp_object
     foundation_id int NULL REFERENCES foundation (id) on delete set null on update cascade
 );
 
-CREATE TABLE equipment
+CREATE TABLE IF NOT EXISTS equipment
 (
     id   serial PRIMARY KEY,
     name varchar(80)
 );
 
-CREATE TABLE item
+CREATE TABLE IF NOT EXISTS item
 (
     id   serial PRIMARY KEY,
     name varchar(80)
 );
 
-CREATE TABLE equipment_contents
+CREATE TABLE IF NOT EXISTS equipment_contents
 (
     equipment_id int REFERENCES equipment (id) on delete restrict on update cascade,
     item_id      int REFERENCES item (id) on delete restrict on update cascade,
     PRIMARY KEY (equipment_id, item_id)
 );
 
-CREATE TABLE priming
+CREATE TABLE IF NOT EXISTS priming
 (
     id            serial PRIMARY KEY,
     scp_object_id int NULL REFERENCES scp_object (id) on delete restrict on update cascade
@@ -101,7 +138,7 @@ CREATE TABLE priming
     personnel_id  int NULL REFERENCES personnel (id) on delete restrict on update cascade
 );
 
-CREATE TABLE excursion_log
+CREATE TABLE IF NOT EXISTS excursion_log
 (
     id                  serial PRIMARY KEY,
     trigger_type        trigger_type,
@@ -114,18 +151,20 @@ CREATE TABLE excursion_log
     priming_id          int REFERENCES priming (id) on delete restrict on update cascade
 );
 
-CREATE TABLE excursion_contents
+CREATE TABLE IF NOT EXISTS excursion_contents
 (
     excursion_log_id int REFERENCES excursion_log (id) on delete restrict on update cascade,
     item_id          int REFERENCES item (id) on delete restrict on update cascade,
     PRIMARY KEY (excursion_log_id, item_id)
 );
 
-CREATE OR REPLACE FUNCTION check_level()  RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION check_level() RETURNS TRIGGER AS
+$$
 DECLARE
     level clearance_level;
 BEGIN
-    level = (SELECT clearance_level FROM personnel
+    level = (SELECT clearance_level
+             FROM personnel
              WHERE NEW.personnel_id = personnel.id);
     IF (level = '4' or level = '5') THEN
         RETURN NEW;
@@ -134,5 +173,11 @@ BEGIN
 end;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER priming_personnel_level BEFORE INSERT OR UPDATE on priming FOR EACH ROW
-    WHEN ( NEW.personnel_id is NOT NULL and NEW.scp_object_id is NOT NULL) execute procedure check_level();
+
+DROP TRIGGER IF EXISTS priming_personnel_level on priming;
+CREATE TRIGGER priming_personnel_level
+    BEFORE INSERT OR UPDATE
+    on priming
+    FOR EACH ROW
+    WHEN ( NEW.personnel_id is NOT NULL and NEW.scp_object_id is NOT NULL)
+execute procedure check_level();
