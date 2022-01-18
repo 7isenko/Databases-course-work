@@ -21,7 +21,6 @@ public class ScpObjectEntity {
     private int id;
     private String name;
     private String description;
-    @Enumerated(EnumType.STRING) @Type(type = "psql_enum")
     private ObjectCLass objectClass;
     private Integer foundationId;
     private Collection<PrimingEntity> primingsById;
@@ -33,6 +32,13 @@ public class ScpObjectEntity {
         this.description = description;
         this.objectClass = objectClass;
         this.foundationId = foundationId;
+    }
+
+    public ScpObjectEntity(int id, String name, String description, ObjectCLass objectClass) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.objectClass = objectClass;
     }
 
     @Id

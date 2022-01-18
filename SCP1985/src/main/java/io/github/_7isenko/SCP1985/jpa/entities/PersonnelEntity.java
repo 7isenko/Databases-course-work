@@ -28,6 +28,13 @@ public class PersonnelEntity {
     private Collection<MobileGroupMembersEntity> mobileGroupMembersById;
     private Collection<PrimingEntity> primingsById;
 
+    public PersonnelEntity(String name, String surname, ClearanceLevel clearanceLevel, Classification classification) {
+        this.name = name;
+        this.surname = surname;
+        this.clearanceLevel = clearanceLevel;
+        this.classification = classification;
+    }
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
