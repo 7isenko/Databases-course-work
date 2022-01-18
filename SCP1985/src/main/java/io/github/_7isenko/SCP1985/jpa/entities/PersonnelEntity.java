@@ -1,7 +1,11 @@
 package io.github._7isenko.SCP1985.jpa.entities;
 
+import io.github._7isenko.SCP1985.jpa.PostgreSQLEnumType;
 import io.github._7isenko.SCP1985.jpa.object_types.Classification;
 import io.github._7isenko.SCP1985.jpa.object_types.ClearanceLevel;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -10,15 +14,19 @@ import java.util.Objects;
 /**
  * @author 7isenko
  */
+@NoArgsConstructor
 @Entity
+@TypeDef(name = "psql_enum", typeClass = PostgreSQLEnumType.class)
 @Table(name = "personnel")
 public class PersonnelEntity {
     private int id;
     private String name;
     private String surname;
     @Enumerated(EnumType.STRING)
+    @Type(type = "psql_enum")
     private ClearanceLevel clearanceLevel;
     @Enumerated(EnumType.STRING)
+    @Type(type = "psql_enum")
     private Classification classification;
     private Collection<AccessKeyEntity> accessKeysById;
     private Collection<MobileGroupMembersEntity> mobileGroupMembersById;
@@ -55,6 +63,7 @@ public class PersonnelEntity {
     }
 
     @Enumerated(EnumType.STRING)
+    @Type(type = "psql_enum")
     @Column(name = "clearance_level", nullable = true)
     public ClearanceLevel getClearanceLevel() {
         return clearanceLevel;
@@ -65,6 +74,7 @@ public class PersonnelEntity {
     }
 
     @Enumerated(EnumType.STRING)
+    @Type(type = "psql_enum")
     @Column(name = "classification", nullable = true)
     public Classification getClassification() {
         return classification;

@@ -1,11 +1,14 @@
 package io.github._7isenko.SCP1985.jpa.entities;
 
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 /**
  * @author 7isenko
  */
+@NoArgsConstructor
 @Entity
 @Table(name = "access_key")
 public class AccessKeyEntity {

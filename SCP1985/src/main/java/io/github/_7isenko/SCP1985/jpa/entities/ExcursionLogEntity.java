@@ -1,7 +1,11 @@
 package io.github._7isenko.SCP1985.jpa.entities;
 
+import io.github._7isenko.SCP1985.jpa.PostgreSQLEnumType;
 import io.github._7isenko.SCP1985.jpa.object_types.LogStatus;
 import io.github._7isenko.SCP1985.jpa.object_types.TriggerType;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -11,16 +15,18 @@ import java.util.Objects;
 /**
  * @author 7isenko
  */
+@NoArgsConstructor
 @Entity
+@TypeDef(name = "psql_enum", typeClass = PostgreSQLEnumType.class)
 @Table(name = "excursion_log")
 public class ExcursionLogEntity {
     private int id;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) @Type(type = "psql_enum")
     private TriggerType triggerType;
     private Timestamp triggerCommitted;
     private Integer equipmentId;
     private String realityDescription;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) @Type(type = "psql_enum")
     private LogStatus logStatus;
     private Integer retrievalId;
     private String note;
@@ -40,7 +46,7 @@ public class ExcursionLogEntity {
         this.id = id;
     }
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) @Type(type = "psql_enum")
     @Column(name = "trigger_type", nullable = true)
     public TriggerType getTriggerType() {
         return triggerType;
@@ -80,7 +86,7 @@ public class ExcursionLogEntity {
         this.realityDescription = realityDescription;
     }
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) @Type(type = "psql_enum")
     @Column(name = "log_status", nullable = true)
     public LogStatus getLogStatus() {
         return logStatus;

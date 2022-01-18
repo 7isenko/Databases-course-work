@@ -1,5 +1,7 @@
 package io.github._7isenko.SCP1985.jpa.entities;
 
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
@@ -7,6 +9,7 @@ import java.util.Objects;
 /**
  * @author 7isenko
  */
+@NoArgsConstructor
 @Entity
 @Table(name = "foundation")
 public class FoundationEntity {
@@ -14,6 +17,11 @@ public class FoundationEntity {
     private Integer locationId;
     private LocationEntity locationByLocationId;
     private Collection<ScpObjectEntity> scpObjectsById;
+
+    public FoundationEntity(int id, Integer locationId) {
+        this.id = id;
+        this.locationId = locationId;
+    }
 
     @Id
     @Column(name = "id", nullable = false)

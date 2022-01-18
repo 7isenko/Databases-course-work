@@ -1,5 +1,7 @@
 package io.github._7isenko.SCP1985.jpa.entities;
 
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
@@ -7,6 +9,7 @@ import java.util.Objects;
 /**
  * @author 7isenko
  */
+@NoArgsConstructor
 @Entity
 @Table(name = "priming")
 public class PrimingEntity {
