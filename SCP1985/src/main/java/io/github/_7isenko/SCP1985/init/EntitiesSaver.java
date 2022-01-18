@@ -1,7 +1,7 @@
 package io.github._7isenko.SCP1985.init;
 
-import io.github._7isenko.SCP1985.init.utils.PersonnelGenerator;
-import io.github._7isenko.SCP1985.init.utils.SCPReceiver;
+import io.github._7isenko.SCP1985.utils.PersonnelGenerator;
+import io.github._7isenko.SCP1985.utils.SCPReceiver;
 import io.github._7isenko.SCP1985.jpa.entities.AccessKeyEntity;
 import io.github._7isenko.SCP1985.jpa.entities.FoundationEntity;
 import io.github._7isenko.SCP1985.jpa.entities.LocationEntity;

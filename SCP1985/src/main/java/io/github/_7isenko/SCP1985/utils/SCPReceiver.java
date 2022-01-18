@@ -1,4 +1,4 @@
-package io.github._7isenko.SCP1985.init.utils;
+package io.github._7isenko.SCP1985.utils;
 
 import io.github._7isenko.SCP1985.jpa.entities.ScpObjectEntity;
 import io.github._7isenko.SCP1985.jpa.object_types.ObjectCLass;
