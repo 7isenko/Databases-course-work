@@ -5,7 +5,7 @@ $$
     EXCEPTION
         WHEN DUPLICATE_OBJECT THEN
             RAISE NOTICE 'type clearance_level already exists. it will be skipped';
-    end
+    END
 $$;
 
 DO
@@ -15,7 +15,7 @@ $$
     EXCEPTION
         WHEN DUPLICATE_OBJECT THEN
             RAISE NOTICE 'type classification already exists. it will be skipped';
-    end
+    END
 $$;
 DO
 $$
@@ -25,7 +25,7 @@ $$
     EXCEPTION
         WHEN DUPLICATE_OBJECT THEN
             RAISE NOTICE 'type object_class already exists. it will be skipped';
-    end
+    END
 $$;
 DO
 $$
@@ -34,7 +34,7 @@ $$
     EXCEPTION
         WHEN DUPLICATE_OBJECT THEN
             RAISE NOTICE 'type trigger_type already exists. it will be skipped';
-    end
+    END
 $$;
 DO
 $$
@@ -43,7 +43,7 @@ $$
     EXCEPTION
         WHEN DUPLICATE_OBJECT THEN
             RAISE NOTICE 'type log_status already exists. it will be skipped';
-    end
+    END
 $$;
 
 CREATE TABLE IF NOT EXISTS personnel
@@ -170,7 +170,7 @@ BEGIN
         RETURN NEW;
     END IF;
     RETURN NULL;
-end;
+END;
 $$ LANGUAGE plpgsql;
 
 
