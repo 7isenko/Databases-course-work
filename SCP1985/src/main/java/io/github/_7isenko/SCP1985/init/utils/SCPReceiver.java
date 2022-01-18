@@ -53,12 +53,17 @@ public class SCPReceiver {
             String description = getDescriptionFromDocument(document);
             String clazz = getClassFromDocument(document);
 
-            if (name == null || description == null || clazz == null || !ObjectCLass.hasValue(clazz)) {
+            if (name == null || description == null || clazz == null) {
                 System.out.printf("Страница объекта №%d - SCP-%03d имеет нестандартную структуру. " +
                         "Он будет пропущен.%n%n", i, scpId);
                 continue;
             }
-            scpInstances.add(new ScpObjectEntity(scpId, name, description, ObjectCLass.valueOf(clazz)));
+
+            if (ObjectCLass.hasValue(clazz)) {
+                scpInstances.add(new ScpObjectEntity(scpId, name, description, ObjectCLass.valueOf(clazz)));
+            } else {
+                scpInstances.add(new ScpObjectEntity(scpId, name, description, ObjectCLass.Неприменимо));
+            }
 
             System.out.printf("Объект %d:%n", i);
             System.out.printf("SCP-%03d - %s, Класс: %s%n", scpId, name, clazz);
@@ -67,7 +72,6 @@ public class SCPReceiver {
 
         return scpInstances;
     }
-
 
 
     private int getRandomSCPNumber() {
