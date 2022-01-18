@@ -18,12 +18,11 @@ public class FoundationEntity {
     private LocationEntity locationByLocationId;
     private Collection<ScpObjectEntity> scpObjectsById;
 
-    public FoundationEntity(int id, Integer locationId) {
-        this.id = id;
+    public FoundationEntity(Integer locationId) {
         this.locationId = locationId;
     }
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;

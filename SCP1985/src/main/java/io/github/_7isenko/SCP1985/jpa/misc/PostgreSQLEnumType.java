@@ -1,4 +1,4 @@
-package io.github._7isenko.SCP1985.jpa;
+package io.github._7isenko.SCP1985.jpa.misc;
 
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;

@@ -1,6 +1,6 @@
 package io.github._7isenko.SCP1985.jpa.entities;
 
-import io.github._7isenko.SCP1985.jpa.PostgreSQLEnumType;
+import io.github._7isenko.SCP1985.jpa.misc.PostgreSQLEnumType;
 import io.github._7isenko.SCP1985.jpa.object_types.LogStatus;
 import io.github._7isenko.SCP1985.jpa.object_types.TriggerType;
 import lombok.NoArgsConstructor;
@@ -21,12 +21,10 @@ import java.util.Objects;
 @Table(name = "excursion_log")
 public class ExcursionLogEntity {
     private int id;
-    @Enumerated(EnumType.STRING) @Type(type = "psql_enum")
     private TriggerType triggerType;
     private Timestamp triggerCommitted;
     private Integer equipmentId;
     private String realityDescription;
-    @Enumerated(EnumType.STRING) @Type(type = "psql_enum")
     private LogStatus logStatus;
     private Integer retrievalId;
     private String note;

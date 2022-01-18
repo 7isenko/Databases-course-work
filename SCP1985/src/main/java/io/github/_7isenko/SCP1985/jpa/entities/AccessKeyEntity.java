@@ -16,7 +16,7 @@ public class AccessKeyEntity {
     private Integer personnelId;
     private PersonnelEntity personnelByPersonnelId;
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ssh_key", nullable = false, length = -1)
     public String getSshKey() {
         return sshKey;

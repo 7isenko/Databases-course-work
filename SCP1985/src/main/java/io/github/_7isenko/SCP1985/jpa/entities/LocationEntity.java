@@ -1,7 +1,6 @@
 package io.github._7isenko.SCP1985.jpa.entities;
 
 import lombok.NoArgsConstructor;
-import org.springframework.data.repository.cdi.Eager;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -21,13 +20,12 @@ public class LocationEntity {
     private Collection<FoundationEntity> foundationsById;
     private Collection<RetrievalEntity> retrievalsById;
 
-    public LocationEntity(int id, double latitude, double longitude) {
-        this.id = id;
+    public LocationEntity(double latitude, double longitude) {
         this.latitude = new BigDecimal(latitude);
         this.longitude = new BigDecimal(longitude);
     }
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;

@@ -17,11 +17,13 @@ import org.springframework.stereotype.Component;
 public class DataLoader implements ApplicationRunner {
 
     private final SessionFactory sessionFactory;
+    private final EntitiesLoader entitiesLoader;
 
     private Session session;
 
-    public DataLoader(SessionFactory sessionFactory) {
+    public DataLoader(SessionFactory sessionFactory, EntitiesLoader entitiesLoader) {
         this.sessionFactory = sessionFactory;
+        this.entitiesLoader = entitiesLoader;
     }
 
     @Override
@@ -33,12 +35,14 @@ public class DataLoader implements ApplicationRunner {
 
         session.getTransaction().commit();
         session.close();
+
+        entitiesLoader.saveRandomLocations(10);
     }
 
 
     private void requireInitialData() {
-        if (!checkFirstFoundationLocation()) saveFirstFoundationLocation();
-        if (!checkFirstFoundation()) saveFirstFoundation();
+        if (!checkFirstFoundationLocation()) entitiesLoader.saveFirstFoundationLocation();
+        if (!checkFirstFoundation()) entitiesLoader.saveFirstFoundation();
         if (!checkScp1985()) saveScp1985();
     }
 
@@ -46,19 +50,9 @@ public class DataLoader implements ApplicationRunner {
         return session.get(LocationEntity.class, 1) != null;
     }
 
-    private void saveFirstFoundationLocation() {
-        session.save(new LocationEntity(1, 37.928141, -119.026927));
-    }
-
-
     private boolean checkFirstFoundation() {
         return session.get(FoundationEntity.class, 1) != null;
     }
-
-    private void saveFirstFoundation() {
-        session.save(new FoundationEntity(1, 1));
-    }
-
 
     private boolean checkScp1985() {
         return session.get(ScpObjectEntity.class, 1985) != null;
@@ -66,6 +60,7 @@ public class DataLoader implements ApplicationRunner {
 
     private void saveScp1985() {
         session.save(getScp1985());
+        session.flush();
     }
 
     private ScpObjectEntity getScp1985() {

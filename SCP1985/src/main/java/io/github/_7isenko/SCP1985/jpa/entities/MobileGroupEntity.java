@@ -17,7 +17,7 @@ public class MobileGroupEntity {
     private Collection<MobileGroupMembersEntity> mobileGroupMembersById;
     private Collection<RetrievalEntity> retrievalsById;
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;

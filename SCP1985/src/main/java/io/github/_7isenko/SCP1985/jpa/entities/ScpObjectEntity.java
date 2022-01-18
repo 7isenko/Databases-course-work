@@ -1,6 +1,6 @@
 package io.github._7isenko.SCP1985.jpa.entities;
 
-import io.github._7isenko.SCP1985.jpa.PostgreSQLEnumType;
+import io.github._7isenko.SCP1985.jpa.misc.PostgreSQLEnumType;
 import io.github._7isenko.SCP1985.jpa.object_types.ObjectCLass;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
