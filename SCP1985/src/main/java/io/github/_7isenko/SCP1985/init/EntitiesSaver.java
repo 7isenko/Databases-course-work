@@ -1,13 +1,14 @@
 package io.github._7isenko.SCP1985.init;
 
+import io.github._7isenko.SCP1985.init.utils.PersonnelGenerator;
 import io.github._7isenko.SCP1985.init.utils.SCPReceiver;
+import io.github._7isenko.SCP1985.jpa.entities.AccessKeyEntity;
 import io.github._7isenko.SCP1985.jpa.entities.FoundationEntity;
 import io.github._7isenko.SCP1985.jpa.entities.LocationEntity;
 import io.github._7isenko.SCP1985.jpa.entities.ScpObjectEntity;
 import io.github._7isenko.SCP1985.jpa.object_types.ObjectCLass;
-import io.github._7isenko.SCP1985.jpa.repositories.FoundationEntityRepository;
-import io.github._7isenko.SCP1985.jpa.repositories.LocationEntityRepository;
-import io.github._7isenko.SCP1985.jpa.repositories.ScpObjectEntityRepository;
+import io.github._7isenko.SCP1985.jpa.repositories.*;
+import io.github._7isenko.SCP1985.utils.StringsHelper;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -22,12 +23,29 @@ public class EntitiesSaver {
     private final LocationEntityRepository locationEntityRepository;
     private final FoundationEntityRepository foundationEntityRepository;
     private final ScpObjectEntityRepository scpObjectEntityRepository;
+    private final PersonnelEntityRepository personnelEntityRepository;
+    private final AccessKeyEntityRepository accessKeyEntityRepository;
 
-    public EntitiesSaver(RandomEntitiesGenerator generator, LocationEntityRepository locationEntityRepository, FoundationEntityRepository foundationEntityRepository, ScpObjectEntityRepository scpObjectEntityRepository) {
+    public EntitiesSaver(RandomEntitiesGenerator generator, LocationEntityRepository locationEntityRepository, FoundationEntityRepository foundationEntityRepository, ScpObjectEntityRepository scpObjectEntityRepository, PersonnelEntityRepository personnelEntityRepository, AccessKeyEntityRepository accessKeyEntityRepository) {
         this.generator = generator;
         this.locationEntityRepository = locationEntityRepository;
         this.foundationEntityRepository = foundationEntityRepository;
         this.scpObjectEntityRepository = scpObjectEntityRepository;
+        this.personnelEntityRepository = personnelEntityRepository;
+        this.accessKeyEntityRepository = accessKeyEntityRepository;
+    }
+
+    public void savePersonnelKeys(int amount) {
+        for (int i = 0; i < amount; i++) {
+            String ssh = StringsHelper.genRandomString(32);
+            accessKeyEntityRepository.save(new AccessKeyEntity(ssh, i + 1));
+        }
+        accessKeyEntityRepository.flush();
+    }
+
+    public void saveRandomPersonnel(int amount) {
+        PersonnelGenerator personnelGenerator = new PersonnelGenerator();
+        personnelEntityRepository.saveAll(personnelGenerator.generatePersonnel(amount));
     }
 
     public void saveRandomSCPs(int amount, int maxId) {

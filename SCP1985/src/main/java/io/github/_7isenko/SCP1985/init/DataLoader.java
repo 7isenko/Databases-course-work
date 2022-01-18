@@ -18,6 +18,7 @@ public class DataLoader implements ApplicationRunner {
     private final static int AMOUNT_OF_FOUNDATIONS = 5;
     private final static int AMOUNT_OF_SCP = 5;
     private final static int MAX_SCP_ID = 4000;
+    private final static int PERSONNEL_AMOUNT = 15;
 
     private final SessionFactory sessionFactory;
     private final EntitiesSaver entitiesSaver;
@@ -34,6 +35,9 @@ public class DataLoader implements ApplicationRunner {
         entitiesSaver.saveRandomLocations(AMOUNT_OF_FOUNDATIONS);
         entitiesSaver.saveRandomFoundations(AMOUNT_OF_FOUNDATIONS);
         entitiesSaver.saveRandomSCPs(AMOUNT_OF_SCP, MAX_SCP_ID);
+        entitiesSaver.saveRandomPersonnel(PERSONNEL_AMOUNT);
+        entitiesSaver.savePersonnelKeys(PERSONNEL_AMOUNT);
+
     }
 
     private void requireInitialData() {
