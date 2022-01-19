@@ -6,19 +6,27 @@ import io.github._7isenko.SCP1985.jpa.object_types.Classification;
 import io.github._7isenko.SCP1985.jpa.object_types.ClearanceLevel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 /**
  * @author 7isenko
  */
-public class PersonnelGenerator {
+public class PersonnelHelper {
 
-    private final Faker faker = new Faker();
-    private final ClassificationWithWeight[] items = new ClassificationWithWeight[]{new ClassificationWithWeight("A", 0.5D),
-            new ClassificationWithWeight("B", 1), new ClassificationWithWeight("C", 1.5D),
-            new ClassificationWithWeight("D", 10), new ClassificationWithWeight("E", 3)};
+    public static List<PersonnelEntity> getAllowedPersonnel(List<PersonnelEntity> personnelEntities) {
+        HashSet<Classification> classifications = new HashSet<>(Arrays.asList(Classification.A, Classification.B, Classification.C));
+        return personnelEntities.stream().filter(personnelEntity ->
+                        (personnelEntity.getClearanceLevel() == ClearanceLevel.FOUR ||
+                                personnelEntity.getClearanceLevel() == ClearanceLevel.FIVE) && classifications.contains(personnelEntity.getClassification()))
+                .collect(Collectors.toList());
+    }
 
-    public ArrayList<PersonnelEntity> generatePersonnel(int amount) {
+    public static ArrayList<PersonnelEntity> generatePersonnel(int amount) {
+        Faker faker = new Faker();
         double totalWeight = 0.0;
         for (ClassificationWithWeight it : items) {
             totalWeight += it.getWeight();
@@ -61,4 +69,9 @@ public class PersonnelGenerator {
             return name;
         }
     }
+
+    private static final ClassificationWithWeight[] items = new ClassificationWithWeight[]{new ClassificationWithWeight("A", 0.5D),
+            new ClassificationWithWeight("B", 1), new ClassificationWithWeight("C", 1.5D),
+            new ClassificationWithWeight("D", 10), new ClassificationWithWeight("E", 3)};
+
 }

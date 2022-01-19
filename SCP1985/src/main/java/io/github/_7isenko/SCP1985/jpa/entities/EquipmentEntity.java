@@ -1,6 +1,8 @@
 package io.github._7isenko.SCP1985.jpa.entities;
 
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -17,6 +19,10 @@ public class EquipmentEntity {
     private String name;
     private Collection<EquipmentContentsEntity> equipmentContentsById;
     private Collection<ExcursionLogEntity> excursionLogsById;
+
+    public EquipmentEntity(String name) {
+        this.name = name;
+    }
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -51,7 +57,7 @@ public class EquipmentEntity {
         return Objects.hash(id, name);
     }
 
-    @OneToMany(mappedBy = "equipmentByEquipmentId")
+    @OneToMany(mappedBy = "equipmentByEquipmentId", fetch = FetchType.EAGER) @Fetch(value = FetchMode.SUBSELECT)
     public Collection<EquipmentContentsEntity> getEquipmentContentsById() {
         return equipmentContentsById;
     }

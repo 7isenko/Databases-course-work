@@ -14,8 +14,6 @@ import java.util.ArrayList;
 @Component
 public class RandomEntitiesGenerator {
 
-
-
     public ArrayList<LocationEntity> getRandomLocations(int amount) {
         ArrayList<Double> latitudes = CollectionsHelper.getRandomList(amount, -90D, 90D);
         ArrayList<Double> longitudes = CollectionsHelper.getRandomList(amount, -180D, 180D);

@@ -84,7 +84,7 @@ public class ExcursionLogEntity {
         this.realityDescription = realityDescription;
     }
 
-    @Enumerated(EnumType.STRING) @Type(type = "psql_enum")
+    @Enumerated(EnumType.STRING)
     @Column(name = "log_status", nullable = true)
     public LogStatus getLogStatus() {
         return logStatus;

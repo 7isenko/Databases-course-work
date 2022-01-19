@@ -20,6 +20,11 @@ public class PrimingEntity {
     private ScpObjectEntity scpObjectByScpObjectId;
     private PersonnelEntity personnelByPersonnelId;
 
+    public PrimingEntity(Integer scpObjectId, Integer personnelId) {
+        this.scpObjectId = scpObjectId;
+        this.personnelId = personnelId;
+    }
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
@@ -63,7 +68,7 @@ public class PrimingEntity {
         return Objects.hash(id, scpObjectId, personnelId);
     }
 
-    @OneToMany(mappedBy = "primingByPrimingId")
+    @OneToMany(mappedBy = "primingByPrimingId", fetch = FetchType.EAGER)
     public Collection<ExcursionLogEntity> getExcursionLogsById() {
         return excursionLogsById;
     }
