@@ -46,7 +46,7 @@ public class DataLoader implements ApplicationRunner {
 
         entitiesSaver.saveRandomLocations(FOUNDATION_AMOUNT);
         entitiesSaver.saveRandomFoundations(FOUNDATION_AMOUNT);
-       // entitiesSaver.saveRandomSCPs(SCP_AMOUNT, MAX_SCP_ID);
+        entitiesSaver.saveRandomSCPs(SCP_AMOUNT, MAX_SCP_ID);
         entitiesSaver.saveRandomPersonnel(PERSONNEL_AMOUNT);
         entitiesSaver.savePersonnelKeys(PERSONNEL_AMOUNT);
         entitiesSaver.saveRandomItems(ITEM_AMOUNT);
