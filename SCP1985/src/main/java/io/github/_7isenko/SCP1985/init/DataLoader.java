@@ -53,7 +53,7 @@ public class DataLoader implements ApplicationRunner {
         entitiesSaver.saveEquipmentContents(MIN_EQUIPMENT_CONTENTS_AMOUNT, MAX_EQUIPMENT_CONTENTS_AMOUNT);
         entitiesSaver.saveMobileGroups(MOBILE_GROUP_AMOUNT);
         entitiesSaver.saveMobileGroupsContents(MOBILE_GROUP_MEMBERS_AMOUNT);
-
+        System.out.println("Заполнение закончено!");
     }
 
     private void requireInitialData() {
