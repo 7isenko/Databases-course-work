@@ -138,7 +138,7 @@ CREATE TRIGGER priming_personnel_level BEFORE INSERT OR UPDATE on priming FOR EA
     WHEN ( NEW.personnel_id is NOT NULL and NEW.scp_object_id is NOT NULL) execute procedure check_level();
 
 CREATE OR REPLACE FUNCTION go_on_excursion(scp_object_id integer, personnel_id integer, equipment_id integer)
-    RETURNS void AS $$
+    RETURNS integer AS $$
 DECLARE
     probability_of_right_priming decimal(3, 2);
     probe decimal(3, 2);
@@ -181,6 +181,7 @@ BEGIN
                                    retrieval_id, note, priming_id) VALUES
         ('Внепланово', localtimestamp(0), equipment_id, 'blablabla', 'В ПОДГОТОВКЕ',
          id_retrieval, 'No notes', id_priming);
+        RETURN 0;
 
     ELSEIF (NOT right_priming) THEN
 
@@ -193,11 +194,12 @@ BEGIN
                                    retrieval_id, note, priming_id) VALUES
         ('Внепланово', localtimestamp(0), equipment_id, 'alalalal', 'ДЛЯ ОГРАНИЧЕННОГО ПОЛЬЗОВАНИЯ',
          id_retrieval, 'No notes', id_priming);
+        RETURN 0;
 
     ELSE
 
         INSERT INTO retrieval (location_id, mobile_group_id, return_to_reality, return_to_foundation, succeed) VALUES
-        (id_location, 1, localtimestamp(0), NULL, FALSE);
+        (id_location, 1, localtimestamp(0), NULL, TRUE);
 
         INSERT INTO item (name) VALUES ('some word');
         id_item = (SELECT id from item ORDER BY id DESC LIMIT 1);
@@ -213,6 +215,7 @@ BEGIN
         id_excursion = (SELECT id from excursion_log ORDER BY id DESC LIMIT 1);
 
         INSERT INTO excursion_contents (excursion_log_id, item_id) VALUES (id_excursion, id_item);
+        RETURN 1;
     end if;
 end
 $$ LANGUAGE plpgsql;
