@@ -182,8 +182,7 @@ CREATE TRIGGER priming_personnel_level
 execute procedure check_level();
 
 CREATE OR REPLACE FUNCTION go_on_excursion(scp_object_id integer, personnel_id integer, equipment_id integer)
-    RETURNS void AS
-$$
+    RETURNS integer AS $$
 DECLARE
     probability_of_right_priming decimal(3, 2);
     probe                        decimal(3, 2);
@@ -223,9 +222,10 @@ BEGIN
         id_retrieval = (SELECT id from retrieval ORDER BY id DESC LIMIT 1);
         INSERT INTO excursion_log (trigger_type, trigger_committed,
                                    equipment_id, reality_description, log_status,
-                                   retrieval_id, note, priming_id)
-        VALUES ('Внепланово', localtimestamp(0), equipment_id, 'blablabla', 'В_ПОДГОТОВКЕ',
-                id_retrieval, 'No notes', id_priming);
+                                   retrieval_id, note, priming_id) VALUES
+        ('Внепланово', localtimestamp(0), equipment_id, 'blablabla', 'В ПОДГОТОВКЕ',
+         id_retrieval, 'No notes', id_priming);
+        RETURN 0;
 
     ELSEIF (NOT right_priming) THEN
 
@@ -235,14 +235,15 @@ BEGIN
         id_retrieval = (SELECT id from retrieval ORDER BY id DESC LIMIT 1);
         INSERT INTO excursion_log (trigger_type, trigger_committed,
                                    equipment_id, reality_description, log_status,
-                                   retrieval_id, note, priming_id)
-        VALUES ('Внепланово', localtimestamp(0), equipment_id, 'alalalal', 'ДЛЯ_ОГРАНИЧЕННОГО_ПОЛЬЗОВАНИЯ',
-                id_retrieval, 'No notes', id_priming);
+                                   retrieval_id, note, priming_id) VALUES
+        ('Внепланово', localtimestamp(0), equipment_id, 'alalalal', 'ДЛЯ ОГРАНИЧЕННОГО ПОЛЬЗОВАНИЯ',
+         id_retrieval, 'No notes', id_priming);
+        RETURN 0;
 
     ELSE
 
-        INSERT INTO retrieval (location_id, mobile_group_id, return_to_reality, return_to_foundation, succeed)
-        VALUES (id_location, 1, localtimestamp(0), NULL, FALSE);
+        INSERT INTO retrieval (location_id, mobile_group_id, return_to_reality, return_to_foundation, succeed) VALUES
+        (id_location, 1, localtimestamp(0), NULL, TRUE);
 
         INSERT INTO item (name) VALUES ('some word');
         id_item = (SELECT id from item ORDER BY id DESC LIMIT 1);
@@ -258,6 +259,7 @@ BEGIN
         id_excursion = (SELECT id from excursion_log ORDER BY id DESC LIMIT 1);
 
         INSERT INTO excursion_contents (excursion_log_id, item_id) VALUES (id_excursion, id_item);
+        RETURN 1;
     end if;
 end
 $$ LANGUAGE plpgsql;
