@@ -5,15 +5,6 @@ package io.github._7isenko.SCP1985.jpa.object_types;
  */
 @SuppressWarnings("NonAsciiCharacters")
 public enum LogStatus {
-    В_ПОДГОТОВКЕ("В ПОДГОТОВКЕ"), ДЛЯ_ОГРАНИЧЕННОГО_ПОЛЬЗОВАНИЯ("ДЛЯ ОГРАНИЧЕННОГО ПОЛЬЗОВАНИЯ");
-    private final String status;
+    В_ПОДГОТОВКЕ, ДЛЯ_ОГРАНИЧЕННОГО_ПОЛЬЗОВАНИЯ;
 
-    LogStatus(String status) {
-        this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return status;
-    }
 }

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class DataLoader implements ApplicationRunner {
 
     private final static int FOUNDATION_AMOUNT = 5;
-    private final static int SCP_AMOUNT = 5;
+    private final static int SCP_AMOUNT = 10;
     private final static int MAX_SCP_ID = 4000;
     private final static int PERSONNEL_AMOUNT = 30;
 
@@ -29,6 +29,7 @@ public class DataLoader implements ApplicationRunner {
     private final static int MOBILE_GROUP_AMOUNT = 3;
     private final static int MOBILE_GROUP_MEMBERS_AMOUNT = 3;
 
+    private final static int PRIMINGS_AMOUNT = 3;
 
     private final SessionFactory sessionFactory;
     private final EntitiesSaver entitiesSaver;
@@ -45,7 +46,7 @@ public class DataLoader implements ApplicationRunner {
 
         entitiesSaver.saveRandomLocations(FOUNDATION_AMOUNT);
         entitiesSaver.saveRandomFoundations(FOUNDATION_AMOUNT);
-        entitiesSaver.saveRandomSCPs(SCP_AMOUNT, MAX_SCP_ID);
+       // entitiesSaver.saveRandomSCPs(SCP_AMOUNT, MAX_SCP_ID);
         entitiesSaver.saveRandomPersonnel(PERSONNEL_AMOUNT);
         entitiesSaver.savePersonnelKeys(PERSONNEL_AMOUNT);
         entitiesSaver.saveRandomItems(ITEM_AMOUNT);
@@ -53,6 +54,9 @@ public class DataLoader implements ApplicationRunner {
         entitiesSaver.saveEquipmentContents(MIN_EQUIPMENT_CONTENTS_AMOUNT, MAX_EQUIPMENT_CONTENTS_AMOUNT);
         entitiesSaver.saveMobileGroups(MOBILE_GROUP_AMOUNT);
         entitiesSaver.saveMobileGroupsContents(MOBILE_GROUP_MEMBERS_AMOUNT);
+        entitiesSaver.savePrimings(PRIMINGS_AMOUNT);
+        entitiesSaver.saveExcursions();
+
         System.out.println("Заполнение закончено!");
     }
 

@@ -5,13 +5,12 @@ import io.github._7isenko.SCP1985.jpa.entities.*;
 import io.github._7isenko.SCP1985.jpa.object_types.ObjectCLass;
 import io.github._7isenko.SCP1985.jpa.repositories.*;
 import io.github._7isenko.SCP1985.utils.CollectionsHelper;
-import io.github._7isenko.SCP1985.utils.PersonnelGenerator;
+import io.github._7isenko.SCP1985.utils.PersonnelHelper;
 import io.github._7isenko.SCP1985.utils.SCPReceiver;
 import io.github._7isenko.SCP1985.utils.StringsHelper;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
@@ -34,8 +33,10 @@ public class EntitiesSaver {
     private final EquipmentContentsEntityRepository equipmentContentsEntityRepository;
     private final MobileGroupEntityRepository mobileGroupEntityRepository;
     private final MobileGroupMembersEntityRepository mobileGroupMembersEntityRepository;
+    private final PrimingEntityRepository primingEntityRepository;
+    private final ExcursionLogEntityRepository excursionLogEntityRepository;
 
-    public EntitiesSaver(RandomEntitiesGenerator generator, LocationEntityRepository locationEntityRepository, FoundationEntityRepository foundationEntityRepository, ScpObjectEntityRepository scpObjectEntityRepository, PersonnelEntityRepository personnelEntityRepository, AccessKeyEntityRepository accessKeyEntityRepository, ItemEntityRepository itemEntityRepository, EquipmentEntityRepository equipmentEntityRepository, EquipmentContentsEntityRepository equipmentContentsEntityRepository, MobileGroupEntityRepository mobileGroupEntityRepository, MobileGroupMembersEntityRepository mobileGroupMembersEntityRepository) {
+    public EntitiesSaver(RandomEntitiesGenerator generator, LocationEntityRepository locationEntityRepository, FoundationEntityRepository foundationEntityRepository, ScpObjectEntityRepository scpObjectEntityRepository, PersonnelEntityRepository personnelEntityRepository, AccessKeyEntityRepository accessKeyEntityRepository, ItemEntityRepository itemEntityRepository, EquipmentEntityRepository equipmentEntityRepository, EquipmentContentsEntityRepository equipmentContentsEntityRepository, MobileGroupEntityRepository mobileGroupEntityRepository, MobileGroupMembersEntityRepository mobileGroupMembersEntityRepository, PrimingEntityRepository primingEntityRepository, ExcursionLogEntityRepository excursionLogEntityRepository) {
         this.generator = generator;
         this.locationEntityRepository = locationEntityRepository;
         this.foundationEntityRepository = foundationEntityRepository;
@@ -47,6 +48,31 @@ public class EntitiesSaver {
         this.equipmentContentsEntityRepository = equipmentContentsEntityRepository;
         this.mobileGroupEntityRepository = mobileGroupEntityRepository;
         this.mobileGroupMembersEntityRepository = mobileGroupMembersEntityRepository;
+        this.primingEntityRepository = primingEntityRepository;
+        this.excursionLogEntityRepository = excursionLogEntityRepository;
+    }
+
+    public void saveExcursions() {
+        List<PrimingEntity> primingEntities = primingEntityRepository.findAll();
+        List<EquipmentEntity> equipmentEntities = equipmentEntityRepository.findAll();
+        for (PrimingEntity primingEntity : primingEntities) {
+            if (primingEntity.getExcursionLogsById().isEmpty())
+                excursionLogEntityRepository.goOnExcursion(primingEntity.getScpObjectId(), primingEntity.getPersonnelId(), CollectionsHelper.getRandomElement(equipmentEntities).getId());
+        }
+        excursionLogEntityRepository.flush();
+    }
+
+    public void savePrimings(int amount) {
+        List<PersonnelEntity> allowedPersonnelEntities = PersonnelHelper.getAllowedPersonnel(personnelEntityRepository.findAll());
+        List<ScpObjectEntity> scpObjectEntities = scpObjectEntityRepository.findAll();
+
+        for (int i = 0; i < amount; i++) {
+            int scp = CollectionsHelper.getRandomElement(scpObjectEntities).getId();
+            int personnel = CollectionsHelper.getRandomElement(allowedPersonnelEntities).getId();
+            primingEntityRepository.save(new PrimingEntity(scp, personnel));
+        }
+
+        primingEntityRepository.flush();
     }
 
     public void saveMobileGroupsContents(int min) {
@@ -65,7 +91,7 @@ public class EntitiesSaver {
         Faker faker = new Faker();
         ThreadLocalRandom random = ThreadLocalRandom.current();
         for (int i = 0; i < amount; i++) {
-            mobileGroupEntityRepository.save(new MobileGroupEntity(faker.pokemon().name(), new Timestamp(random.nextLong(Calendar.getInstance().getTimeInMillis() >> 8, Calendar.getInstance().getTimeInMillis()))));
+            mobileGroupEntityRepository.save(new MobileGroupEntity(faker.pokemon().name(), new Timestamp(random.nextLong(Calendar.getInstance().getTimeInMillis() >> 3, Calendar.getInstance().getTimeInMillis()))));
         }
         mobileGroupEntityRepository.flush();
     }
@@ -106,8 +132,8 @@ public class EntitiesSaver {
     }
 
     public void saveRandomPersonnel(int amount) {
-        PersonnelGenerator personnelGenerator = new PersonnelGenerator();
-        personnelEntityRepository.saveAll(personnelGenerator.generatePersonnel(amount));
+        PersonnelHelper personnelHelper = new PersonnelHelper();
+        personnelEntityRepository.saveAll(personnelHelper.generatePersonnel(amount));
     }
 
     public void saveRandomSCPs(int amount, int maxId) {
