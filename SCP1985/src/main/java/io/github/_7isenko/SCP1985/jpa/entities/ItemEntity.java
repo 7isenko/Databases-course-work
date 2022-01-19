@@ -18,6 +18,10 @@ public class ItemEntity {
     private Collection<EquipmentContentsEntity> equipmentContentsById;
     private Collection<ExcursionContentsEntity> excursionContentsById;
 
+    public ItemEntity(String name) {
+        this.name = name;
+    }
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {

@@ -3,6 +3,7 @@ package io.github._7isenko.SCP1985.jpa.entities;
 import io.github._7isenko.SCP1985.jpa.misc.PostgreSQLEnumType;
 import io.github._7isenko.SCP1985.jpa.object_types.Classification;
 import io.github._7isenko.SCP1985.jpa.object_types.ClearanceLevel;
+import io.github._7isenko.SCP1985.jpa.object_types.converters.ClearanceLevelConverter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -65,8 +66,8 @@ public class PersonnelEntity {
         this.surname = surname;
     }
 
-    @Enumerated(EnumType.STRING)
-    @Type(type = "psql_enum")
+    @Enumerated(EnumType.ORDINAL) // If I put EnumType.ORDINAL, it ALL breaks.
+    @Type(type = "psql_enum") @Convert(converter = ClearanceLevelConverter.class)
     @Column(name = "clearance_level", nullable = true)
     public ClearanceLevel getClearanceLevel() {
         return clearanceLevel;

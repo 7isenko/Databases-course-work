@@ -17,6 +17,14 @@ public class CollectionsHelper {
         throw new AssertionError();
     }
 
+    public static ArrayList<String> getRandomStringList(int amount, int bound) {
+        ArrayList<String> strings = new ArrayList<>();
+        for (int i = 0; i < amount; i++) {
+            strings.add(StringsHelper.genRandomString(bound));
+        }
+        return strings;
+    }
+
     public static ArrayList<Double> getRandomList(int amount, double min, double max) {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         ArrayList<Double> doubles = new ArrayList<>();

@@ -1,5 +1,7 @@
 package io.github._7isenko.SCP1985.jpa.entities;
 
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
@@ -8,6 +10,7 @@ import java.util.Objects;
 /**
  * @author 7isenko
  */
+@NoArgsConstructor
 @Entity
 @Table(name = "mobile_group")
 public class MobileGroupEntity {
@@ -16,6 +19,15 @@ public class MobileGroupEntity {
     private Timestamp created;
     private Collection<MobileGroupMembersEntity> mobileGroupMembersById;
     private Collection<RetrievalEntity> retrievalsById;
+
+    public MobileGroupEntity(String name) {
+        this.name = name;
+    }
+
+    public MobileGroupEntity(String name, Timestamp created) {
+        this.name = name;
+        this.created = created;
+    }
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -60,7 +72,7 @@ public class MobileGroupEntity {
         return Objects.hash(id, name, created);
     }
 
-    @OneToMany(mappedBy = "mobileGroupByMobileGroupId")
+    @OneToMany(mappedBy = "mobileGroupByMobileGroupId", fetch = FetchType.EAGER)
     public Collection<MobileGroupMembersEntity> getMobileGroupMembersById() {
         return mobileGroupMembersById;
     }

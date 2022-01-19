@@ -39,7 +39,7 @@ $$;
 DO
 $$
     BEGIN
-        CREATE TYPE log_status as enum ('В ПОДГОТОВКЕ', 'ДЛЯ ОГРАНИЧЕННОГО ПОЛЬЗОВАНИЯ');
+        CREATE TYPE log_status as enum ('В_ПОДГОТОВКЕ', 'ДЛЯ_ОГРАНИЧЕННОГО_ПОЛЬЗОВАНИЯ');
     EXCEPTION
         WHEN DUPLICATE_OBJECT THEN
             RAISE NOTICE 'type log_status already exists. it will be skipped';
@@ -173,20 +173,26 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER priming_personnel_level BEFORE INSERT OR UPDATE on priming FOR EACH ROW
-    WHEN ( NEW.personnel_id is NOT NULL and NEW.scp_object_id is NOT NULL) execute procedure check_level();
+DROP TRIGGER IF EXISTS priming_personnel_level on priming;
+CREATE TRIGGER priming_personnel_level
+    BEFORE INSERT OR UPDATE
+    on priming
+    FOR EACH ROW
+    WHEN ( NEW.personnel_id is NOT NULL and NEW.scp_object_id is NOT NULL)
+execute procedure check_level();
 
 CREATE OR REPLACE FUNCTION go_on_excursion(scp_object_id integer, personnel_id integer, equipment_id integer)
-    RETURNS void AS $$
+    RETURNS void AS
+$$
 DECLARE
     probability_of_right_priming decimal(3, 2);
-    probe decimal(3, 2);
-    right_priming bool;
-    id_location integer;
-    id_retrieval integer;
-    id_priming integer;
-    id_item integer;
-    id_excursion integer;
+    probe                        decimal(3, 2);
+    right_priming                bool;
+    id_location                  integer;
+    id_retrieval                 integer;
+    id_priming                   integer;
+    id_item                      integer;
+    id_excursion                 integer;
 BEGIN
 
     probability_of_right_priming = 0.05;
@@ -203,40 +209,40 @@ BEGIN
         right_priming = true;
     end if;
 
-    INSERT INTO location (latitude, longitude) VALUES
-    (random()*180 - 90, random()*360 - 180);
+    INSERT INTO location (latitude, longitude)
+    VALUES (random() * 180 - 90, random() * 360 - 180);
 
     id_location = (SELECT id from location ORDER BY id DESC LIMIT 1);
     id_priming = (SELECT id from priming ORDER BY id DESC LIMIT 1);
 
     IF (NOT right_priming and equipment_id IS NULL) THEN
 
-        INSERT INTO retrieval (location_id, mobile_group_id, return_to_reality, return_to_foundation, succeed) VALUES
-        (id_location, 1, localtimestamp(0), NULL, FALSE);
+        INSERT INTO retrieval (location_id, mobile_group_id, return_to_reality, return_to_foundation, succeed)
+        VALUES (id_location, 1, localtimestamp(0), NULL, FALSE);
 
         id_retrieval = (SELECT id from retrieval ORDER BY id DESC LIMIT 1);
         INSERT INTO excursion_log (trigger_type, trigger_committed,
                                    equipment_id, reality_description, log_status,
-                                   retrieval_id, note, priming_id) VALUES
-        ('Внепланово', localtimestamp(0), equipment_id, 'blablabla', 'В ПОДГОТОВКЕ',
-         id_retrieval, 'No notes', id_priming);
+                                   retrieval_id, note, priming_id)
+        VALUES ('Внепланово', localtimestamp(0), equipment_id, 'blablabla', 'В_ПОДГОТОВКЕ',
+                id_retrieval, 'No notes', id_priming);
 
     ELSEIF (NOT right_priming) THEN
 
-        INSERT INTO retrieval (location_id, mobile_group_id, return_to_reality, return_to_foundation, succeed) VALUES
-        (id_location, 1, localtimestamp(0), NULL, FALSE);
+        INSERT INTO retrieval (location_id, mobile_group_id, return_to_reality, return_to_foundation, succeed)
+        VALUES (id_location, 1, localtimestamp(0), NULL, FALSE);
 
         id_retrieval = (SELECT id from retrieval ORDER BY id DESC LIMIT 1);
         INSERT INTO excursion_log (trigger_type, trigger_committed,
                                    equipment_id, reality_description, log_status,
-                                   retrieval_id, note, priming_id) VALUES
-        ('Внепланово', localtimestamp(0), equipment_id, 'alalalal', 'ДЛЯ ОГРАНИЧЕННОГО ПОЛЬЗОВАНИЯ',
-         id_retrieval, 'No notes', id_priming);
+                                   retrieval_id, note, priming_id)
+        VALUES ('Внепланово', localtimestamp(0), equipment_id, 'alalalal', 'ДЛЯ_ОГРАНИЧЕННОГО_ПОЛЬЗОВАНИЯ',
+                id_retrieval, 'No notes', id_priming);
 
     ELSE
 
-        INSERT INTO retrieval (location_id, mobile_group_id, return_to_reality, return_to_foundation, succeed) VALUES
-        (id_location, 1, localtimestamp(0), NULL, FALSE);
+        INSERT INTO retrieval (location_id, mobile_group_id, return_to_reality, return_to_foundation, succeed)
+        VALUES (id_location, 1, localtimestamp(0), NULL, FALSE);
 
         INSERT INTO item (name) VALUES ('some word');
         id_item = (SELECT id from item ORDER BY id DESC LIMIT 1);
@@ -245,9 +251,9 @@ BEGIN
         id_retrieval = (SELECT id from retrieval ORDER BY id DESC LIMIT 1);
         INSERT INTO excursion_log (trigger_type, trigger_committed,
                                    equipment_id, reality_description, log_status,
-                                   retrieval_id, note, priming_id) VALUES
-        ('Инъекция', localtimestamp(0), equipment_id, 'hahahaha', 'ДЛЯ ОГРАНИЧЕННОГО ПОЛЬЗОВАНИЯ',
-         id_retrieval, 'No notes', id_priming);
+                                   retrieval_id, note, priming_id)
+        VALUES ('Инъекция', localtimestamp(0), equipment_id, 'hahahaha', 'ДЛЯ_ОГРАНИЧЕННОГО_ПОЛЬЗОВАНИЯ',
+                id_retrieval, 'No notes', id_priming);
 
         id_excursion = (SELECT id from excursion_log ORDER BY id DESC LIMIT 1);
 
@@ -255,11 +261,3 @@ BEGIN
     end if;
 end
 $$ LANGUAGE plpgsql;
-
-DROP TRIGGER IF EXISTS priming_personnel_level on priming;
-CREATE TRIGGER priming_personnel_level
-    BEFORE INSERT OR UPDATE
-    on priming
-    FOR EACH ROW
-    WHEN ( NEW.personnel_id is NOT NULL and NEW.scp_object_id is NOT NULL)
-execute procedure check_level();
