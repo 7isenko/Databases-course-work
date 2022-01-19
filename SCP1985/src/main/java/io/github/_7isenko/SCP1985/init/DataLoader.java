@@ -16,20 +16,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class DataLoader implements ApplicationRunner {
 
-    private final static int FOUNDATION_AMOUNT = 5;
-    private final static int SCP_AMOUNT = 10;
+    private final static int FOUNDATION_AMOUNT = 15;
+    private final static int SCP_AMOUNT = 200;
     private final static int MAX_SCP_ID = 4000;
-    private final static int PERSONNEL_AMOUNT = 30;
+    private final static int PERSONNEL_AMOUNT = 400;
 
-    private final static int ITEM_AMOUNT = 30;
-    private final static int EQUIPMENT_AMOUNT = 5;
-    private final static int MIN_EQUIPMENT_CONTENTS_AMOUNT = 3;
-    private final static int MAX_EQUIPMENT_CONTENTS_AMOUNT = 5;
+    private final static int ITEM_AMOUNT = 180;
+    private final static int EQUIPMENT_AMOUNT = 30;
+    private final static int MIN_EQUIPMENT_CONTENTS_AMOUNT = 4;
+    private final static int MAX_EQUIPMENT_CONTENTS_AMOUNT = 6;
 
-    private final static int MOBILE_GROUP_AMOUNT = 3;
-    private final static int MOBILE_GROUP_MEMBERS_AMOUNT = 3;
+    private final static int MOBILE_GROUP_AMOUNT = 30;
+    private final static int MOBILE_GROUP_MEMBERS_AMOUNT = 7;
 
-    private final static int PRIMINGS_AMOUNT = 3;
+    private final static int PRIMINGS_AMOUNT = 70;
 
     private final SessionFactory sessionFactory;
     private final EntitiesSaver entitiesSaver;
