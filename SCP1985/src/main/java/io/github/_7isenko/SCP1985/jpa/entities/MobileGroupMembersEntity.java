@@ -18,6 +18,11 @@ public class MobileGroupMembersEntity {
     private MobileGroupEntity mobileGroupByMobileGroupId;
     private PersonnelEntity personnelByPersonnelId;
 
+    public MobileGroupMembersEntity(int mobileGroupId, int personnelId) {
+        this.mobileGroupId = mobileGroupId;
+        this.personnelId = personnelId;
+    }
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "mobile_group_id", nullable = false)
     public int getMobileGroupId() {

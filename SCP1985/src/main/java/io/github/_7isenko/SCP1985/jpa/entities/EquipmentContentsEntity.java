@@ -18,6 +18,11 @@ public class EquipmentContentsEntity {
     private EquipmentEntity equipmentByEquipmentId;
     private ItemEntity itemByItemId;
 
+    public EquipmentContentsEntity(int equipmentId, int itemId) {
+        this.equipmentId = equipmentId;
+        this.itemId = itemId;
+    }
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "equipment_id", nullable = false)
     public int getEquipmentId() {

@@ -1,6 +1,7 @@
 package io.github._7isenko.SCP1985.jpa.object_types.converters;
 
 import io.github._7isenko.SCP1985.jpa.object_types.ClearanceLevel;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
