@@ -1,4 +1,4 @@
-package io.github._7isenko.SCP1985.init.utils;
+package io.github._7isenko.SCP1985.utils;
 
 import com.github.javafaker.Faker;
 import io.github._7isenko.SCP1985.jpa.entities.PersonnelEntity;

@@ -1,4 +1,4 @@
-package io.github._7isenko.SCP1985.init.utils;
+package io.github._7isenko.SCP1985.utils;
 
 import io.github._7isenko.SCP1985.jpa.entities.ScpObjectEntity;
 import io.github._7isenko.SCP1985.jpa.object_types.ObjectCLass;
@@ -12,7 +12,6 @@ import org.springframework.lang.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -26,7 +25,7 @@ public class SCPReceiver {
 
     public SCPReceiver(int maxScpId, @Nullable Set<Integer> knownScpIds) {
         this.maxScpId = maxScpId;
-        this.knownScpIds = Objects.requireNonNullElseGet(knownScpIds, HashSet::new);
+        this.knownScpIds = knownScpIds != null ? knownScpIds : new HashSet<>();
     }
 
     public ArrayList<ScpObjectEntity> getSCPList(int amount) {
