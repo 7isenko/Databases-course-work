@@ -1,27 +1,27 @@
-delete from access_key;
+truncate table access_key restart identity;
 
-delete from mobile_group_members;
+truncate table mobile_group_members restart identity;
 
-delete from equipment_contents;
+truncate table equipment_contents restart identity;
 
-delete from excursion_contents;
+truncate table excursion_contents restart identity;
 
-delete from item;
+truncate table item restart identity cascade;
 
-delete from excursion_log;
+truncate table excursion_log restart identity cascade;
 
-delete from retrieval;
+truncate table retrieval restart identity cascade;
 
-delete from mobile_group;
+truncate table mobile_group restart identity cascade;
 
-delete from equipment;
+truncate table equipment restart identity cascade;
 
-delete from priming;
+truncate table priming restart identity cascade;
 
-delete from personnel;
+truncate table personnel restart identity cascade;
 
-delete from scp_object;
+truncate table scp_object restart identity cascade;
 
-delete from foundation;
+truncate table foundation restart identity cascade;
 
-delete from location;
+truncate table location restart identity cascade;
