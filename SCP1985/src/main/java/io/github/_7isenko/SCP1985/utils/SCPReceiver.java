@@ -26,7 +26,7 @@ public class SCPReceiver {
 
     public SCPReceiver(int maxScpId, @Nullable Set<Integer> knownScpIds) {
         this.maxScpId = maxScpId;
-        this.knownScpIds = Objects.requireNonNullElseGet(knownScpIds, HashSet::new);
+        this.knownScpIds = knownScpIds != null ? knownScpIds : new HashSet<>();
     }
 
     public ArrayList<ScpObjectEntity> getSCPList(int amount) {
