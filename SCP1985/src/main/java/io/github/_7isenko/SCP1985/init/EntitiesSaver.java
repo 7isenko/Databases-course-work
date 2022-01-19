@@ -1,13 +1,13 @@
 package io.github._7isenko.SCP1985.init;
 
-import io.github._7isenko.SCP1985.utils.PersonnelGenerator;
-import io.github._7isenko.SCP1985.utils.SCPReceiver;
 import io.github._7isenko.SCP1985.jpa.entities.AccessKeyEntity;
 import io.github._7isenko.SCP1985.jpa.entities.FoundationEntity;
 import io.github._7isenko.SCP1985.jpa.entities.LocationEntity;
 import io.github._7isenko.SCP1985.jpa.entities.ScpObjectEntity;
 import io.github._7isenko.SCP1985.jpa.object_types.ObjectCLass;
 import io.github._7isenko.SCP1985.jpa.repositories.*;
+import io.github._7isenko.SCP1985.utils.PersonnelGenerator;
+import io.github._7isenko.SCP1985.utils.SCPReceiver;
 import io.github._7isenko.SCP1985.utils.StringsHelper;
 import org.springframework.stereotype.Component;
 
