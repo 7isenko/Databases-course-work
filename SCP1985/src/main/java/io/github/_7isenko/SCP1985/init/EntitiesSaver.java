@@ -132,8 +132,7 @@ public class EntitiesSaver {
     }
 
     public void saveRandomPersonnel(int amount) {
-        PersonnelHelper personnelHelper = new PersonnelHelper();
-        personnelEntityRepository.saveAll(personnelHelper.generatePersonnel(amount));
+        personnelEntityRepository.saveAll(PersonnelHelper.generatePersonnel(amount));
     }
 
     public void saveRandomSCPs(int amount, int maxId) {
