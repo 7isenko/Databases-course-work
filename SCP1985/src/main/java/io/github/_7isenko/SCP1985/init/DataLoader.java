@@ -19,7 +19,7 @@ public class DataLoader implements ApplicationRunner {
     private final static int FOUNDATION_AMOUNT = 5;
     private final static int SCP_AMOUNT = 5;
     private final static int MAX_SCP_ID = 4000;
-    private final static int PERSONNEL_AMOUNT = 15;
+    private final static int PERSONNEL_AMOUNT = 30;
 
     private final static int ITEM_AMOUNT = 30;
     private final static int EQUIPMENT_AMOUNT = 5;
