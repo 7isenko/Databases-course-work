@@ -192,6 +192,15 @@ RETURN (latitude, longitude);
 end;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION get_priming(scp_object_id integer, personnel_id integer) RETURNS integer AS $$
+BEGIN
+RETURN (SELECT priming.id from priming
+                                   LEFT JOIN excursion_log el on priming.id = el.priming_id
+        WHERE el.id is NULL
+    LIMIT 1);
+end;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION go_on_excursion(scp_object_id integer, personnel_id integer, equipment_id integer)
     RETURNS void AS $$
 DECLARE
