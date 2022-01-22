@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List of all SCPs in database</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<p>
+    Just a list of SCP.
+</p>
+<table>
+    <tr th:each="scp:${scpEntities}">
+        <td th:utext="${scp.id}">...</td>
+        <td th:utext="${scp.name}">...</td>
+        <td th:utext="${scp.description}">...</td>
+    </tr>
+</table>
+</body>
+</html>
