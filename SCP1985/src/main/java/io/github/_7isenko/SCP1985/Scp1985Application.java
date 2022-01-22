@@ -1,6 +1,6 @@
 package io.github._7isenko.SCP1985;
 
-import io.github._7isenko.SCP1985.jpa.entities.ScpObjectEntity;
+import io.github._7isenko.SCP1985.model.entities.ScpObjectEntity;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
