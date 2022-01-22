@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS access_key
 CREATE TABLE IF NOT EXISTS mobile_group
 (
     id      serial PRIMARY KEY,
-    name    varchar(60),
+    name    varchar(90),
     created timestamp
 );
 
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS foundation
 CREATE TABLE IF NOT EXISTS scp_object
 (
     id            int PRIMARY KEY,
-    name          varchar(80),
+    name          varchar(120),
     description   text,
     object_class  object_class DEFAULT 'Неприменимо',
     foundation_id int NULL REFERENCES foundation (id) on delete set null on update cascade
@@ -113,13 +113,13 @@ CREATE TABLE IF NOT EXISTS scp_object
 CREATE TABLE IF NOT EXISTS equipment
 (
     id   serial PRIMARY KEY,
-    name varchar(80)
+    name varchar(120)
 );
 
 CREATE TABLE IF NOT EXISTS item
 (
     id   serial PRIMARY KEY,
-    name varchar(80)
+    name varchar(120)
 );
 
 CREATE TABLE IF NOT EXISTS equipment_contents
