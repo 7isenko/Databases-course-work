@@ -190,12 +190,11 @@ CREATE OR REPLACE FUNCTION get_retrieval_location()
 AS
 $$
 DECLARE
-    latitude  decimal(9, 6);
-    longitude decimal(9, 6);
+    rec RECORD;
 BEGIN
-    latitude = random() * 180 - 90;
-    longitude = random() * 360 - 180;
-    RETURN (latitude, longitude);
+    rec.latitude = random() * 180 - 90;
+    rec.longitude = random() * 360 - 180;
+    RETURN next;
 end;
 $$ LANGUAGE plpgsql;
 
