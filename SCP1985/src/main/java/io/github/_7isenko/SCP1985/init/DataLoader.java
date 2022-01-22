@@ -16,46 +16,48 @@ import org.springframework.stereotype.Component;
 @Component
 public class DataLoader implements ApplicationRunner {
 
-    private final static int FOUNDATION_AMOUNT = 15;
-    private final static int SCP_AMOUNT = 200;
+    private final static int FOUNDATION_AMOUNT = 2;
+    private final static int SCP_AMOUNT = 5;
     private final static int MAX_SCP_ID = 4000;
-    private final static int PERSONNEL_AMOUNT = 400;
+    private final static int PERSONNEL_AMOUNT = 20;
 
-    private final static int ITEM_AMOUNT = 180;
-    private final static int EQUIPMENT_AMOUNT = 30;
+    private final static int ITEM_AMOUNT = 30;
+    private final static int EQUIPMENT_AMOUNT = 3;
     private final static int MIN_EQUIPMENT_CONTENTS_AMOUNT = 4;
     private final static int MAX_EQUIPMENT_CONTENTS_AMOUNT = 6;
 
-    private final static int MOBILE_GROUP_AMOUNT = 30;
-    private final static int MOBILE_GROUP_MEMBERS_AMOUNT = 7;
+    private final static int MOBILE_GROUP_AMOUNT = 2;
+    private final static int MOBILE_GROUP_MEMBERS_AMOUNT = 4;
 
-    private final static int PRIMINGS_AMOUNT = 70;
+    private final static int PRIMINGS_AMOUNT = 2;
 
     private final SessionFactory sessionFactory;
-    private final EntitiesSaver entitiesSaver;
+    private final GeneratingEntitiesSaver generatingEntitiesSaver;
+    private final InitialDataSaver initialDataSaver;
 
 
-    public DataLoader(SessionFactory sessionFactory, EntitiesSaver entitiesSaver) {
+    public DataLoader(SessionFactory sessionFactory, GeneratingEntitiesSaver generatingEntitiesSaver, InitialDataSaver initialDataSaver) {
         this.sessionFactory = sessionFactory;
-        this.entitiesSaver = entitiesSaver;
+        this.generatingEntitiesSaver = generatingEntitiesSaver;
+        this.initialDataSaver = initialDataSaver;
     }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         requireInitialData();
 
-        entitiesSaver.saveRandomLocations(FOUNDATION_AMOUNT);
-        entitiesSaver.saveRandomFoundations(FOUNDATION_AMOUNT);
-        entitiesSaver.saveRandomSCPs(SCP_AMOUNT, MAX_SCP_ID);
-        entitiesSaver.saveRandomPersonnel(PERSONNEL_AMOUNT);
-        entitiesSaver.saveRandomPersonnelKeys(PERSONNEL_AMOUNT);
-        entitiesSaver.saveRandomItems(ITEM_AMOUNT);
-        entitiesSaver.saveRandomEquipment(EQUIPMENT_AMOUNT);
-        entitiesSaver.saveRandomEquipmentContents(MIN_EQUIPMENT_CONTENTS_AMOUNT, MAX_EQUIPMENT_CONTENTS_AMOUNT);
-        entitiesSaver.saveRandomMobileGroups(MOBILE_GROUP_AMOUNT);
-        entitiesSaver.saveRandomMobileGroupsMembers(MOBILE_GROUP_MEMBERS_AMOUNT);
-        entitiesSaver.saveRandomPrimings(PRIMINGS_AMOUNT);
-        entitiesSaver.saveRandomExcursionLogs();
+        generatingEntitiesSaver.saveRandomLocations(FOUNDATION_AMOUNT);
+        generatingEntitiesSaver.saveRandomFoundations(FOUNDATION_AMOUNT);
+        generatingEntitiesSaver.saveRandomSCPs(SCP_AMOUNT, MAX_SCP_ID);
+        generatingEntitiesSaver.saveRandomPersonnel(PERSONNEL_AMOUNT);
+        generatingEntitiesSaver.saveRandomPersonnelKeys(PERSONNEL_AMOUNT);
+        generatingEntitiesSaver.saveRandomItems(ITEM_AMOUNT);
+        generatingEntitiesSaver.saveRandomEquipment(EQUIPMENT_AMOUNT);
+        generatingEntitiesSaver.saveRandomEquipmentContents(MIN_EQUIPMENT_CONTENTS_AMOUNT, MAX_EQUIPMENT_CONTENTS_AMOUNT);
+        generatingEntitiesSaver.saveRandomMobileGroups(MOBILE_GROUP_AMOUNT);
+        generatingEntitiesSaver.saveRandomMobileGroupsMembers(MOBILE_GROUP_MEMBERS_AMOUNT);
+        generatingEntitiesSaver.saveRandomPrimings(PRIMINGS_AMOUNT);
+        generatingEntitiesSaver.saveRandomExcursionLogs();
 
         System.out.println("Заполнение закончено!");
     }
@@ -64,9 +66,9 @@ public class DataLoader implements ApplicationRunner {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
 
-        if (!checkFirstFoundationLocation(session)) entitiesSaver.saveFirstFoundationLocation();
-        if (!checkFirstFoundation(session)) entitiesSaver.saveFirstFoundation();
-        if (!checkScp1985(session)) entitiesSaver.saveScp1985();
+        if (!checkFirstFoundationLocation(session)) initialDataSaver.saveFirstFoundationLocation();
+        if (!checkFirstFoundation(session)) initialDataSaver.saveFirstFoundation();
+        if (!checkScp1985(session)) initialDataSaver.saveScp1985();
 
         session.getTransaction().commit();
         session.close();
