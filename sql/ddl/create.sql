@@ -181,17 +181,56 @@ CREATE TRIGGER priming_personnel_level
     WHEN ( NEW.personnel_id is NOT NULL and NEW.scp_object_id is NOT NULL)
 execute procedure check_level();
 
+CREATE OR REPLACE FUNCTION get_retrieval_location()
+    RETURNS TABLE
+            (
+                latitude  decimal(9, 6),
+                longitude decimal(9, 6)
+            )
+AS
+$$
+DECLARE
+    latitude  decimal(9, 6);
+    longitude decimal(9, 6);
+BEGIN
+    latitude = random() * 180 - 90;
+    longitude = random() * 360 - 180;
+    RETURN (latitude, longitude);
+end;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_priming(scp_object_id_param integer, personnel_id_param integer) RETURNS integer AS
+$$
+BEGIN
+    RETURN (SELECT priming.id
+            from priming
+                     LEFT JOIN excursion_log el on priming.id = el.priming_id
+            WHERE priming.scp_object_id = scp_object_id_param
+              and priming.personnel_id = personnel_id_param
+              and el.id is NULL
+            LIMIT 1);
+end;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION go_on_excursion(scp_object_id integer, personnel_id integer, equipment_id integer)
-    RETURNS integer AS $$
+    RETURNS integer AS
+$$
 DECLARE
     probability_of_right_priming decimal(3, 2);
-    probe decimal(3, 2);
-    right_priming bool;
-    id_location integer;
-    id_retrieval integer;
-    id_priming integer;
-    id_item integer;
-    id_excursion integer;
+    probe                        decimal(3, 2);
+    right_priming                bool;
+    id_location                  integer;
+    id_retrieval                 integer;
+    id_priming                   integer;
+    id_item                      integer;
+    id_excursion                 integer;
+    last_location                TABLE
+                                 (
+                                     latitude  decimal(9, 6),
+                                     longitude decimal(9, 6)
+                                 );
+    latitude                     decimal(9, 6);
+    longitude                    decimal(9, 6);
 BEGIN
 
     probability_of_right_priming = 0.05;
@@ -208,42 +247,59 @@ BEGIN
         right_priming = true;
     end if;
 
-    INSERT INTO location (latitude, longitude) VALUES
-        (random()*180 - 90, random()*360 - 180);
+    last_location = (SELECT * from get_retrieval_location());
+    latitude = last_location.latitude;
+    longitude = last_location.longitude;
+    INSERT INTO location (latitude, longitude) VALUES (latitude, longitude);
 
-    id_location = (SELECT id from location ORDER BY id DESC LIMIT 1);
-    id_priming = (SELECT id from priming ORDER BY id DESC LIMIT 1);
+    id_location = (SELECT id
+                   from location
+                   WHERE location.latitude = latitude
+                     AND location.longitude = longitude
+                   LIMIT 1);
+    id_priming = (SELECT priming.id
+                  from priming
+                           LEFT JOIN excursion_log el on priming.id = el.priming_id
+                  WHERE el.id is NULL
+                  LIMIT 1);
+
+    IF (id_priming IS NULL) THEN
+        RETURN 0;
+    end if;
 
     IF (NOT right_priming and equipment_id IS NULL) THEN
 
-        INSERT INTO retrieval (location_id, mobile_group_id, return_to_reality, return_to_foundation, succeed) VALUES
-            (id_location, 1, localtimestamp(0), NULL, FALSE);
+        INSERT INTO retrieval (location_id, mobile_group_id, return_to_reality, return_to_foundation, succeed)
+        VALUES (id_location, 1, localtimestamp(0), NULL, FALSE);
 
         id_retrieval = (SELECT id from retrieval ORDER BY id DESC LIMIT 1);
         INSERT INTO excursion_log (trigger_type, trigger_committed,
                                    equipment_id, reality_description, log_status,
-                                   retrieval_id, note, priming_id) VALUES
-            ('Внепланово', localtimestamp(0), equipment_id, 'blablabla', 'В_ПОДГОТОВКЕ',
-             id_retrieval, 'No notes', id_priming);
+                                   retrieval_id, note, priming_id)
+        VALUES ('Внепланово', localtimestamp(0), equipment_id, 'blablabla', 'В_ПОДГОТОВКЕ',
+                id_retrieval, 'No notes', id_priming);
+
         RETURN 0;
+
 
     ELSEIF (NOT right_priming) THEN
 
-        INSERT INTO retrieval (location_id, mobile_group_id, return_to_reality, return_to_foundation, succeed) VALUES
-            (id_location, 1, localtimestamp(0), NULL, FALSE);
+        INSERT INTO retrieval (location_id, mobile_group_id, return_to_reality, return_to_foundation, succeed)
+        VALUES (id_location, 1, localtimestamp(0), NULL, FALSE);
 
         id_retrieval = (SELECT id from retrieval ORDER BY id DESC LIMIT 1);
         INSERT INTO excursion_log (trigger_type, trigger_committed,
                                    equipment_id, reality_description, log_status,
-                                   retrieval_id, note, priming_id) VALUES
-            ('Внепланово', localtimestamp(0), equipment_id, 'alalalal', 'ДЛЯ_ОГРАНИЧЕННОГО_ПОЛЬЗОВАНИЯ',
-             id_retrieval, 'No notes', id_priming);
+                                   retrieval_id, note, priming_id)
+        VALUES ('Внепланово', localtimestamp(0), equipment_id, 'alalalal', 'ДЛЯ_ОГРАНИЧЕННОГО_ПОЛЬЗОВАНИЯ',
+                id_retrieval, 'No notes', id_priming);
+
         RETURN 0;
 
     ELSE
 
-        INSERT INTO retrieval (location_id, mobile_group_id, return_to_reality, return_to_foundation, succeed) VALUES
-            (id_location, 1, localtimestamp(0), NULL, TRUE);
+        INSERT INTO retrieval (location_id, mobile_group_id, return_to_reality, return_to_foundation, succeed)
+        VALUES (id_location, 1, localtimestamp(0), NULL, FALSE);
 
         INSERT INTO item (name) VALUES ('some word');
         id_item = (SELECT id from item ORDER BY id DESC LIMIT 1);
@@ -252,13 +308,14 @@ BEGIN
         id_retrieval = (SELECT id from retrieval ORDER BY id DESC LIMIT 1);
         INSERT INTO excursion_log (trigger_type, trigger_committed,
                                    equipment_id, reality_description, log_status,
-                                   retrieval_id, note, priming_id) VALUES
-            ('Инъекция', localtimestamp(0), equipment_id, 'hahahaha', 'ДЛЯ_ОГРАНИЧЕННОГО_ПОЛЬЗОВАНИЯ',
-             id_retrieval, 'No notes', id_priming);
+                                   retrieval_id, note, priming_id)
+        VALUES ('Инъекция', localtimestamp(0), equipment_id, 'hahahaha', 'ДЛЯ_ОГРАНИЧЕННОГО_ПОЛЬЗОВАНИЯ',
+                id_retrieval, 'No notes', id_priming);
 
         id_excursion = (SELECT id from excursion_log ORDER BY id DESC LIMIT 1);
 
         INSERT INTO excursion_contents (excursion_log_id, item_id) VALUES (id_excursion, id_item);
+
         RETURN 1;
     end if;
 end
