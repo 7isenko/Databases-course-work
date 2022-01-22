@@ -192,12 +192,16 @@ RETURN (latitude, longitude);
 end;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION get_priming(scp_object_id integer, personnel_id integer) RETURNS integer AS $$
+CREATE OR REPLACE FUNCTION get_priming(scp_object_id_param integer, personnel_id_param integer) RETURNS integer AS
+$$
 BEGIN
-RETURN (SELECT priming.id from priming
-                                   LEFT JOIN excursion_log el on priming.id = el.priming_id
-        WHERE el.id is NULL
-    LIMIT 1);
+    RETURN (SELECT priming.id
+            from priming
+                     LEFT JOIN excursion_log el on priming.id = el.priming_id
+            WHERE priming.scp_object_id = scp_object_id_param
+              and priming.personnel_id = personnel_id_param
+              and el.id is NULL
+            LIMIT 1);
 end;
 $$ LANGUAGE plpgsql;
 
