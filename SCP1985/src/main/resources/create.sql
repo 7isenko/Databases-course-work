@@ -202,7 +202,7 @@ end;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION go_on_excursion(scp_object_id integer, personnel_id integer, equipment_id integer)
-    RETURNS void AS $$
+    RETURNS integer AS $$
 DECLARE
 probability_of_right_priming decimal(3, 2);
     probe decimal(3, 2);
@@ -222,21 +222,21 @@ BEGIN
         probability_of_right_priming = 0.70;
         IF (scp_object_id is NOT NULL) THEN
             probability_of_right_priming = 0.95;
-end if;
-end if;
+        end if;
+    end if;
 
     probe = random();
     right_priming = false;
     IF (probe <= probability_of_right_priming) THEN
         right_priming = true;
-end if;
+    end if;
 
     last_location = (SELECT * from get_retrieval_location());
     latitude = last_location.latitude;
     longitude = last_location.longitude;
-INSERT INTO location (latitude, longitude) VALUES (latitude, longitude);
+    INSERT INTO location (latitude, longitude) VALUES (latitude, longitude);
 
-id_location = (SELECT id from location
+    id_location = (SELECT id from location
                     WHERE location.latitude = latitude  AND
                           location.longitude = longitude
                     LIMIT 1);
@@ -246,7 +246,7 @@ id_location = (SELECT id from location
                     LIMIT 1);
 
     IF (id_priming IS NULL) THEN RETURN 0;
-end if;
+    end if;
 
     IF (NOT right_priming and equipment_id IS NULL) THEN
 
@@ -254,43 +254,50 @@ end if;
         (id_location, 1, localtimestamp(0), NULL, FALSE);
 
         id_retrieval = (SELECT id from retrieval ORDER BY id DESC LIMIT 1);
-INSERT INTO excursion_log (trigger_type, trigger_committed,
-                           equipment_id, reality_description, log_status,
-                           retrieval_id, note, priming_id) VALUES
-('Внепланово', localtimestamp(0), equipment_id, 'blablabla', 'В ПОДГОТОВКЕ',
- id_retrieval, 'No notes', id_priming);
+        INSERT INTO excursion_log (trigger_type, trigger_committed,
+                                    equipment_id, reality_description, log_status,
+                                    retrieval_id, note, priming_id) VALUES
+        ('Внепланово', localtimestamp(0), equipment_id, 'blablabla', 'В_ПОДГОТОВКЕ',
+        id_retrieval, 'No notes', id_priming);
 
-ELSEIF (NOT right_priming) THEN
+        RETURN 0;
+
+
+    ELSEIF (NOT right_priming) THEN
 
         INSERT INTO retrieval (location_id, mobile_group_id, return_to_reality, return_to_foundation, succeed) VALUES
         (id_location, 1, localtimestamp(0), NULL, FALSE);
 
         id_retrieval = (SELECT id from retrieval ORDER BY id DESC LIMIT 1);
-INSERT INTO excursion_log (trigger_type, trigger_committed,
-                           equipment_id, reality_description, log_status,
-                           retrieval_id, note, priming_id) VALUES
-('Внепланово', localtimestamp(0), equipment_id, 'alalalal', 'ДЛЯ ОГРАНИЧЕННОГО ПОЛЬЗОВАНИЯ',
- id_retrieval, 'No notes', id_priming);
+        INSERT INTO excursion_log (trigger_type, trigger_committed,
+                                   equipment_id, reality_description, log_status,
+                                   retrieval_id, note, priming_id) VALUES
+        ('Внепланово', localtimestamp(0), equipment_id, 'alalalal', 'ДЛЯ_ОГРАНИЧЕННОГО_ПОЛЬЗОВАНИЯ',
+         id_retrieval, 'No notes', id_priming);
 
-ELSE
+        RETURN 0;
+
+    ELSE
 
         INSERT INTO retrieval (location_id, mobile_group_id, return_to_reality, return_to_foundation, succeed) VALUES
         (id_location, 1, localtimestamp(0), NULL, FALSE);
 
-INSERT INTO item (name) VALUES ('some word');
-id_item = (SELECT id from item ORDER BY id DESC LIMIT 1);
+        INSERT INTO item (name) VALUES ('some word');
+        id_item = (SELECT id from item ORDER BY id DESC LIMIT 1);
 
 
         id_retrieval = (SELECT id from retrieval ORDER BY id DESC LIMIT 1);
-INSERT INTO excursion_log (trigger_type, trigger_committed,
-                           equipment_id, reality_description, log_status,
-                           retrieval_id, note, priming_id) VALUES
-('Инъекция', localtimestamp(0), equipment_id, 'hahahaha', 'ДЛЯ ОГРАНИЧЕННОГО ПОЛЬЗОВАНИЯ',
- id_retrieval, 'No notes', id_priming);
+        INSERT INTO excursion_log (trigger_type, trigger_committed,
+                                   equipment_id, reality_description, log_status,
+                                   retrieval_id, note, priming_id) VALUES
+        ('Инъекция', localtimestamp(0), equipment_id, 'hahahaha', 'ДЛЯ_ОГРАНИЧЕННОГО_ПОЛЬЗОВАНИЯ',
+         id_retrieval, 'No notes', id_priming);
 
-id_excursion = (SELECT id from excursion_log ORDER BY id DESC LIMIT 1);
+        id_excursion = (SELECT id from excursion_log ORDER BY id DESC LIMIT 1);
 
-INSERT INTO excursion_contents (excursion_log_id, item_id) VALUES (id_excursion, id_item);
-end if;
+        INSERT INTO excursion_contents (excursion_log_id, item_id) VALUES (id_excursion, id_item);
+
+        RETURN 1;
+    end if;
 end
 $$ LANGUAGE plpgsql;
