@@ -223,11 +223,7 @@ DECLARE
     id_priming                   integer;
     id_item                      integer;
     id_excursion                 integer;
-    last_location                TABLE
-                                 (
-                                     latitude  decimal(9, 6),
-                                     longitude decimal(9, 6)
-                                 );
+    rec                          record;
     latitude                     decimal(9, 6);
     longitude                    decimal(9, 6);
 BEGIN
@@ -246,9 +242,9 @@ BEGIN
         right_priming = true;
     end if;
 
-    last_location = (SELECT * from get_retrieval_location());
-    latitude = last_location.latitude;
-    longitude = last_location.longitude;
+    rec = (SELECT * from get_retrieval_location());
+    latitude = rec.latitude;
+    longitude = rec.longitude;
     INSERT INTO location (latitude, longitude) VALUES (latitude, longitude);
 
     id_location = (SELECT id
