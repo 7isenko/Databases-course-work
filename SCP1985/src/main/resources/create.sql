@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS access_key
 CREATE TABLE IF NOT EXISTS mobile_group
 (
     id      serial PRIMARY KEY,
-    name    varchar(60),
+    name    varchar(90),
     created timestamp
 );
 
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS foundation
 CREATE TABLE IF NOT EXISTS scp_object
 (
     id            int PRIMARY KEY,
-    name          varchar(80),
+    name          varchar(120),
     description   text,
     object_class  object_class DEFAULT 'Неприменимо',
     foundation_id int NULL REFERENCES foundation (id) on delete set null on update cascade
@@ -113,13 +113,13 @@ CREATE TABLE IF NOT EXISTS scp_object
 CREATE TABLE IF NOT EXISTS equipment
 (
     id   serial PRIMARY KEY,
-    name varchar(80)
+    name varchar(120)
 );
 
 CREATE TABLE IF NOT EXISTS item
 (
     id   serial PRIMARY KEY,
-    name varchar(80)
+    name varchar(120)
 );
 
 CREATE TABLE IF NOT EXISTS equipment_contents
@@ -181,21 +181,17 @@ CREATE TRIGGER priming_personnel_level
     WHEN ( NEW.personnel_id is NOT NULL and NEW.scp_object_id is NOT NULL)
 execute procedure check_level();
 
-CREATE OR REPLACE FUNCTION get_retrieval_location()
-    RETURNS TABLE
-            (
-                latitude  decimal(9, 6),
-                longitude decimal(9, 6)
-            )
-AS
+CREATE OR REPLACE FUNCTION get_retrieval_latitude() RETURNS decimal(9, 6) AS
 $$
-DECLARE
-    latitude  decimal(9, 6);
-    longitude decimal(9, 6);
 BEGIN
-    latitude = random() * 180 - 90;
-    longitude = random() * 360 - 180;
-    RETURN (latitude, longitude);
+    RETURN random() * 180 - 90;
+end;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_retrieval_longitude() RETURNS decimal(9, 6) AS
+$$
+BEGIN
+    RETURN random() * 360 - 180;
 end;
 $$ LANGUAGE plpgsql;
 
@@ -224,13 +220,8 @@ DECLARE
     id_priming                   integer;
     id_item                      integer;
     id_excursion                 integer;
-    last_location                TABLE
-                                 (
-                                     latitude  decimal(9, 6),
-                                     longitude decimal(9, 6)
-                                 );
-    latitude                     decimal(9, 6);
-    longitude                    decimal(9, 6);
+    rand_latitude                decimal(9, 6);
+    rand_longitude               decimal(9, 6);
 BEGIN
 
     probability_of_right_priming = 0.05;
@@ -247,15 +238,14 @@ BEGIN
         right_priming = true;
     end if;
 
-    last_location = (SELECT * from get_retrieval_location());
-    latitude = last_location.latitude;
-    longitude = last_location.longitude;
-    INSERT INTO location (latitude, longitude) VALUES (latitude, longitude);
+    rand_latitude = (SELECT * from get_retrieval_latitude());
+    rand_longitude = (SELECT * from get_retrieval_longitude());
+    INSERT INTO location (latitude, longitude) VALUES (rand_latitude, rand_longitude);
 
     id_location = (SELECT id
                    from location
-                   WHERE location.latitude = latitude
-                     AND location.longitude = longitude
+                   WHERE location.latitude = rand_latitude
+                     AND location.longitude = rand_longitude
                    LIMIT 1);
     id_priming = (SELECT priming.id
                   from priming
