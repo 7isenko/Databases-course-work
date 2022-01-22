@@ -218,8 +218,8 @@ DECLARE
     id_priming                   integer;
     id_item                      integer;
     id_excursion                 integer;
-    latitude                     decimal(9, 6);
-    longitude                    decimal(9, 6);
+    rand_latitude                     decimal(9, 6);
+    rand_longitude                    decimal(9, 6);
 BEGIN
 
     probability_of_right_priming = 0.05;
@@ -236,14 +236,14 @@ BEGIN
         right_priming = true;
     end if;
 
-    latitude = (SELECT * from get_retrieval_latitude());
-    longitude = (SELECT * from get_retrieval_longitude());
-    INSERT INTO location (latitude, longitude) VALUES (latitude, longitude);
+    rand_latitude = (SELECT * from get_retrieval_latitude());
+    rand_longitude = (SELECT * from get_retrieval_longitude());
+    INSERT INTO location (latitude, longitude) VALUES (rand_latitude, rand_longitude);
 
     id_location = (SELECT id
                    from location
-                   WHERE location.latitude = latitude
-                     AND location.longitude = longitude
+                   WHERE location.latitude = rand_latitude
+                     AND location.longitude = rand_longitude
                    LIMIT 1);
     id_priming = (SELECT priming.id
                   from priming
