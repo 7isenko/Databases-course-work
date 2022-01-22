@@ -181,20 +181,15 @@ CREATE TRIGGER priming_personnel_level
     WHEN ( NEW.personnel_id is NOT NULL and NEW.scp_object_id is NOT NULL)
 execute procedure check_level();
 
-CREATE OR REPLACE FUNCTION get_retrieval_location()
-    RETURNS TABLE
-            (
-                latitude  decimal(9, 6),
-                longitude decimal(9, 6)
-            )
-AS
-$$
-DECLARE
-    rec RECORD;
+CREATE OR REPLACE FUNCTION get_retrieval_latitude() RETURNS decimal(9, 6) AS $$
 BEGIN
-    rec.latitude = random() * 180 - 90;
-    rec.longitude = random() * 360 - 180;
-    RETURN next;
+    RETURN random()*180 - 90;
+end;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_retrieval_longitude() RETURNS decimal(9, 6) AS $$
+BEGIN
+    RETURN random()*360 - 180;
 end;
 $$ LANGUAGE plpgsql;
 
@@ -223,7 +218,6 @@ DECLARE
     id_priming                   integer;
     id_item                      integer;
     id_excursion                 integer;
-    rec                          record;
     latitude                     decimal(9, 6);
     longitude                    decimal(9, 6);
 BEGIN
@@ -242,9 +236,8 @@ BEGIN
         right_priming = true;
     end if;
 
-    rec = (SELECT * from get_retrieval_location());
-    latitude = rec.latitude;
-    longitude = rec.longitude;
+    latitude = (SELECT * from get_retrieval_latitude());
+    longitude = (SELECT * from get_retrieval_longitude());
     INSERT INTO location (latitude, longitude) VALUES (latitude, longitude);
 
     id_location = (SELECT id
