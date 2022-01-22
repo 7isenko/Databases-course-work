@@ -7,8 +7,6 @@ import io.github._7isenko.SCP1985.jpa.object_types.ObjectCLass;
 import io.github._7isenko.SCP1985.jpa.repositories.FoundationEntityRepository;
 import io.github._7isenko.SCP1985.jpa.repositories.LocationEntityRepository;
 import io.github._7isenko.SCP1985.jpa.repositories.ScpObjectEntityRepository;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,37 +19,28 @@ public class InitialDataManager {
     private final FoundationEntityRepository foundationEntityRepository;
     private final ScpObjectEntityRepository scpObjectEntityRepository;
 
-    private final SessionFactory sessionFactory;
-
-    public InitialDataManager(LocationEntityRepository locationEntityRepository, FoundationEntityRepository foundationEntityRepository, ScpObjectEntityRepository scpObjectEntityRepository, SessionFactory sessionFactory) {
+    public InitialDataManager(LocationEntityRepository locationEntityRepository, FoundationEntityRepository foundationEntityRepository, ScpObjectEntityRepository scpObjectEntityRepository) {
         this.locationEntityRepository = locationEntityRepository;
         this.foundationEntityRepository = foundationEntityRepository;
         this.scpObjectEntityRepository = scpObjectEntityRepository;
-        this.sessionFactory = sessionFactory;
     }
 
     public void requireInitialData() {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-
-        if (!checkFirstFoundationLocation(session)) saveFirstFoundationLocation();
-        if (!checkFirstFoundation(session)) saveFirstFoundation();
-        if (!checkScp1985(session)) saveScp1985();
-
-        session.getTransaction().commit();
-        session.close();
+        if (!checkFirstFoundationLocation()) saveFirstFoundationLocation();
+        if (!checkFirstFoundation()) saveFirstFoundation();
+        if (!checkScp1985()) saveScp1985();
     }
 
-    private boolean checkFirstFoundationLocation(Session session) {
-        return session.get(LocationEntity.class, 1) != null;
+    private boolean checkFirstFoundationLocation() {
+        return locationEntityRepository.findById(1).isPresent();
     }
 
-    private boolean checkFirstFoundation(Session session) {
-        return session.get(FoundationEntity.class, 1) != null;
+    private boolean checkFirstFoundation() {
+        return foundationEntityRepository.findById(1).isPresent();
     }
 
-    private boolean checkScp1985(Session session) {
-        return session.get(ScpObjectEntity.class, 1985) != null;
+    private boolean checkScp1985() {
+        return scpObjectEntityRepository.findById(1985).isPresent();
     }
 
     public void saveFirstFoundationLocation() {
