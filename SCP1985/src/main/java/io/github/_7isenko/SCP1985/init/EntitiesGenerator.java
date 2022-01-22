@@ -29,16 +29,18 @@ public class EntitiesGenerator {
     private final ItemEntityRepository itemEntityRepository;
     private final EquipmentEntityRepository equipmentEntityRepository;
     private final MobileGroupEntityRepository mobileGroupEntityRepository;
+    private final FoundationEntityRepository foundationEntityRepository;
     private final PrimingEntityRepository primingEntityRepository;
     private final ExcursionLogEntityRepository excursionLogEntityRepository;
 
-    public EntitiesGenerator(LocationEntityRepository locationEntityRepository, FoundationEntityRepository foundationEntityRepository, ScpObjectEntityRepository scpObjectEntityRepository, PersonnelEntityRepository personnelEntityRepository, AccessKeyEntityRepository accessKeyEntityRepository, ItemEntityRepository itemEntityRepository, EquipmentEntityRepository equipmentEntityRepository, EquipmentContentsEntityRepository equipmentContentsEntityRepository, MobileGroupEntityRepository mobileGroupEntityRepository, MobileGroupMembersEntityRepository mobileGroupMembersEntityRepository, PrimingEntityRepository primingEntityRepository, ExcursionLogEntityRepository excursionLogEntityRepository) {
+    public EntitiesGenerator(LocationEntityRepository locationEntityRepository, FoundationEntityRepository foundationEntityRepository, ScpObjectEntityRepository scpObjectEntityRepository, PersonnelEntityRepository personnelEntityRepository, AccessKeyEntityRepository accessKeyEntityRepository, ItemEntityRepository itemEntityRepository, EquipmentEntityRepository equipmentEntityRepository, EquipmentContentsEntityRepository equipmentContentsEntityRepository, MobileGroupEntityRepository mobileGroupEntityRepository, MobileGroupMembersEntityRepository mobileGroupMembersEntityRepository, FoundationEntityRepository foundationEntityRepository1, PrimingEntityRepository primingEntityRepository, ExcursionLogEntityRepository excursionLogEntityRepository) {
         this.locationEntityRepository = locationEntityRepository;
         this.scpObjectEntityRepository = scpObjectEntityRepository;
         this.personnelEntityRepository = personnelEntityRepository;
         this.itemEntityRepository = itemEntityRepository;
         this.equipmentEntityRepository = equipmentEntityRepository;
         this.mobileGroupEntityRepository = mobileGroupEntityRepository;
+        this.foundationEntityRepository = foundationEntityRepository1;
         this.primingEntityRepository = primingEntityRepository;
         this.excursionLogEntityRepository = excursionLogEntityRepository;
     }
@@ -132,8 +134,16 @@ public class EntitiesGenerator {
             known.add(scpObject.getId());
         }
         SCPReceiver scpReceiver = new SCPReceiver(maxId, known);
+        ArrayList<ScpObjectEntity> scpList = scpReceiver.getSCPList(amount);
 
-        return scpReceiver.getSCPList(amount);
+        int max = foundationEntityRepository.countAll();
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+
+        for (ScpObjectEntity scpObject : scpList) {
+            scpObject.setFoundationId(random.nextInt(1, max));
+        }
+
+        return scpList;
     }
 
     public ArrayList<PersonnelEntity> getRandomPersonnel(int amount) {
