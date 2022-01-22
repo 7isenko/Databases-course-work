@@ -16,3 +16,61 @@ p {
     font-size: 18px;
     font-weight: bold;
 }
+
+.menu1 {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    width: 200px;
+}
+
+.menu1 a {
+    background-color: #949494;
+    color: #fff;
+    padding: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    border-left: 5px solid #33ADFF;
+    display: inline-block;
+}
+
+.menu1 li {
+    border-left: 10px solid #666;
+    border-bottom: 1px solid #666;
+}
+
+.menu1 a:hover {
+    background-color: #666;
+    border-left: 5px solid #3333FF;
+}
+
+.hidden_block {
+    width:600px;
+    background:#176387;
+    color:#fff;
+    font-size:25px;
+    border:3px solid #2BA2DB;
+    padding:20px;
+    margin:auto;
+    text-align:center;
+    display: inline-block;
+    opacity:0; /*Элемент полностью прозрачный (невидимый)*/
+    transition: 0.5s; /*Скорость перехода состояния элемента*/
+}
+
+.menu1 a:hover ~ .hidden_block{
+    opacity:1;
+    transition: 0.5s;
+}
+
+.left_menu {
+    float:left;
+    width:24%;
+    display: inline-block;
+}
+
+.query {
+    display: inline-block;
+    padding: 100px;
+    margin: 100px;
+}
