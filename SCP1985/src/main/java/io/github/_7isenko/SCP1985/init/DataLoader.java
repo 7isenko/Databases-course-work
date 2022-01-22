@@ -48,14 +48,14 @@ public class DataLoader implements ApplicationRunner {
         entitiesSaver.saveRandomFoundations(FOUNDATION_AMOUNT);
         entitiesSaver.saveRandomSCPs(SCP_AMOUNT, MAX_SCP_ID);
         entitiesSaver.saveRandomPersonnel(PERSONNEL_AMOUNT);
-        entitiesSaver.savePersonnelKeys(PERSONNEL_AMOUNT);
+        entitiesSaver.saveRandomPersonnelKeys(PERSONNEL_AMOUNT);
         entitiesSaver.saveRandomItems(ITEM_AMOUNT);
         entitiesSaver.saveRandomEquipment(EQUIPMENT_AMOUNT);
-        entitiesSaver.saveEquipmentContents(MIN_EQUIPMENT_CONTENTS_AMOUNT, MAX_EQUIPMENT_CONTENTS_AMOUNT);
-        entitiesSaver.saveMobileGroups(MOBILE_GROUP_AMOUNT);
-        entitiesSaver.saveMobileGroupsContents(MOBILE_GROUP_MEMBERS_AMOUNT);
-        entitiesSaver.savePrimings(PRIMINGS_AMOUNT);
-        entitiesSaver.saveExcursions();
+        entitiesSaver.saveRandomEquipmentContents(MIN_EQUIPMENT_CONTENTS_AMOUNT, MAX_EQUIPMENT_CONTENTS_AMOUNT);
+        entitiesSaver.saveRandomMobileGroups(MOBILE_GROUP_AMOUNT);
+        entitiesSaver.saveRandomMobileGroupsMembers(MOBILE_GROUP_MEMBERS_AMOUNT);
+        entitiesSaver.saveRandomPrimings(PRIMINGS_AMOUNT);
+        entitiesSaver.saveRandomExcursionLogs();
 
         System.out.println("Заполнение закончено!");
     }

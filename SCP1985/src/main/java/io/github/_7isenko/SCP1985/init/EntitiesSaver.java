@@ -52,7 +52,11 @@ public class EntitiesSaver {
         this.excursionLogEntityRepository = excursionLogEntityRepository;
     }
 
-    public void saveExcursions() {
+    public void saveExcursionLogs(Iterable<ExcursionLogEntity> excursionLogEntities) {
+        excursionLogEntityRepository.saveAllAndFlush(excursionLogEntities);
+    }
+
+    public void saveRandomExcursionLogs() {
         List<PrimingEntity> primingEntities = primingEntityRepository.findAll();
         List<EquipmentEntity> equipmentEntities = equipmentEntityRepository.findAll();
         for (PrimingEntity primingEntity : primingEntities) {
@@ -62,7 +66,11 @@ public class EntitiesSaver {
         excursionLogEntityRepository.flush();
     }
 
-    public void savePrimings(int amount) {
+    public void savePrimings(Iterable<PrimingEntity> primingEntities) {
+        primingEntityRepository.saveAllAndFlush(primingEntities);
+    }
+
+    public void saveRandomPrimings(int amount) {
         List<PersonnelEntity> allowedPersonnelEntities = PersonnelHelper.getAllowedPersonnel(personnelEntityRepository.findAll());
         List<ScpObjectEntity> scpObjectEntities = scpObjectEntityRepository.findAll();
 
@@ -75,7 +83,11 @@ public class EntitiesSaver {
         primingEntityRepository.flush();
     }
 
-    public void saveMobileGroupsContents(int min) {
+    public void saveMobileGroupsMembers(Iterable<MobileGroupMembersEntity> mobileGroupMembersEntities) {
+        mobileGroupMembersEntityRepository.saveAllAndFlush(mobileGroupMembersEntities);
+    }
+
+    public void saveRandomMobileGroupsMembers(int min) {
         List<PersonnelEntity> personnelEntities = personnelEntityRepository.findAll();
         for (MobileGroupEntity mobileGroup : mobileGroupEntityRepository.findAll()) {
             if (mobileGroup.getMobileGroupMembersById().size() < min) {
@@ -87,7 +99,11 @@ public class EntitiesSaver {
         mobileGroupMembersEntityRepository.flush();
     }
 
-    public void saveMobileGroups(int amount) {
+    public void saveMobileGroups(Iterable<MobileGroupEntity> mobileGroupEntities) {
+        mobileGroupEntityRepository.saveAllAndFlush(mobileGroupEntities);
+    }
+
+    public void saveRandomMobileGroups(int amount) {
         Faker faker = new Faker();
         ThreadLocalRandom random = ThreadLocalRandom.current();
         for (int i = 0; i < amount; i++) {
@@ -96,7 +112,11 @@ public class EntitiesSaver {
         mobileGroupEntityRepository.flush();
     }
 
-    public void saveEquipmentContents(int min, int max) {
+    public void saveEquipmentContents(Iterable<EquipmentContentsEntity> equipmentContentsEntities) {
+        equipmentContentsEntityRepository.saveAllAndFlush(equipmentContentsEntities);
+    }
+
+    public void saveRandomEquipmentContents(int min, int max) {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         List<ItemEntity> itemEntities = itemEntityRepository.findAll();
         for (EquipmentEntity equipmentEntity : equipmentEntityRepository.findAll()) {
@@ -108,12 +128,20 @@ public class EntitiesSaver {
         }
     }
 
+    public void saveEquipment(Iterable<EquipmentEntity> equipmentEntities) {
+        equipmentEntityRepository.saveAllAndFlush(equipmentEntities);
+    }
+
     public void saveRandomEquipment(int amount) {
         for (String s : CollectionsHelper.getRandomStringList(amount, 3)) {
             EquipmentEntity eq = new EquipmentEntity(s);
             equipmentEntityRepository.save(eq);
         }
         equipmentEntityRepository.flush();
+    }
+
+    public void saveItems(Iterable<ItemEntity> itemEntities) {
+        itemEntityRepository.saveAllAndFlush(itemEntities);
     }
 
     public void saveRandomItems(int amount) {
@@ -123,7 +151,11 @@ public class EntitiesSaver {
         itemEntityRepository.flush();
     }
 
-    public void savePersonnelKeys(int amount) {
+    public void saveAccessKeys(Iterable<AccessKeyEntity> accessKeyEntities) {
+        accessKeyEntityRepository.saveAllAndFlush(accessKeyEntities);
+    }
+
+    public void saveRandomPersonnelKeys(int amount) {
         for (int i = 0; i < amount; i++) {
             String ssh = StringsHelper.genRandomString(32);
             accessKeyEntityRepository.save(new AccessKeyEntity(ssh, i + 1));
@@ -131,8 +163,16 @@ public class EntitiesSaver {
         accessKeyEntityRepository.flush();
     }
 
+    public void savePersonnel(Iterable<PersonnelEntity> personnelEntities) {
+        personnelEntityRepository.saveAllAndFlush(personnelEntities);
+    }
+
     public void saveRandomPersonnel(int amount) {
-        personnelEntityRepository.saveAll(PersonnelHelper.generatePersonnel(amount));
+        savePersonnel(PersonnelHelper.generatePersonnel(amount));
+    }
+
+    public void saveSCPs(Iterable<ScpObjectEntity> scpObjectEntities) {
+        scpObjectEntityRepository.saveAllAndFlush(scpObjectEntities);
     }
 
     public void saveRandomSCPs(int amount, int maxId) {
@@ -141,7 +181,8 @@ public class EntitiesSaver {
             known.add(scpObject.getId());
         }
         SCPReceiver scpReceiver = new SCPReceiver(maxId, known);
-        scpObjectEntityRepository.saveAll(scpReceiver.getSCPList(amount));
+
+        saveSCPs(scpReceiver.getSCPList(amount));
     }
 
     /**
