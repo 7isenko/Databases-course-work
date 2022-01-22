@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+</head>
+<body>
+
+    <div class="left_menu">
+        <ul class="menu1" th:each="scp:${scpEntities}" >
+            <li th:if="${scp.id <= 1000}" class="li1">
+                <a href="index" class="mainmenu1" th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}"></a>
+                <div class="hidden_block">
+                    <p th:utext="${scp.description}">...</p>
+                </div>
+            </li>
+            <li th:if="${scp.id > 1000 && scp.id <= 2000}" class="li1">
+                <a href="index" class="mainmenu1" th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}"></a>
+            </li>
+            <li th:if="${scp.id > 2000 && scp.id <= 3000}" class="li1">
+                <a href="index" class="mainmenu1" th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}"></a>
+            </li>
+            <li th:if="${scp.id > 3000 && scp.id <= 4000}" class="li1">
+                <a href="index" class="mainmenu1" th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}"></a>
+            </li>
+            <li th:if="${scp.id > 4000 && scp.id <= 5000}" class="li1">
+                <a href="index" class="mainmenu1" th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}"></a>
+            </li>
+            <li th:if="${scp.id > 5000 && scp.id <= 6000}" class="li1">
+                <a href="index" class="mainmenu1" th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}"></a>
+            </li>
+            <li th:if="${scp.id > 6000 && scp.id <= 7000}" class="li1">
+                <a href="index" class="mainmenu1" th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}"></a>
+            </li>
+        </ul>
+    </div>
+
+
+    <div class="query">
+        <p>Введите запрос</p>
+    </div>
+
+</body>
+</html>
