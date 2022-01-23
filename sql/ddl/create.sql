@@ -289,7 +289,7 @@ BEGIN
     ELSE
 
         INSERT INTO retrieval (location_id, mobile_group_id, return_to_reality, return_to_foundation, succeed)
-        VALUES (id_location, 1, localtimestamp(0), NULL, FALSE);
+        VALUES (id_location, 1, localtimestamp(0), NULL, TRUE);
 
         INSERT INTO item (name) VALUES ('some word');
         id_item = (SELECT id from item ORDER BY id DESC LIMIT 1);
