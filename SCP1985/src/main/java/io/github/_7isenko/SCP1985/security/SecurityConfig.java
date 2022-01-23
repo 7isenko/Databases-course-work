@@ -32,8 +32,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/", "/login").permitAll()
-                .antMatchers("/main").hasAnyAuthority("A", "B", "C", "admin")
-                .antMatchers("/admin").hasAuthority("admin")
+                .antMatchers("/main").hasAnyAuthority("A", "B", "C")
+                .antMatchers("/admin").permitAll() // Это только в рамках лабы, а не системы.
                 .and().formLogin()
                 .loginPage("/login")
                 .usernameParameter("name")
