@@ -37,7 +37,7 @@ public class MainController {
         this.equipmentEntityRepository = equipmentEntityRepository;
     }
 
-    @RequestMapping(value = { "/", "/main" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/main" }, method = RequestMethod.GET)
     public String index(Model model) {
         scpEntities = scpObjectEntityRepository.findAllOrderById();
         model.addAttribute("scpEntities", scpEntities);

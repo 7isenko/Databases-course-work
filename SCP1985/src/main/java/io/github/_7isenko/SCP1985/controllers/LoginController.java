@@ -31,7 +31,7 @@ public class LoginController {
         this.personnelEntityRepository = personnelEntityRepository;
     }
 
-    @RequestMapping(value = {"/login"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)
     public String login(Model model) {
         LoginForm loginForm = new LoginForm();
         model.addAttribute("loginForm", loginForm);
@@ -39,7 +39,7 @@ public class LoginController {
         return "login";
     }
 
-    @RequestMapping(value = {"/login"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/", "/login"}, method = RequestMethod.POST)
     public ResponseEntity<String> login(@ModelAttribute("loginForm") LoginForm loginForm) {
         String name = loginForm.getName();
         String key = loginForm.getKey();
