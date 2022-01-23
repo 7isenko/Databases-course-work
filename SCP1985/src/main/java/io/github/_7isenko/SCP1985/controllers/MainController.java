@@ -17,14 +17,17 @@ public class MainController {
 
     // Must be static to be visible
     private static List<ScpObjectEntity> scpEntities;
+    private final ScpObjectEntityRepository scpObjectEntityRepository;
 
 
     public MainController(ScpObjectEntityRepository scpObjectEntityRepository) {
-        scpEntities = scpObjectEntityRepository.findAll();
+        scpEntities = scpObjectEntityRepository.findAllOrderById();
+        this.scpObjectEntityRepository = scpObjectEntityRepository;
     }
 
     @RequestMapping(value = { "/", "/main" }, method = RequestMethod.GET)
     public String index(Model model) {
+        scpEntities = scpObjectEntityRepository.findAllOrderById();
         model.addAttribute("scpEntities", scpEntities);
         return "main";
     }

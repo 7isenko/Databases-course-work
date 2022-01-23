@@ -17,14 +17,17 @@ public class IndexController {
 
     // Must be static to be visible
     private static List<ScpObjectEntity> scpEntities;
+    private final ScpObjectEntityRepository scpObjectEntityRepository;
 
 
     public IndexController(ScpObjectEntityRepository scpObjectEntityRepository) {
+        this.scpObjectEntityRepository = scpObjectEntityRepository;
         scpEntities = scpObjectEntityRepository.findAll();
     }
 
-    @RequestMapping(value = { "/", "/index" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/scp"}, method = RequestMethod.GET)
     public String index(Model model) {
+        scpEntities = scpObjectEntityRepository.findAll();
         model.addAttribute("scpEntities", scpEntities);
         return "index";
     }
