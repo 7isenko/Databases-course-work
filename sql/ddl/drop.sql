@@ -28,6 +28,8 @@ drop table if exists location;
 
 drop function go_on_excursion(scp_object_id integer, personnel_id integer, equipment_id integer);
 
+DROP FUNCTION make_reports();
+
 drop type if exists clearance_level;
 
 drop type if exists classification;

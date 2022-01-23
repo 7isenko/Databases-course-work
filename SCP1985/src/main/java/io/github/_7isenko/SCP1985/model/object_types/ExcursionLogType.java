@@ -1,12 +1,18 @@
 package io.github._7isenko.SCP1985.model.object_types;
 
+import io.github._7isenko.SCP1985.model.misc.PostgreSQLEnumType;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
+@TypeDef(name = "psql_enum", typeClass = PostgreSQLEnumType.class)
 @NoArgsConstructor
 @Entity
 public class ExcursionLogType {
