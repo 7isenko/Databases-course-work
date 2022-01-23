@@ -1,11 +1,11 @@
-package io.github._7isenko.SCP1985.model.init;
+package io.github._7isenko.SCP1985.model;
 
 import io.github._7isenko.SCP1985.model.entities.*;
 import io.github._7isenko.SCP1985.model.repositories.*;
 import org.springframework.stereotype.Component;
 
 /**
- * This class wraps every repository to simplify interaction with the database.
+ * This class wraps every repository to simplify saving values to the database.
  * Most methods work with collections (iterable).
  *
  * @author 7isenko

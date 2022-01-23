@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin panel</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<form th:action="@{/admin}"
+      th:object="${adminForm}" method="post">
+    <label>
+        Foundations amount:
+        <input type="number" th:field="*{foundationAmount}"/>
+    </label>
+    <br>
+    <label>
+        SCP amount:
+        <input type="number" th:field="*{scpAmount}"/>
+    </label>
+    <br>
+    <label>
+        Personnel amount:
+        <input type="number" th:field="*{personnelAmount}"/>
+    </label>
+    <br>
+    <label>
+        Items amount:
+        <input type="number" th:field="*{itemAmount}"/>
+    </label>
+    <br>
+    <label>
+        Mobile groups amount:
+        <input type="number" th:field="*{mobileGroupAmount}"/>
+    </label>
+    <br>
+    <label>
+        Primings (and excursions) amount:
+        <input type="number" th:field="*{primingsAmount}"/>
+    </label>
+    <br>
+    <input type="submit" value="Generate"/>
+</form>
+
+<div th:if="${successMessage}" th:utext="${successMessage}"
+     style="color:red;font-style:italic;">
+</div>
+</body>
+</html>

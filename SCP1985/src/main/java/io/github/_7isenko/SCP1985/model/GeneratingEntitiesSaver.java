@@ -1,4 +1,4 @@
-package io.github._7isenko.SCP1985.model.init;
+package io.github._7isenko.SCP1985.model;
 
 import io.github._7isenko.SCP1985.model.entities.EquipmentEntity;
 import io.github._7isenko.SCP1985.model.entities.PrimingEntity;
@@ -15,6 +15,11 @@ import java.util.List;
  */
 @Component
 public class GeneratingEntitiesSaver {
+
+    private final static int MAX_SCP_ID = 4000;
+    private final static int MIN_EQUIPMENT_CONTENTS_AMOUNT = 4;
+    private final static int MAX_EQUIPMENT_CONTENTS_AMOUNT = 6;
+    private final static int MOBILE_GROUP_MEMBERS_AMOUNT = 4;
 
     private final RepositoriesFacade repositoriesFacade;
 
@@ -41,46 +46,55 @@ public class GeneratingEntitiesSaver {
     }
 
     public void saveRandomPrimings(int amount) {
+        if (amount <= 0) return;
         repositoriesFacade.savePrimings(generator.getPrimingEntities(amount));
     }
 
-    public void saveRandomMobileGroupsMembers(int min) {
-        repositoriesFacade.saveMobileGroupsMembers(generator.getRandomMobileGroupsMembers(min));
+    public void saveRandomMobileGroupsMembers() {
+        repositoriesFacade.saveMobileGroupsMembers(generator.getRandomMobileGroupsMembers(MOBILE_GROUP_MEMBERS_AMOUNT));
     }
 
     public void saveRandomMobileGroups(int amount) {
+        if (amount <= 0) return;
         repositoriesFacade.saveMobileGroups(generator.getRandomMobileGroups(amount));
     }
 
-    public void saveRandomEquipmentContents(int min, int max) {
-        repositoriesFacade.saveEquipmentContents(generator.getRandomEquipmentContents(min, max));
+    public void saveRandomEquipmentContents() {
+        repositoriesFacade.saveEquipmentContents(generator.getRandomEquipmentContents(MIN_EQUIPMENT_CONTENTS_AMOUNT, MAX_EQUIPMENT_CONTENTS_AMOUNT));
     }
 
     public void saveRandomEquipment(int amount) {
+        if (amount <= 0) return;
         repositoriesFacade.saveEquipment(generator.getRandomEquipment(amount));
     }
 
     public void saveRandomItems(int amount) {
+        if (amount <= 0) return;
         repositoriesFacade.saveItems(generator.getRandomItems(amount));
     }
 
     public void saveRandomPersonnelKeys(int amount) {
+        if (amount <= 0) return;
         repositoriesFacade.saveAccessKeys(generator.getRandomPersonnelKeys(amount));
     }
 
-    public void saveRandomSCPs(int amount, int maxId) {
-        repositoriesFacade.saveSCPs(generator.getRandomSCPs(amount, maxId));
+    public void saveRandomSCPs(int amount) {
+        if (amount <= 0) return;
+        repositoriesFacade.saveSCPs(generator.getRandomSCPs(amount, MAX_SCP_ID));
     }
 
     public void saveRandomPersonnel(int amount) {
+        if (amount <= 0) return;
         repositoriesFacade.savePersonnel(generator.getRandomPersonnel(amount));
     }
 
     public void saveRandomFoundations(int amount) {
+        if (amount <= 0) return;
         repositoriesFacade.saveFoundations(generator.getRandomFoundations(amount));
     }
 
     public void saveRandomLocations(int amount) {
+        if (amount <= 0) return;
         repositoriesFacade.saveLocations(generator.getRandomLocations(amount));
     }
 

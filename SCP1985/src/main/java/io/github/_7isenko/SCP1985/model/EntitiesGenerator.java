@@ -1,4 +1,4 @@
-package io.github._7isenko.SCP1985.model.init;
+package io.github._7isenko.SCP1985.model;
 
 import com.github.javafaker.Faker;
 import io.github._7isenko.SCP1985.model.entities.*;
@@ -64,7 +64,7 @@ public class EntitiesGenerator {
         ArrayList<MobileGroupMembersEntity> mobileGroupMembersEntities = new ArrayList<>();
         List<PersonnelEntity> personnelEntities = personnelEntityRepository.findAll();
         for (MobileGroupEntity mobileGroup : mobileGroupEntityRepository.findAll()) {
-            if (mobileGroup.getMobileGroupMembersById().size() < min) {
+            if (mobileGroup.getMobileGroupMembersById() == null || mobileGroup.getMobileGroupMembersById().size() < min) {
                 for (int i = 0; i < min; i++) {
                     mobileGroupMembersEntities.add(new MobileGroupMembersEntity(mobileGroup.getId(), CollectionsHelper.getRandomElement(personnelEntities).getId()));
                 }
@@ -118,6 +118,7 @@ public class EntitiesGenerator {
         return itemEntities;
     }
 
+    // FIXME: make it correct
     public ArrayList<AccessKeyEntity> getRandomPersonnelKeys(int amount) {
         ArrayList<AccessKeyEntity> accessKeyEntities = new ArrayList<>();
 
@@ -150,6 +151,7 @@ public class EntitiesGenerator {
         return PersonnelHelper.generatePersonnel(amount);
     }
 
+    // FIXME: hard connect with locations
     public ArrayList<FoundationEntity> getRandomFoundations(int amount) {
         ArrayList<FoundationEntity> foundationEntities = new ArrayList<>();
 
