@@ -54,7 +54,7 @@ public class AccessKeyEntity {
         return Objects.hash(sshKey, personnelId);
     }
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "personnel_id", referencedColumnName = "id", updatable = false, insertable = false)
     public PersonnelEntity getPersonnelByPersonnelId() {
         return personnelByPersonnelId;
