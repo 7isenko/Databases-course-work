@@ -7,39 +7,148 @@
 </head>
 <body>
 
-    <div class="left_menu">
+    <input type="checkbox" id="nav-scp" name="dependent" hidden>
+    <input type="checkbox" id="nav-pers" name="dependent" hidden>
+    <input type="checkbox" id="nav-equip" name="dependent" hidden>
+
+    <div class="nav" id="scp">
+        <label for="nav-scp" class="nav-toggle" onclick></label>
+        <h2 class="logo">
+            SCP-Object
+        </h2>
         <ul class="menu1" th:each="scp:${scpEntities}" >
             <li th:if="${scp.id <= 1000}" class="li1">
-                <a href="index" class="mainmenu1" th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}"></a>
+                <label>
+                    <input type="radio" name="scp" class="mainmenu1" th:data="'SCP-' + ${scp.id}"
+                           th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}" onclick="set_text_info(this.getAttribute('data'), 'scp')"/>
+                </label>
                 <div class="hidden_block">
                     <p th:utext="${scp.description}">...</p>
                 </div>
             </li>
             <li th:if="${scp.id > 1000 && scp.id <= 2000}" class="li1">
-                <a href="index" class="mainmenu1" th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}"></a>
+                <label>
+                    <input type="radio" name="scp" class="mainmenu1" th:data="'SCP-' + ${scp.id}"
+                           th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}" onclick="set_text_info(this.getAttribute('data'), 'scp')"/>
+                </label>
+                <div class="hidden_block">
+                    <p th:utext="${scp.description}">...</p>
+                </div>
             </li>
             <li th:if="${scp.id > 2000 && scp.id <= 3000}" class="li1">
-                <a href="index" class="mainmenu1" th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}"></a>
+                <label>
+                    <input type="radio" name="scp" class="mainmenu1" th:data="'SCP-' + ${scp.id}"
+                           th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}" onclick="set_text_info(this.getAttribute('data'), 'scp')"/>
+                </label>
+                <div class="hidden_block">
+                    <p th:utext="${scp.description}">...</p>
+                </div>
             </li>
             <li th:if="${scp.id > 3000 && scp.id <= 4000}" class="li1">
-                <a href="index" class="mainmenu1" th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}"></a>
+                <label>
+                    <input type="radio" name="scp" class="mainmenu1" th:data="'SCP-' + ${scp.id}"
+                           th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}" onclick="set_text_info(this.getAttribute('data'), 'scp')"/>
+                </label>
+                <div class="hidden_block">
+                    <p th:utext="${scp.description}">...</p>
+                </div>
             </li>
             <li th:if="${scp.id > 4000 && scp.id <= 5000}" class="li1">
-                <a href="index" class="mainmenu1" th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}"></a>
+                <label>
+                    <input type="radio" name="scp" class="mainmenu1" th:data="'SCP-' + ${scp.id}"
+                           th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}" onclick="set_text_info(this.getAttribute('data'), 'scp')"/>
+                </label>
+                <div class="hidden_block">
+                    <p th:utext="${scp.description}">...</p>
+                </div>
             </li>
             <li th:if="${scp.id > 5000 && scp.id <= 6000}" class="li1">
-                <a href="index" class="mainmenu1" th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}"></a>
+                <label>
+                    <input type="radio" name="scp" class="mainmenu1" th:data="'SCP-' + ${scp.id}"
+                           th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}" onclick="set_text_info(this.getAttribute('data'), 'scp')"/>
+                </label>
+                <div class="hidden_block">
+                    <p th:utext="${scp.description}">...</p>
+                </div>
             </li>
             <li th:if="${scp.id > 6000 && scp.id <= 7000}" class="li1">
-                <a href="index" class="mainmenu1" th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}"></a>
+                <label>
+                    <input type="radio" name="scp" class="mainmenu1" th:data="'SCP-' + ${scp.id}"
+                           th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}" onclick="set_text_info(this.getAttribute('data'), 'scp')"/>
+                </label>
+                <div class="hidden_block">
+                    <p th:utext="${scp.description}">...</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="nav" id="pers">
+        <label for="nav-pers" class="nav-toggle" onclick></label>
+        <h2 class="logo">
+            Personnel
+        </h2>
+        <ul class="menu1" th:each="personnel:${personnelEntities}" >
+            <li class="li1">
+                <label>
+                    <input type="radio" name="pers" class="mainmenu1" th:data="'LV' + ${personnel.clearanceLevel} + ' ' + ${personnel.name}"
+                           th:utext="'LV' + ${personnel.clearanceLevel} + ' ' + ${personnel.name}"
+                           onclick="set_text_info(this.getAttribute('data'), 'pers')"/>
+                </label>
+            </li>
+        </ul>
+    </div>
+
+    <div class="nav" id="equip">
+        <label for="nav-equip" class="nav-toggle" onclick></label>
+        <h2 class="logo">
+            Equipment
+        </h2>
+        <ul class="menu1" th:each="equip:${equipmentEntities}" >
+            <li class="li1">
+                <label>
+                    <input type="radio" name="equip" class="mainmenu1" th:data="${equip.name}" th:utext="${equip.name}"
+                           onclick="set_text_info(this.getAttribute('data'), 'equip')"/>
+                </label>
             </li>
         </ul>
     </div>
 
 
-    <div class="query">
+    <form class="query" method="post">
         <p>Введите запрос</p>
-    </div>
+        <input type="text" id="scp_obj" onclick="click_on_text('scp')">
+        <input type="text" id="pers_obj" onclick="click_on_text('pers')">
+        <input type="text" id="equip_obj" onclick="click_on_text('equip')">
+        <input type="submit" value="Направить">
+    </form>
 
 </body>
+
+<script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script>
+    function click_on_text(txt){
+        const checked_button = document.querySelectorAll("input:checked");
+        for (let i = 0; i < checked_button.length; i++){
+            checked_button[i].checked = false;
+        }
+        if (txt === 'scp'){
+            document.getElementById("nav-scp").click();
+            return;
+        }
+        if (txt === 'pers'){
+            document.getElementById("nav-pers").click();
+            return;
+        }
+        if (txt === 'equip'){
+            document.getElementById("nav-equip").click();
+        }
+    }
+
+    function set_text_info(txt, field){
+        document.getElementById(field + "_obj").value = txt;
+    }
+
+</script>
+
 </html>
