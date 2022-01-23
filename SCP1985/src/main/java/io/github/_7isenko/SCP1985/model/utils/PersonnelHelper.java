@@ -67,8 +67,8 @@ public class PersonnelHelper {
         }
     }
 
-    private static final ClassificationWithWeight[] items = new ClassificationWithWeight[]{new ClassificationWithWeight("A", 0.5D),
+    private static final ClassificationWithWeight[] items = new ClassificationWithWeight[]{new ClassificationWithWeight("A", 1),
             new ClassificationWithWeight("B", 2), new ClassificationWithWeight("C", 3),
-            new ClassificationWithWeight("D", 7), new ClassificationWithWeight("E", 3)};
+            new ClassificationWithWeight("D", 6), new ClassificationWithWeight("E", 3)};
 
 }
