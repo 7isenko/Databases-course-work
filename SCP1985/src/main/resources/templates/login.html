@@ -10,12 +10,12 @@
       th:object="${loginForm}" method="post">
     <label>
         Your full name:
-        <input type="number" th:field="*{name}"/>
+        <input th:field="*{name}"/>
     </label>
     <br>
     <label>
         Key:
-        <input type="number" th:field="*{key}"/>
+        <input th:field="*{key}"/>
     </label>
     <br>
     <input type="submit" value="Login"/>
