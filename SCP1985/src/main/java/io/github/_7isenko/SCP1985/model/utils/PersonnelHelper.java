@@ -6,8 +6,6 @@ import io.github._7isenko.SCP1985.model.object_types.Classification;
 import io.github._7isenko.SCP1985.model.object_types.ClearanceLevel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -18,10 +16,9 @@ import java.util.stream.Collectors;
 public class PersonnelHelper {
 
     public static List<PersonnelEntity> getAllowedPersonnel(List<PersonnelEntity> personnelEntities) {
-        HashSet<Classification> classifications = new HashSet<>(Arrays.asList(Classification.A, Classification.B, Classification.C));
         return personnelEntities.stream().filter(personnelEntity ->
-                        (personnelEntity.getClearanceLevel() == ClearanceLevel.FOUR ||
-                                personnelEntity.getClearanceLevel() == ClearanceLevel.FIVE) && classifications.contains(personnelEntity.getClassification()))
+                        (personnelEntity.getClearanceLevel() == ClearanceLevel.THREE || personnelEntity.getClearanceLevel() == ClearanceLevel.FOUR ||
+                                personnelEntity.getClearanceLevel() == ClearanceLevel.FIVE) && personnelEntity.getClassification() == Classification.C)
                 .collect(Collectors.toList());
     }
 
@@ -41,9 +38,9 @@ public class PersonnelHelper {
             }
             ClassificationWithWeight cl = items[idx];
             int level = 0;
-            if (cl.name.equals("A")) level = ThreadLocalRandom.current().nextInt(4, 6);
-            if (cl.name.equals("B")) level = ThreadLocalRandom.current().nextInt(3, 6);
-            if (cl.name.equals("C")) level = ThreadLocalRandom.current().nextInt(2, 5);
+            if (cl.name.equals("A")) level = ThreadLocalRandom.current().nextInt(5, 6);
+            if (cl.name.equals("B")) level = ThreadLocalRandom.current().nextInt(4, 6);
+            if (cl.name.equals("C")) level = ThreadLocalRandom.current().nextInt(3, 5);
             if (cl.name.equals("D")) level = 1;
 
             personnels.add(new PersonnelEntity(faker.name().firstName(), faker.name().lastName(), ClearanceLevel.values()[level], Classification.valueOf(cl.name)));
@@ -71,7 +68,7 @@ public class PersonnelHelper {
     }
 
     private static final ClassificationWithWeight[] items = new ClassificationWithWeight[]{new ClassificationWithWeight("A", 0.5D),
-            new ClassificationWithWeight("B", 1), new ClassificationWithWeight("C", 1.5D),
-            new ClassificationWithWeight("D", 10), new ClassificationWithWeight("E", 3)};
+            new ClassificationWithWeight("B", 2), new ClassificationWithWeight("C", 3),
+            new ClassificationWithWeight("D", 7), new ClassificationWithWeight("E", 3)};
 
 }
