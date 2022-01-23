@@ -1,22 +1,15 @@
 package io.github._7isenko.SCP1985.security;
 
 import io.github._7isenko.SCP1985.model.entities.PersonnelEntity;
-import io.github._7isenko.SCP1985.model.repositories.AccessKeyEntityRepository;
 import io.github._7isenko.SCP1985.model.repositories.PersonnelEntityRepository;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 /**
