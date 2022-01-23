@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+</head>
+<body>
+
+    <table>
+        <tr>
+            <th>Номер отчета</th>
+            <th>Триггер</th>
+            <th>Время срабатывания триггера</th>
+            <th>Экипировка</th>
+            <th>Описание вселенной</th>
+            <th>Статус отчета</th>
+            <th>Заметки</th>
+            <th>Полученные предметы</th>
+            <th>SCP-объект</th>
+            <th>Напрвляющий</th>
+            <th>Мобильная группа</th>
+            <th>Координаты появления объекта</th>
+            <th>Время возвращения на Землю</th>
+            <th>Время возвращения в Фонд</th>
+            <th>Успех миссии</th>
+        </tr>
+        <tr th:each="report:${reports}">
+            <td th:utext="${report.id}">...</td>
+            <td th:utext="${report.triggerType}">...</td>
+            <td th:utext="${report.triggerCommitted}">...</td>
+            <td th:utext="${report.equipment}">...</td>
+            <td th:utext="${report.realityDescription}">...</td>
+            <td th:utext="${report.logStatus}">...</td>
+            <td th:utext="${report.note}">...</td>
+            <td th:utext="${report.item}">...</td>
+            <td th:utext="'SCP-' + ${report.scp_object}">...</td>
+            <td th:utext="'LV' + ${report.clearanceLevel} + ' ' + ${report.classification} + ' ' +
+                        ${report.personnel_name}">...</td>
+            <td th:utext="${report.mobile_group}">...</td>
+            <td th:utext="${report.latitude} + ', ' + ${report.longitude}">...</td>
+            <td th:utext="${report.returnToReality}">...</td>
+            <td th:utext="${report.returnToFoundation}">...</td>
+            <td th:utext="${report.succeed}">...</td>
+
+        </tr>
+    </table>
+
+</body>
+</html>
