@@ -90,7 +90,8 @@ public class EntitiesGenerator {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         List<ItemEntity> itemEntities = itemEntityRepository.findAll();
         for (EquipmentEntity equipmentEntity : equipmentEntityRepository.findAll()) {
-            for (int i = equipmentEntity.getEquipmentContentsById().size(); i < min + random.nextInt(0, max - min); i++) {
+            int size = equipmentEntity.getEquipmentContentsById() == null ? 0 : equipmentEntity.getEquipmentContentsById().size();
+            for (int i = size; i < min + random.nextInt(0, max - min); i++) {
                 equipmentContentsEntities.add(new EquipmentContentsEntity(equipmentEntity.getId(),
                         CollectionsHelper.getRandomElement(itemEntities).getId()));
             }
