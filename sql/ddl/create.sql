@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS foundation
 CREATE TABLE IF NOT EXISTS scp_object
 (
     id            int PRIMARY KEY,
-    name          varchar(120),
+    name          text,  -- text поставлен из-за того, что порой встречаются scp с непредсказуемо длинными именами
     description   text,
     object_class  object_class DEFAULT 'Неприменимо',
     foundation_id int NULL REFERENCES foundation (id) on delete set null on update cascade
