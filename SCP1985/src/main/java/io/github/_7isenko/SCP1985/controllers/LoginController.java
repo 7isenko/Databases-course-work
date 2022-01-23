@@ -36,7 +36,7 @@ public class LoginController {
         LoginForm loginForm = new LoginForm();
         model.addAttribute("loginForm", loginForm);
 
-        return "admin";
+        return "login";
     }
 
     @RequestMapping(value = {"/login"}, method = RequestMethod.POST)
