@@ -40,7 +40,7 @@ public class GeneratingEntitiesSaver {
         List<PrimingEntity> primingEntities = primingEntityRepository.findAll();
         List<EquipmentEntity> equipmentEntities = equipmentEntityRepository.findAll();
         for (PrimingEntity primingEntity : primingEntities) {
-            if (primingEntity.getExcursionLogsById().isEmpty())
+            if (primingEntity.getExcursionLogsById() == null || primingEntity.getExcursionLogsById().isEmpty())
                 repositoriesFacade.executeGoOnExcursion(primingEntity, CollectionsHelper.getRandomElement(equipmentEntities));
         }
     }
