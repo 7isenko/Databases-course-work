@@ -27,20 +27,20 @@
         </tr>
         <tr th:each="report:${reports}">
             <td th:utext="${report.id}">...</td>
-            <td th:utext="${report.triggerType}">...</td>
-            <td th:utext="${report.triggerCommitted}">...</td>
+            <td th:utext="${report.trigger_type}">...</td>
+            <td th:utext="${report.trigger_committed}">...</td>
             <td th:utext="${report.equipment}">...</td>
-            <td th:utext="${report.realityDescription}">...</td>
-            <td th:utext="${report.logStatus}">...</td>
+            <td th:utext="${report.reality_description}">...</td>
+            <td th:utext="${report.log_status}">...</td>
             <td th:utext="${report.note}">...</td>
             <td th:utext="${report.item}">...</td>
             <td th:utext="'SCP-' + ${report.scp_object}">...</td>
-            <td th:utext="'LV' + ${report.clearanceLevel} + ' ' + ${report.classification} + ' ' +
+            <td th:utext="'LV' + ${report.clearance_level} + ' ' + ${report.classification} + ' ' +
                         ${report.personnel_name}">...</td>
             <td th:utext="${report.mobile_group}">...</td>
             <td th:utext="${report.latitude} + ', ' + ${report.longitude}">...</td>
-            <td th:utext="${report.returnToReality}">...</td>
-            <td th:utext="${report.returnToFoundation}">...</td>
+            <td th:utext="${report.return_to_reality}">...</td>
+            <td th:utext="${report.return_to_foundation}">...</td>
             <td th:utext="${report.succeed}">...</td>
 
         </tr>

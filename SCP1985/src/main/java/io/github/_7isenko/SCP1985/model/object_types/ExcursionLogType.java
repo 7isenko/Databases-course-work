@@ -19,44 +19,53 @@ public class ExcursionLogType {
 
     @Id
     private int id;
-    private TriggerType triggerType;
-    private Timestamp triggerCommitted;
+
+    @ Enumerated(EnumType.STRING)
+    @ Type(type = "psql_enum")
+    private TriggerType trigger_type;
+    private Timestamp trigger_committed;
     private String equipment;
-    private String realityDescription;
-    private LogStatus logStatus;
+    private String reality_description;
+
+    @ Enumerated(EnumType.STRING)
+    @ Type(type = "psql_enum")
+    private LogStatus log_status;
     private String note;
     private String item;
     private int scp_object;
-    private ClearanceLevel clearanceLevel;
+    private ClearanceLevel clearance_level;
+
+    @ Enumerated(EnumType.STRING)
+    @ Type(type = "psql_enum")
     private Classification classification;
     private String personnel_name;
-    private Timestamp returnToReality;
-    private Timestamp returnToFoundation;
+    private Timestamp return_to_reality;
+    private Timestamp return_to_foundation;
     private Boolean succeed;
     private String mobile_group;
     private BigDecimal latitude;
     private BigDecimal longitude;
 
-    public ExcursionLogType(int id, TriggerType triggerType, Timestamp triggerCommitted,
-                            String equipment, String realityDescription, LogStatus logStatus,
-                            String note, String item, int scp_object, ClearanceLevel clearanceLevel,
+    public ExcursionLogType(int id, TriggerType trigger_type, Timestamp trigger_committed,
+                            String equipment, String reality_description, LogStatus log_status,
+                            String note, String item, int scp_object, ClearanceLevel clearance_level,
                             Classification classification, String personnel_name,
-                            Timestamp returnToReality, Timestamp returnToFoundation, Boolean succeed,
+                            Timestamp return_to_reality, Timestamp return_to_foundation, Boolean succeed,
                             String mobile_group, BigDecimal latitude, BigDecimal longitude) {
         this.id = id;
-        this.triggerType = triggerType;
-        this.triggerCommitted = triggerCommitted;
+        this.trigger_type = trigger_type;
+        this.trigger_committed = trigger_committed;
         this.equipment = equipment;
-        this.realityDescription = realityDescription;
-        this.logStatus = logStatus;
+        this.reality_description = reality_description;
+        this.log_status = log_status;
         this.note = note;
         this.item = item;
         this.scp_object = scp_object;
-        this.clearanceLevel = clearanceLevel;
+        this.clearance_level = clearance_level;
         this.classification = classification;
         this.personnel_name = personnel_name;
-        this.returnToReality = returnToReality;
-        this.returnToFoundation = returnToFoundation;
+        this.return_to_reality = return_to_reality;
+        this.return_to_foundation = return_to_foundation;
         this.succeed = succeed;
         this.mobile_group = mobile_group;
         this.latitude = latitude;
@@ -71,20 +80,20 @@ public class ExcursionLogType {
         this.id = id;
     }
 
-    public TriggerType getTriggerType() {
-        return triggerType;
+    public TriggerType getTrigger_type() {
+        return trigger_type;
     }
 
-    public void setTriggerType(TriggerType triggerType) {
-        this.triggerType = triggerType;
+    public void setTrigger_type(TriggerType trigger_type) {
+        this.trigger_type = trigger_type;
     }
 
-    public Timestamp getTriggerCommitted() {
-        return triggerCommitted;
+    public Timestamp getTrigger_committed() {
+        return trigger_committed;
     }
 
-    public void setTriggerCommitted(Timestamp triggerCommitted) {
-        this.triggerCommitted = triggerCommitted;
+    public void setTrigger_committed(Timestamp trigger_committed) {
+        this.trigger_committed = trigger_committed;
     }
 
     public String getEquipment() {
@@ -95,21 +104,13 @@ public class ExcursionLogType {
         this.equipment = equipment;
     }
 
-    public String getRealityDescription() {
-        return realityDescription;
-    }
+    public String getReality_description() { return reality_description; }
 
-    public void setRealityDescription(String realityDescription) {
-        this.realityDescription = realityDescription;
-    }
+    public void setReality_description(String reality_description) { this.reality_description = reality_description; }
 
-    public LogStatus getLogStatus() {
-        return logStatus;
-    }
+    public LogStatus getLog_status() { return log_status; }
 
-    public void setLogStatus(LogStatus logStatus) {
-        this.logStatus = logStatus;
-    }
+    public void setLog_status(LogStatus log_status) { this.log_status = log_status; }
 
     public String getNote() {
         return note;
@@ -135,13 +136,9 @@ public class ExcursionLogType {
         this.scp_object = scp_object;
     }
 
-    public ClearanceLevel getClearanceLevel() {
-        return clearanceLevel;
-    }
+    public ClearanceLevel getClearance_level() { return clearance_level; }
 
-    public void setClearanceLevel(ClearanceLevel clearanceLevel) {
-        this.clearanceLevel = clearanceLevel;
-    }
+    public void setClearance_level(ClearanceLevel clearance_level) { this.clearance_level = clearance_level; }
 
     public Classification getClassification() {
         return classification;
@@ -159,21 +156,17 @@ public class ExcursionLogType {
         this.personnel_name = personnel_name;
     }
 
-    public Timestamp getReturnToReality() {
-        return returnToReality;
+    public Timestamp getReturn_to_reality() {
+        return return_to_reality;
     }
 
-    public void setReturnToReality(Timestamp returnToReality) {
-        this.returnToReality = returnToReality;
+    public void setReturn_to_reality(Timestamp return_to_reality) {
+        this.return_to_reality = return_to_reality;
     }
 
-    public Timestamp getReturnToFoundation() {
-        return returnToFoundation;
-    }
+    public Timestamp getReturn_to_foundation() { return return_to_foundation; }
 
-    public void setReturnToFoundation(Timestamp returnToFoundation) {
-        this.returnToFoundation = returnToFoundation;
-    }
+    public void setReturn_to_foundation(Timestamp return_to_foundation) { this.return_to_foundation = return_to_foundation; }
 
     public Boolean getSucceed() {
         return succeed;
@@ -211,19 +204,19 @@ public class ExcursionLogType {
     public String toString() {
         return "ExcursionLogType{" +
                 "id=" + id +
-                ", triggerType=" + triggerType +
-                ", triggerCommitted=" + triggerCommitted +
+                ", trigger_type=" + trigger_type +
+                ", trigger_committed=" + trigger_committed +
                 ", equipment='" + equipment + '\'' +
-                ", realityDescription='" + realityDescription + '\'' +
-                ", logStatus=" + logStatus +
+                ", realityDescription='" + reality_description + '\'' +
+                ", logStatus=" + log_status +
                 ", note='" + note + '\'' +
                 ", item='" + item + '\'' +
                 ", scp_object=" + scp_object +
-                ", clearanceLevel=" + clearanceLevel +
+                ", clearanceLevel=" + clearance_level +
                 ", classification=" + classification +
                 ", personnel_name='" + personnel_name + '\'' +
-                ", returnToReality=" + returnToReality +
-                ", returnToFoundation=" + returnToFoundation +
+                ", return_to_reality=" + return_to_reality +
+                ", return_to_foundation=" + return_to_foundation +
                 ", succeed=" + succeed +
                 ", mobile_group='" + mobile_group + '\'' +
                 ", latitude=" + latitude +
