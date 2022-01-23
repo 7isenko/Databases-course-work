@@ -24,8 +24,7 @@ public class AdminController {
 
     @RequestMapping(value = {"/admin"}, method = RequestMethod.GET)
     public String showAdminPage(Model model) {
-        AdminForm adminForm = new AdminForm();
-        model.addAttribute("adminForm", adminForm);
+        model.addAttribute("adminForm", new AdminForm());
 
         return "admin";
     }

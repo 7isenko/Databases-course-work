@@ -25,7 +25,7 @@ public class PersonnelEntity {
     private String surname;
     private ClearanceLevel clearanceLevel;
     private Classification classification;
-    private Collection<AccessKeyEntity> accessKeysById;
+    private AccessKeyEntity accessKeyById;
     private Collection<MobileGroupMembersEntity> mobileGroupMembersById;
     private Collection<PrimingEntity> primingsById;
 
@@ -101,13 +101,13 @@ public class PersonnelEntity {
         return Objects.hash(id, name, surname, clearanceLevel, classification);
     }
 
-    @OneToMany(mappedBy = "personnelByPersonnelId")
-    public Collection<AccessKeyEntity> getAccessKeysById() {
-        return accessKeysById;
+    @OneToOne(mappedBy = "personnelByPersonnelId")
+    public AccessKeyEntity getAccessKeyById() {
+        return accessKeyById;
     }
 
-    public void setAccessKeysById(Collection<AccessKeyEntity> accessKeysById) {
-        this.accessKeysById = accessKeysById;
+    public void setAccessKeyById(AccessKeyEntity accessKeyById) {
+        this.accessKeyById = accessKeyById;
     }
 
     @OneToMany(mappedBy = "personnelByPersonnelId")
