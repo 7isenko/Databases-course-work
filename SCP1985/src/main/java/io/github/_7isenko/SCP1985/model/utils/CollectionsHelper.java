@@ -17,6 +17,11 @@ public class CollectionsHelper {
         throw new AssertionError();
     }
 
+    public static <T> T getFirstElement(Collection<T> coll) {
+        for (T t : coll) return t;
+        throw new AssertionError();
+    }
+
     public static ArrayList<String> getRandomStringList(int amount, int bound) {
         ArrayList<String> strings = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
