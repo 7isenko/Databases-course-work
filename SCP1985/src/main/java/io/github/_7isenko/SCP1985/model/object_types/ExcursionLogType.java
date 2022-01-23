@@ -1,10 +1,17 @@
 package io.github._7isenko.SCP1985.model.object_types;
 
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
+@NoArgsConstructor
+@Entity
 public class ExcursionLogType {
 
+    @Id
     private int id;
     private TriggerType triggerType;
     private Timestamp triggerCommitted;

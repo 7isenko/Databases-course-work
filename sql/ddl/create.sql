@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS foundation
 CREATE TABLE IF NOT EXISTS scp_object
 (
     id            int PRIMARY KEY,
-    name          text,  -- text поставлен из-за того, что порой встречаются scp с непредсказуемо длинными именами
+    name          text, -- text поставлен из-за того, что порой встречаются scp с непредсказуемо длинными именами
     description   text,
     object_class  object_class DEFAULT 'Неприменимо',
     foundation_id int NULL REFERENCES foundation (id) on delete set null on update cascade
@@ -311,22 +311,58 @@ BEGIN
 end
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE function make_reports() RETURNS TABLE (id integer, trigger_type trigger_type, trigger_commited timestamp,
-                                                    equipment varchar(120), reality_description text, log_status log_status, note text, item varchar(120),
-                                                    scp_object integer, personnel_level clearance_level, personnel_class classification, personnel_name varchar(60),
-                                                    return_to_reality timestamp, return_to_foundation timestamp, succeed bool, mobile_group varchar(90),
-                                                    latitude decimal(9, 6), longitude decimal(9, 6)) AS $$
+CREATE OR REPLACE function make_reports()
+    RETURNS TABLE
+            (
+                id                   integer,
+                trigger_type         trigger_type,
+                trigger_commited     timestamp,
+                equipment            varchar(120),
+                reality_description  text,
+                log_status           log_status,
+                note                 text,
+                item                 varchar(120),
+                scp_object           integer,
+                personnel_level      clearance_level,
+                personnel_class      classification,
+                personnel_name       varchar(60),
+                return_to_reality    timestamp,
+                return_to_foundation timestamp,
+                succeed              bool,
+                mobile_group         varchar(90),
+                latitude             decimal(9, 6),
+                longitude            decimal(9, 6)
+            )
+AS
+$$
 BEGIN
-    RETURN query SELECT ex.id, ex.trigger_type, ex.trigger_committed, e.name, ex.reality_description, ex.log_status, ex.note,
-                        i.name, so.id, p2.clearance_level, p2.classification, p2.name, r.return_to_reality, r.return_to_foundation,
-                        r.succeed, mg.name, l.latitude, l.longitude from excursion_log ex INNER JOIN equipment e on e.id = ex.equipment_id
-                                                                                          INNER JOIN priming p on ex.priming_id = p.id
-                                                                                          INNER JOIN retrieval r on ex.retrieval_id = r.id
-                                                                                          INNER JOIN location l on r.location_id = l.id
-                                                                                          INNER JOIN personnel p2 on p.personnel_id = p2.id
-                                                                                          INNER JOIN scp_object so on p.scp_object_id = so.id
-                                                                                          INNER JOIN mobile_group mg on r.mobile_group_id = mg.id
-                                                                                          INNER JOIN excursion_contents ec on ex.id = ec.excursion_log_id
-                                                                                          INNER JOIN item i on ec.item_id = i.id;
+    RETURN query SELECT ex.id,
+                        ex.trigger_type,
+                        ex.trigger_committed,
+                        e.name,
+                        ex.reality_description,
+                        ex.log_status,
+                        ex.note,
+                        i.name,
+                        so.id,
+                        p2.clearance_level,
+                        p2.classification,
+                        p2.name,
+                        r.return_to_reality,
+                        r.return_to_foundation,
+                        r.succeed,
+                        mg.name,
+                        l.latitude,
+                        l.longitude
+                 from excursion_log ex
+                          INNER JOIN equipment e on e.id = ex.equipment_id
+                          INNER JOIN priming p on ex.priming_id = p.id
+                          INNER JOIN retrieval r on ex.retrieval_id = r.id
+                          INNER JOIN location l on r.location_id = l.id
+                          INNER JOIN personnel p2 on p.personnel_id = p2.id
+                          INNER JOIN scp_object so on p.scp_object_id = so.id
+                          INNER JOIN mobile_group mg on r.mobile_group_id = mg.id
+                          INNER JOIN excursion_contents ec on ex.id = ec.excursion_log_id
+                          INNER JOIN item i on ec.item_id = i.id;
 end
 $$ LANGUAGE plpgsql
