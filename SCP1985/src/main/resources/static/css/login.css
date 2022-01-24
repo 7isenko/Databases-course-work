@@ -57,3 +57,14 @@ input[type="text"],input[type="password"]{
     transition: all 0.3s;
 }
 
+.error {
+    font-weight: bold;
+    font-size: 18px;
+    color: red;
+}
+
+.logout {
+    font-weight: bold;
+    font-size: 18px;
+    color: green;
+}

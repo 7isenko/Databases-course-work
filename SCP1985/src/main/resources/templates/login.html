@@ -20,6 +20,8 @@
         </label>
         <br>
         <input class="dws-submit" type="submit" name="submit" value="Login"/>
+        <div class="error" th:utext="${error}"></div>
+        <div class="logout" th:utext="${logout}"></div>
     </form>
 </div>
 </body>
