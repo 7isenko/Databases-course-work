@@ -37,7 +37,7 @@ public class LoginController {
     }
 
     @RequestMapping(value = {"/login"}, method = RequestMethod.GET, params = "error")
-    public String loginWithError(@RequestParam("error") String err, Model model) {
+    public String loginWithError(Model model) {
         addLoginForm(model);
 
         model.addAttribute("error", "Неправильное имя или пароль.");
@@ -45,7 +45,7 @@ public class LoginController {
     }
 
     @RequestMapping(value = {"/login"}, method = RequestMethod.GET, params = "logout")
-    public String loginWithLogout(@RequestParam("logout") String logout, Model model) {
+    public String loginWithLogout(Model model) {
         addLoginForm(model);
 
         model.addAttribute("logout", "Вы успешно вышли из профиля.");
