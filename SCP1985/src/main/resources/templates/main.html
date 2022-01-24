@@ -22,63 +22,42 @@
                     <input type="radio" name="scp" class="mainmenu1" th:data="'SCP-' + ${scp.id}"
                            th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}" onclick="set_text_info(this.getAttribute('data'), 'scp')"/>
                 </label>
-                <div class="hidden_block">
-                    <p th:utext="${scp.description}">...</p>
-                </div>
             </li>
             <li th:if="${scp.id > 1000 && scp.id <= 2000}" class="li1">
                 <label>
                     <input type="radio" name="scp" class="mainmenu1" th:data="'SCP-' + ${scp.id}"
                            th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}" onclick="set_text_info(this.getAttribute('data'), 'scp')"/>
                 </label>
-                <div class="hidden_block">
-                    <p th:utext="${scp.description}">...</p>
-                </div>
             </li>
             <li th:if="${scp.id > 2000 && scp.id <= 3000}" class="li1">
                 <label>
                     <input type="radio" name="scp" class="mainmenu1" th:data="'SCP-' + ${scp.id}"
                            th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}" onclick="set_text_info(this.getAttribute('data'), 'scp')"/>
                 </label>
-                <div class="hidden_block">
-                    <p th:utext="${scp.description}">...</p>
-                </div>
             </li>
             <li th:if="${scp.id > 3000 && scp.id <= 4000}" class="li1">
                 <label>
                     <input type="radio" name="scp" class="mainmenu1" th:data="'SCP-' + ${scp.id}"
                            th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}" onclick="set_text_info(this.getAttribute('data'), 'scp')"/>
                 </label>
-                <div class="hidden_block">
-                    <p th:utext="${scp.description}">...</p>
-                </div>
             </li>
             <li th:if="${scp.id > 4000 && scp.id <= 5000}" class="li1">
                 <label>
                     <input type="radio" name="scp" class="mainmenu1" th:data="'SCP-' + ${scp.id}"
                            th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}" onclick="set_text_info(this.getAttribute('data'), 'scp')"/>
                 </label>
-                <div class="hidden_block">
-                    <p th:utext="${scp.description}">...</p>
-                </div>
             </li>
             <li th:if="${scp.id > 5000 && scp.id <= 6000}" class="li1">
                 <label>
                     <input type="radio" name="scp" class="mainmenu1" th:data="'SCP-' + ${scp.id}"
                            th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}" onclick="set_text_info(this.getAttribute('data'), 'scp')"/>
                 </label>
-                <div class="hidden_block">
-                    <p th:utext="${scp.description}">...</p>
-                </div>
             </li>
             <li th:if="${scp.id > 6000 && scp.id <= 7000}" class="li1">
                 <label>
                     <input type="radio" name="scp" class="mainmenu1" th:data="'SCP-' + ${scp.id}"
                            th:utext="'SCP-' + ${scp.id} + ' ' + ${scp.name}" onclick="set_text_info(this.getAttribute('data'), 'scp')"/>
                 </label>
-                <div class="hidden_block">
-                    <p th:utext="${scp.description}">...</p>
-                </div>
             </li>
         </ul>
     </div>
@@ -115,13 +94,34 @@
     </div>
 
 
-    <form class="query" method="post">
+    <form class="query" th:action="@{/main}" th:object="${priming}" method="post">
         <p>Введите запрос</p>
-        <input type="text" id="scp_obj" onclick="click_on_text('scp')">
-        <input type="text" id="pers_obj" onclick="click_on_text('pers')">
-        <input type="text" id="equip_obj" onclick="click_on_text('equip')">
+        <div class="form_block">
+            <label class="form_label" for="scp_obj">
+                SCP-объект
+            </label>
+            <input type="text" id="scp_obj" th:field="*{scp_object}" onclick="click_on_text('scp')" readonly>
+        </div>
+        <div class="form_block">
+            <label class="form_label" for="pers_obj">
+                Направляющий
+            </label>
+            <input type="text" id="pers_obj" th:field="*{personnel}" onclick="click_on_text('pers')" readonly>
+        </div>
+        <div class="form_block">
+            <label class="form_label" for="equip_obj">
+                Экипировка
+            </label>
+            <input type="text" id="equip_obj" th:field="*{equipment}" onclick="click_on_text('equip')" readonly>
+        </div>
+
         <input type="submit" value="Направить">
     </form>
+
+    <div class="button_report">
+        <input type="button" onclick="window.location.href = '/report';" value="Отчеты"/>
+    </div>
+
 
 </body>
 
