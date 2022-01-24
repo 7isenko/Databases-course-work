@@ -73,9 +73,8 @@ public class GeneratingEntitiesSaver {
         repositoriesFacade.saveItems(generator.getRandomItems(amount));
     }
 
-    public void saveRandomPersonnelKeys(int amount) {
-        if (amount <= 0) return;
-        repositoriesFacade.saveAccessKeys(generator.getRandomPersonnelKeys(amount));
+    public void saveRandomPersonnelKeys() {
+        repositoriesFacade.saveAccessKeys(generator.getRandomPersonnelKeys());
     }
 
     public void saveRandomSCPs(int amount) {

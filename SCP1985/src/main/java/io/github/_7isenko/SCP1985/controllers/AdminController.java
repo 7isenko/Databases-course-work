@@ -39,7 +39,7 @@ public class AdminController {
         generator.saveRandomSCPs(adminForm.getScpAmount());
 
         generator.saveRandomPersonnel(adminForm.getPersonnelAmount());
-        generator.saveRandomPersonnelKeys(adminForm.getPersonnelAmount());
+        generator.saveRandomPersonnelKeys();
 
         generator.saveRandomItems(adminForm.getItemAmount());
         generator.saveRandomEquipment(adminForm.getEquipmentAmount());

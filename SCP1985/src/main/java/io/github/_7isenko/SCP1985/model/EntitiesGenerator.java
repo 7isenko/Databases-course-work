@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 /**
  * @author 7isenko
@@ -119,14 +120,18 @@ public class EntitiesGenerator {
         return itemEntities;
     }
 
-    // FIXME: make it correct
-    public ArrayList<AccessKeyEntity> getRandomPersonnelKeys(int amount) {
+    public ArrayList<AccessKeyEntity> getRandomPersonnelKeys() {
         ArrayList<AccessKeyEntity> accessKeyEntities = new ArrayList<>();
+        List<PersonnelEntity> personnelEntityList = personnelEntityRepository.findAll()
+                .stream()
+                .filter(personnelEntity -> personnelEntity.getAccessKeyById() == null)
+                .collect(Collectors.toList());
 
-        for (int i = 0; i < amount; i++) {
+        for (PersonnelEntity personnel : personnelEntityList) {
             String ssh = StringsHelper.genRandomString(32);
-            accessKeyEntities.add(new AccessKeyEntity(ssh, i + 1));
+            accessKeyEntities.add(new AccessKeyEntity(ssh, personnel.getId()));
         }
+
         return accessKeyEntities;
     }
 
@@ -152,11 +157,10 @@ public class EntitiesGenerator {
         return PersonnelHelper.generatePersonnel(amount);
     }
 
-    // FIXME: hard connect with locations
     public ArrayList<FoundationEntity> getRandomFoundations(int amount) {
         ArrayList<FoundationEntity> foundationEntities = new ArrayList<>();
 
-        for (LocationEntity locationEntity : locationEntityRepository.findByIdGreaterThanAndIdLessThan(1, amount + 1)) {
+        for (LocationEntity locationEntity : locationEntityRepository.findByIdGreaterThanAndIdLessThan(amount)) {
             foundationEntities.add(new FoundationEntity(locationEntity.getId()));
         }
 
