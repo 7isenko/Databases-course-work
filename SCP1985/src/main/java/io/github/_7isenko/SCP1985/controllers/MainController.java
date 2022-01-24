@@ -4,10 +4,7 @@ import io.github._7isenko.SCP1985.controllers.forms.PrimingForm;
 import io.github._7isenko.SCP1985.model.entities.EquipmentEntity;
 import io.github._7isenko.SCP1985.model.entities.PersonnelEntity;
 import io.github._7isenko.SCP1985.model.entities.ScpObjectEntity;
-import io.github._7isenko.SCP1985.model.repositories.EquipmentEntityRepository;
-import io.github._7isenko.SCP1985.model.repositories.ExcursionLogEntityRepository;
-import io.github._7isenko.SCP1985.model.repositories.PersonnelEntityRepository;
-import io.github._7isenko.SCP1985.model.repositories.ScpObjectEntityRepository;
+import io.github._7isenko.SCP1985.model.repositories.*;
 import io.github._7isenko.SCP1985.model.utils.PersonnelHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,15 +25,18 @@ public class MainController {
     private final PersonnelEntityRepository personnelEntityRepository;
     private static List<EquipmentEntity> equipmentEntities;
     private final EquipmentEntityRepository equipmentEntityRepository;
+    private final PrimingEntityRepository primingEntityRepository;
     private final ExcursionLogEntityRepository excursionLogEntityRepository;
 
     public MainController(ScpObjectEntityRepository scpObjectEntityRepository,
                           PersonnelEntityRepository personnelEntityRepository,
                           EquipmentEntityRepository equipmentEntityRepository,
+                          PrimingEntityRepository primingEntityRepository,
                           ExcursionLogEntityRepository excursionLogEntityRepository) {
         this.scpObjectEntityRepository = scpObjectEntityRepository;
         this.personnelEntityRepository = personnelEntityRepository;
         this.equipmentEntityRepository = equipmentEntityRepository;
+        this.primingEntityRepository = primingEntityRepository;
         this.excursionLogEntityRepository = excursionLogEntityRepository;
     }
 
@@ -63,7 +63,7 @@ public class MainController {
             }
         }
 
-        // primingEntityRepository.executePriming(scp_id, personnel_id);
+        primingEntityRepository.executePriming(scp_id, personnel_id);
         excursionLogEntityRepository.goOnExcursion(scp_id, personnel_id, equipment_id);
 
         return "main";
