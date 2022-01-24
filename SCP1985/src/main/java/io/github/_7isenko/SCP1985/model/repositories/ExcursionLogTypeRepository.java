@@ -21,7 +21,7 @@ public interface ExcursionLogTypeRepository extends JpaRepository<ExcursionLogTy
 
     @Transactional
     @Modifying
-    @Query(value = "update excursion_log SET reality_description = :descr, log_status = :status, " +
+    @Query(value = "update excursion_log SET reality_description = :descr, log_status = cast(:status as log_status), " +
             "note = :note WHERE id = :id", nativeQuery = true)
     void updateExcursionLog(@Param("id") int excursion_log_id, @Param("descr") String reality_description,
                             @Param("status") String log_status, @Param("note") String note);
