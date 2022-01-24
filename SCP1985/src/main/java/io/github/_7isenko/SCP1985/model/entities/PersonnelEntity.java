@@ -66,7 +66,7 @@ public class PersonnelEntity {
         this.surname = surname;
     }
 
-    @Enumerated(EnumType.ORDINAL) // If I put EnumType.ORDINAL, it ALL breaks.
+    @Enumerated(EnumType.ORDINAL) // If I put EnumType.STRING, it ALL breaks.
     @Type(type = "psql_enum") @Convert(converter = ClearanceLevelConverter.class)
     @Column(name = "clearance_level", nullable = true)
     public ClearanceLevel getClearanceLevel() {
