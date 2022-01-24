@@ -31,7 +31,7 @@ public class LoginController {
         this.personnelEntityRepository = personnelEntityRepository;
     }
 
-    @RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/login"}, method = RequestMethod.GET)
     public String login(Model model) {
         LoginForm loginForm = new LoginForm();
         model.addAttribute("loginForm", loginForm);

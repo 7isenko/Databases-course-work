@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Navigation</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/navigation.css}"/>
+</head>
+<body>
+<p>Navigation</p>
+<div>
+  <input type="button" th:if="${authorities.contains('A') || authorities.contains('B') ||  authorities.contains('C')}" onclick="window.location.href = '/scp';" value="Список всех SCP"/>
+</div>
+<div>
+  <input type="button" onclick="window.location.href = '/main';" th:if="${authorities.contains('A') || authorities.contains('B') ||  authorities.contains('C')}" value="Создать отчёт"/>
+</div>
+<div>
+  <input type="button" onclick="window.location.href = '/report';" th:if="${authorities.contains('A') || authorities.contains('B') ||  authorities.contains('C')}" value="Отчеты"/>
+</div>
+<div>
+  <input type="button" onclick="window.location.href = '/map';" th:if="${authorities.contains('MOG')}" value="Геолокация"/>
+</div>
+<div>
+  <input type="button" onclick="window.location.href = '/logout';" value="Logout"/>
+</div>
+</body>
+</html>

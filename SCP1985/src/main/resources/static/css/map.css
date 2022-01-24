@@ -1,10 +1,11 @@
 
 #map {
-    height: 600px;
+    height: 550px;
     width: 100%;
 }
 
 #ret {
+    margin-top: 5px;
     position: center;
     text-align: center;
     color: blue;

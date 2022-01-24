@@ -31,8 +31,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "/login").permitAll()
-                .antMatchers("/main", "/report").hasAnyAuthority("A", "B", "C")
+                .antMatchers("/login").permitAll()
+                .antMatchers("/", "/navigation").hasAnyAuthority("A", "B", "C", "MOG")
+                .antMatchers("/main", "/report", "/scp").hasAnyAuthority("A", "B", "C")
                 .antMatchers("/edit").hasAnyAuthority("A", "B")
                 .antMatchers("/map").hasAuthority("MOG")
                 .antMatchers("/admin").permitAll() // Это только в рамках лабы, а не системы.
@@ -40,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .usernameParameter("name")
                 .passwordParameter("key")
-                .defaultSuccessUrl("/main") // TODO: навигацию...
+                .defaultSuccessUrl("/navigation")
                 .failureUrl("/login?error").permitAll()
                 .and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))

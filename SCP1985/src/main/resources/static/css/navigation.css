@@ -1,0 +1,18 @@
+div:not(.button_report) input {
+    background-color: white;
+    position: center;
+    text-align: center;
+    font-size: 16px;
+    border: black solid 2px;
+    width: 400px;
+    height: 28px;
+    padding: 0;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-bottom: 5px;
+}
+
+div:not(.button_report)  {
+    position: center;
+    text-align: center;
+}
