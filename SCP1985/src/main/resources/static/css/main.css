@@ -360,6 +360,28 @@ p {
 
 .query {
     display: inline-block;
-    padding: 100px;
-    margin: 100px;
+    text-align: center;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
+
+.form_block {
+    display: block;
+}
+
+.form_label {
+    display: inline-block;
+    width: 100px;
+}
+
+#scp_obj,#pers_obj, #equip_obj {
+    display: inline-block;
+    margin: 20px;
+    width: 100px;
+    height: 20px;
+}
+

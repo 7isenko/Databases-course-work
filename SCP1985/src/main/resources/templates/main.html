@@ -96,9 +96,25 @@
 
     <form class="query" th:action="@{/main}" th:object="${priming}" method="post">
         <p>Введите запрос</p>
-        <input type="text" id="scp_obj" th:field="*{scp_object}" onclick="click_on_text('scp')" readonly>
-        <input type="text" id="pers_obj" th:field="*{personnel}" onclick="click_on_text('pers')" readonly>
-        <input type="text" id="equip_obj" th:field="*{equipment}" onclick="click_on_text('equip')" readonly>
+        <div class="form_block">
+            <label class="form_label" for="scp_obj">
+                SCP-объект
+            </label>
+            <input type="text" id="scp_obj" th:field="*{scp_object}" onclick="click_on_text('scp')" readonly>
+        </div>
+        <div class="form_block">
+            <label class="form_label" for="pers_obj">
+                Направляющий
+            </label>
+            <input type="text" id="pers_obj" th:field="*{personnel}" onclick="click_on_text('pers')" readonly>
+        </div>
+        <div class="form_block">
+            <label class="form_label" for="equip_obj">
+                Экипировка
+            </label>
+            <input type="text" id="equip_obj" th:field="*{equipment}" onclick="click_on_text('equip')" readonly>
+        </div>
+
         <input type="submit" value="Направить">
     </form>
 
