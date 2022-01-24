@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}"/>
 </head>
 <body>
-<form th:action="@{/login}"
-      th:object="${loginForm}" method="post">
-    <label>
-        Your full name:
-        <input th:field="*{name}"/>
-    </label>
-    <br>
-    <label>
-        Key:
-        <input th:field="*{key}"/>
-    </label>
-    <br>
-    <input type="submit" value="Login"/>
-</form>
+<div class="container">
+    <img src="https://dwstroy.ru/lessons/les3373/demo/img/men.png">
 
+    <form th:action="@{/login}"
+          th:object="${loginForm}" method="post">
+        <label class="dws-input">
+            <input type="text" name="username" th:field="*{name}" placeholder="Введите Ваши имя и фамилию"/>
+        </label>
+        <br>
+        <label class="dws-input">
+            <input type="password" name="password" th:field="*{key}" placeholder="Введите пароль"/>
+        </label>
+        <br>
+        <input class="dws-submit" type="submit" name="submit" value="Login"/>
+    </form>
+</div>
 </body>
 </html>
