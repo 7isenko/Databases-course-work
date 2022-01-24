@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Retrieval</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/map.css}"/>
+</head>
+<body>
+<p id="ret" th:utext="${retrieval}">
+
+</p>
+<div id="map"></div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    function initMap() {
+        const loc = {lat: /*[[${location.latitude}]]*/, lng: /*[[${location.longitude}]]*/};
+        const map = new google.maps.Map(
+            document.getElementById('map'), {zoom: 4, center: loc});
+        const marker = new google.maps.Marker({position: loc, map: map});
+    }
+
+    /*]]>*/
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAprWN5m17FhcSaLb_AXcvCWQjYSmpAaqw&callback=initMap">
+</script>
+</body>
+</html>

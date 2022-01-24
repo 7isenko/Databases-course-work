@@ -1,0 +1,13 @@
+
+#map {
+    height: 600px;
+    width: 100%;
+}
+
+#ret {
+    position: center;
+    text-align: center;
+    color: blue;
+    font-size: 40px;
+    font-weight: bold;
+}
