@@ -289,7 +289,7 @@ BEGIN
     ELSE
 
         INSERT INTO retrieval (location_id, mobile_group_id, return_to_reality, return_to_foundation, succeed)
-        VALUES (id_location, 1, localtimestamp(0), NULL, FALSE);
+        VALUES (id_location, 1, localtimestamp(0), NULL, TRUE);
 
         INSERT INTO item (name) VALUES ('some word');
         id_item = (SELECT id from item ORDER BY id DESC LIMIT 1);
@@ -314,24 +314,24 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE function make_reports()
     RETURNS TABLE
             (
-                id                 integer,
-                triggerType        trigger_type,
-                triggerCommitted   timestamp,
-                equipment          varchar(120),
-                realityDescription text,
-                logStatus          log_status,
-                note               text,
-                item               varchar(120),
-                scp_object         integer,
-                clearanceLevel     clearance_level,
-                classification     classification,
-                personnel_name     varchar(60),
-                returnToReality    timestamp,
-                returnToFoundation timestamp,
-                succeed            bool,
-                mobile_group       varchar(90),
-                latitude           decimal(9, 6),
-                longitude          decimal(9, 6)
+                id                    integer,
+                trigger_type          trigger_type,
+                trigger_committed     timestamp,
+                equipment             varchar(120),
+                reality_description   text,
+                log_status            log_status,
+                note                  text,
+                item                  varchar(120),
+                scp_object            integer,
+                clearance_level       clearance_level,
+                classification        classification,
+                personnel_name        varchar(60),
+                return_to_reality     timestamp,
+                return_to_foundation  timestamp,
+                succeed               bool,
+                mobile_group          varchar(90),
+                latitude              decimal(9, 6),
+                longitude             decimal(9, 6)
             )
 AS
 $$
