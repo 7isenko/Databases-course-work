@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -16,30 +15,28 @@ import java.util.List;
  * @author 7isenko
  */
 @Controller
-public class ReportController {
+public class EditController {
 
     private final ExcursionLogTypeRepository reportsRepository;
 
 
-    public ReportController(ExcursionLogTypeRepository reportsRepository) {
+    public EditController(ExcursionLogTypeRepository reportsRepository) {
         this.reportsRepository = reportsRepository;
     }
 
-    @RequestMapping(value = {"/report"}, method = RequestMethod.POST)
-    public String edit(@ModelAttribute("rep") ExcursionLogType report, RedirectAttributes rattrs){
-        int id = report.getId();
-        rattrs.addAttribute("id", id);
-        return "redirect:edit";
-    }
-
     @Transactional
-    @RequestMapping(value = {"/report"}, method = RequestMethod.GET)
-    public String index(Model model) {
+    @RequestMapping(value = {"/edit"}, method = RequestMethod.GET)
+    public String index(@ModelAttribute("id") int id, Model model) {
         List<ExcursionLogType> reports = reportsRepository.makeReports();
-        model.addAttribute("reports", reports);
         ExcursionLogType report = new ExcursionLogType();
-        model.addAttribute("rep", report);
-        return "report";
+        for (int i = 0; i < reports.size(); ++i){
+            if (reports.get(i).getId() == id){
+                report = reports.get(i);
+                break;
+            }
+        }
+        model.addAttribute("report", report);
+        return "edit";
     }
 
 }

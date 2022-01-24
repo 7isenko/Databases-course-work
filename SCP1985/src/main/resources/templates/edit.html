@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+</head>
+<body>
+    <form th:action="@{/edit}" th:object="${report}" method="post">
+        <label>
+            <p>Номер отчета</p>
+            <input type="text" value="id-report" th:attr="value=*{id}" readonly>
+        </label>
+        <label>
+            <p>Триггер</p>
+            <input type="text" value="id-report" th:attr="value=*{trigger_type}" readonly>
+        </label>
+        <label>
+            <p>Время срабатывания триггера</p>
+            <input type="text" value="id-report" th:attr="value=*{trigger_committed}" readonly>
+        </label>
+        <label>
+            <p>Экипировка</p>
+            <input type="text" value="id-report" th:attr="value=*{equipment}" readonly>
+        </label>
+        <label>
+            <p>Описание реальности</p>
+            <input type="text" value="id-report" th:attr="value=*{reality_description}">
+        </label>
+        <label>
+            <p>Статус отчета</p>
+            <input type="text" value="id-report" th:attr="value=*{log_status}">
+        </label>
+        <label>
+            <p>Заметки</p>
+            <input type="text" value="id-report" th:attr="value=*{note}">
+        </label>
+        <label>
+            <p>Полученный предмет</p>
+            <input type="text" value="id-report" th:attr="value=*{item}" readonly>
+        </label>
+        <label>
+            <p>SCP-объект</p>
+            <input type="text" value="id-report" th:attr="value='SCP-' + *{scp_object}" readonly>
+        </label>
+        <label>
+            <p>Направляющий</p>
+            <input type="text" value="id-report" th:attr="value='LV' + *{clearance_level} + ' '
+                                + *{classification} + ' ' + *{personnel_name}" readonly>
+        </label>
+        <label>
+            <p>Мобильная группа</p>
+            <input type="text" value="id-report" th:attr="value=*{mobile_group}">
+        </label>
+        <label>
+            <p>Координаты появления объекта</p>
+            <input type="text" value="id-report" th:attr="value=*{latitude} + ', ' + *{longitude}" readonly>
+        </label>
+        <label>
+            <p>Время возвращения на Землю</p>
+            <input type="text" value="id-report" th:attr="value=*{return_to_reality}" readonly>
+        </label>
+        <label>
+            <p>Время возвращения в Фонд</p>
+            <input type="text" value="id-report" th:attr="value=*{return_to_foundation}">
+        </label>
+        <label>
+            <p>Итог миссии</p>
+            <input type="text" value="id-report" th:attr="value=(*{succeed} ? 'Успех' : 'Провал')" readonly>
+        </label>
+
+        <input type="submit" value="Сохранить">
+    </form>
+</body>
+</html>
