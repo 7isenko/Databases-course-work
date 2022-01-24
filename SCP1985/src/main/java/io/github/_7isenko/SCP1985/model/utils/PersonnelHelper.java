@@ -17,7 +17,7 @@ public class PersonnelHelper {
 
     public static List<PersonnelEntity> getAllowedPersonnel(List<PersonnelEntity> personnelEntities) {
         return personnelEntities.stream().filter(personnelEntity ->
-                        (personnelEntity.getClearanceLevel() == ClearanceLevel.THREE || personnelEntity.getClearanceLevel() == ClearanceLevel.FOUR ||
+                        (personnelEntity.getClearanceLevel() == ClearanceLevel.FOUR ||
                                 personnelEntity.getClearanceLevel() == ClearanceLevel.FIVE) && personnelEntity.getClassification() == Classification.C)
                 .collect(Collectors.toList());
     }
