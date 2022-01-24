@@ -38,9 +38,9 @@ public class PersonnelHelper {
             }
             ClassificationWithWeight cl = items[idx];
             int level = 0;
-            if (cl.name.equals("A")) level = ThreadLocalRandom.current().nextInt(5, 6);
+            if (cl.name.equals("A")) level = ThreadLocalRandom.current().nextInt(5, 7);
             if (cl.name.equals("B")) level = ThreadLocalRandom.current().nextInt(4, 6);
-            if (cl.name.equals("C")) level = ThreadLocalRandom.current().nextInt(3, 5);
+            if (cl.name.equals("C")) level = ThreadLocalRandom.current().nextInt(3, 6);
             if (cl.name.equals("D")) level = 1;
 
             personnels.add(new PersonnelEntity(faker.name().firstName(), faker.name().lastName(), ClearanceLevel.values()[level], Classification.valueOf(cl.name)));
