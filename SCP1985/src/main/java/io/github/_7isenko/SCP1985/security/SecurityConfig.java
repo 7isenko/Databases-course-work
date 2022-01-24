@@ -32,7 +32,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/", "/login").permitAll()
-                .antMatchers("/main").hasAnyAuthority("A", "B", "C")
+                .antMatchers("/main", "/report").hasAnyAuthority("A", "B", "C")
+                .antMatchers("/edit").hasAnyAuthority("A", "B")
+                .antMatchers("/map").hasAuthority("MOG")
                 .antMatchers("/admin").permitAll() // Это только в рамках лабы, а не системы.
                 .and().formLogin()
                 .loginPage("/login")
