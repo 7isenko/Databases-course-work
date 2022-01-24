@@ -1,7 +1,6 @@
 package io.github._7isenko.SCP1985.controllers;
 
 import io.github._7isenko.SCP1985.controllers.forms.PrimingForm;
-import io.github._7isenko.SCP1985.model.RepositoriesFacade;
 import io.github._7isenko.SCP1985.model.entities.EquipmentEntity;
 import io.github._7isenko.SCP1985.model.entities.PersonnelEntity;
 import io.github._7isenko.SCP1985.model.entities.ScpObjectEntity;
@@ -9,6 +8,7 @@ import io.github._7isenko.SCP1985.model.repositories.EquipmentEntityRepository;
 import io.github._7isenko.SCP1985.model.repositories.ExcursionLogEntityRepository;
 import io.github._7isenko.SCP1985.model.repositories.PersonnelEntityRepository;
 import io.github._7isenko.SCP1985.model.repositories.ScpObjectEntityRepository;
+import io.github._7isenko.SCP1985.model.utils.PersonnelHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,8 +23,6 @@ import java.util.List;
 @Controller
 public class MainController {
 
-    // Must be static to be visible
-    private static List<ScpObjectEntity> scpEntities;
     private final ScpObjectEntityRepository scpObjectEntityRepository;
     private static List<PersonnelEntity> personnelEntities;
     private final PersonnelEntityRepository personnelEntityRepository;
@@ -36,11 +34,8 @@ public class MainController {
                           PersonnelEntityRepository personnelEntityRepository,
                           EquipmentEntityRepository equipmentEntityRepository,
                           ExcursionLogEntityRepository excursionLogEntityRepository) {
-        scpEntities = scpObjectEntityRepository.findAllOrderById();
         this.scpObjectEntityRepository = scpObjectEntityRepository;
-        personnelEntities = personnelEntityRepository.findAll();
         this.personnelEntityRepository = personnelEntityRepository;
-        equipmentEntities = equipmentEntityRepository.findAll();
         this.equipmentEntityRepository = equipmentEntityRepository;
         this.excursionLogEntityRepository = excursionLogEntityRepository;
     }
@@ -53,31 +48,32 @@ public class MainController {
         String level = priming.getPersonnel().split(" ")[0].substring(2);
         int equipment_id = 0;
         String equipment_name = priming.getEquipment();
-        for (int i = 0; i < personnelEntities.size(); ++i){
-            PersonnelEntity personnel = personnelEntities.get(i);
+
+        for (PersonnelEntity personnel : personnelEntities) {
             if (personnel.getName().equals(personnel_name) &&
-                    personnel.getClearanceLevel().toString().equals(level)){
+                    personnel.getClearanceLevel().toString().equals(level)) {
                 personnel_id = personnel.getId();
                 break;
             }
         }
-        for (int i = 0; i < equipmentEntities.size(); ++i){
-            EquipmentEntity equipment = equipmentEntities.get(i);
-            if (equipment.getName().equals(equipment_name)){
+        for (EquipmentEntity equipment : equipmentEntities) {
+            if (equipment.getName().equals(equipment_name)) {
                 equipment_id = equipment.getId();
                 break;
             }
         }
+
+        // primingEntityRepository.executePriming(scp_id, personnel_id);
         excursionLogEntityRepository.goOnExcursion(scp_id, personnel_id, equipment_id);
-        excursionLogEntityRepository.flush();
+
         return "main";
     }
 
     @RequestMapping(value = {"/main" }, method = RequestMethod.GET)
     public String index(Model model) {
-        scpEntities = scpObjectEntityRepository.findAllOrderById();
+        List<ScpObjectEntity> scpEntities = scpObjectEntityRepository.findAllOrderById();
         model.addAttribute("scpEntities", scpEntities);
-        personnelEntities = personnelEntityRepository.findAll();
+        personnelEntities = PersonnelHelper.getAllowedPersonnel(personnelEntityRepository.findAll());
         model.addAttribute("personnelEntities", personnelEntities);
         equipmentEntities = equipmentEntityRepository.findAll();
         model.addAttribute("equipmentEntities", equipmentEntities);
