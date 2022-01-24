@@ -1,0 +1,38 @@
+.query {
+    display: inline-block;
+    text-align: center;
+    width: 500px;
+    height: 500px;
+    position: absolute;
+    top: 0%;
+    left: 35%;
+}
+
+.form_block {
+    display: block;
+    height: 47px;
+}
+
+.form_label {
+    display: block;
+    width: 500px;
+}
+
+.form_label > p, .form_label > input[type="text"] {
+    display: inline-block;
+}
+
+.form_label > p{
+    width: 220px;
+}
+
+.form_label > input[type="text"] {
+    margin: 5px;
+    width: 240px;
+    height: 20px;
+}
+
+.form_label > input[type="text"][readonly] {
+    background-color: #b6b4b4;
+}
+

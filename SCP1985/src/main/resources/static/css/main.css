@@ -385,3 +385,7 @@ p {
     height: 20px;
 }
 
+.button_report {
+    float:right;
+    display: block;
+}
