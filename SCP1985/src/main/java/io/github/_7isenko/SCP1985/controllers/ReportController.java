@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -37,6 +39,10 @@ public class ReportController {
     @RequestMapping(value = {"/report"}, method = RequestMethod.GET)
     public String index(Model model, Authentication authentication) {
         List<ExcursionLogType> reports = reportsRepository.makeReports();
+        reports.sort((o1, o2) -> {
+            if (o1.getId() == o2.getId()) return 0;
+            return o1.getId() < o2.getId() ? -1 : 1;
+        });
         model.addAttribute("reports", reports);
         ExcursionLogType report = new ExcursionLogType();
         model.addAttribute("rep", report);
