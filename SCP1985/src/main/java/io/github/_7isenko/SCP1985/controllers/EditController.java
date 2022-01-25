@@ -34,16 +34,14 @@ public class EditController {
 
     @RequestMapping(value = {"/edit"}, method = RequestMethod.POST)
     public String update(@ModelAttribute("report") ExcursionLogType report, BindingResult result, RedirectAttributes rattrs) {
-        reportsRepository.updateExcursionLog(report.getId(), report.getReality_description(),
-                report.getLog_status().toString(), report.getNote());
-
         int id = report.getId();
         rattrs.addAttribute("id", id);
 
         Optional<ExcursionLogEntity> optionalExcursionLog = excursionLogEntityRepository.findById(report.getId());
         if (optionalExcursionLog.isPresent()) {
             if (report.getReturn_to_foundation() == null ||
-                    report.getReturn_to_reality().compareTo(report.getReturn_to_foundation()) > 0){
+                    report.getReturn_to_reality().compareTo(report.getReturn_to_foundation()) > 0 ||
+                    report.getLog_status() == null){
                 return "redirect:edit?error";
             }
             reportsRepository.updateTimeBackToFoundation(report.getReturn_to_foundation(),
@@ -51,6 +49,10 @@ public class EditController {
         } else {
             return "redirect:edit?error";
         }
+
+        reportsRepository.updateExcursionLog(report.getId(), report.getReality_description(),
+                report.getLog_status().toString(), report.getNote());
+
         return "redirect:report";
     }
 
