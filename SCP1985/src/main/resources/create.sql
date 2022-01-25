@@ -276,7 +276,7 @@ BEGIN
         INSERT INTO excursion_log (trigger_type, trigger_committed,
                                     equipment_id, reality_description, log_status,
                                     retrieval_id, note, priming_id)
-        VALUES ('Внепланово', localtimestamp(0), equipment_id, item_name + equipment_name, 'В_ПОДГОТОВКЕ',
+        VALUES ('Внепланово', localtimestamp(0), equipment_id, concat(item_name, equipment_name), 'В_ПОДГОТОВКЕ',
             id_retrieval, 'No notes', id_priming);
 
         RETURN 0;
@@ -291,7 +291,7 @@ BEGIN
         INSERT INTO excursion_log (trigger_type, trigger_committed,
                                     equipment_id, reality_description, log_status,
                                     retrieval_id, note, priming_id)
-        VALUES ('Внепланово', localtimestamp(0), equipment_id, equipment_name + item_name, 'ДЛЯ_ОГРАНИЧЕННОГО_ПОЛЬЗОВАНИЯ',
+        VALUES ('Внепланово', localtimestamp(0), equipment_id, concat(equipment_name, item_name), 'ДЛЯ_ОГРАНИЧЕННОГО_ПОЛЬЗОВАНИЯ',
                 id_retrieval, 'No notes', id_priming);
 
         RETURN 0;
@@ -305,7 +305,7 @@ BEGIN
         INSERT INTO excursion_log (trigger_type, trigger_committed,
                                     equipment_id, reality_description, log_status,
                                     retrieval_id, note, priming_id)
-        VALUES ('Инъекция', localtimestamp(0), equipment_id, item_name + equipment_name, 'ДЛЯ_ОГРАНИЧЕННОГО_ПОЛЬЗОВАНИЯ',
+        VALUES ('Инъекция', localtimestamp(0), equipment_id, concat(item_name, equipment_name), 'ДЛЯ_ОГРАНИЧЕННОГО_ПОЛЬЗОВАНИЯ',
                 id_retrieval, 'No notes', id_priming);
 
         id_excursion = (SELECT id from excursion_log ORDER BY id DESC LIMIT 1);

@@ -74,7 +74,7 @@ public class MainController {
         primingEntityRepository.executePriming(scp_id, personnel_id);
         excursionLogEntityRepository.goOnExcursion(scp_id, personnel_id, equipment_id);
 
-        return "main";
+        return "redirect:main?answer";
     }
 
     @RequestMapping(value = {"/main" }, method = RequestMethod.GET)
@@ -88,6 +88,14 @@ public class MainController {
         addPrimingForm(model);
 
         model.addAttribute("error", "Неправильное заполнение. Поля не могут быть пустыми");
+        return "main";
+    }
+
+    @RequestMapping(value = {"/main" }, method = RequestMethod.GET, params = "answer")
+    public String primingWithAnswer(Model model, @RequestParam("answer") String ans) {
+        addPrimingForm(model);
+
+        model.addAttribute("answer", "Объект успешно направлен");
         return "main";
     }
 
