@@ -8,16 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.validation.Valid;
-
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,7 +65,7 @@ public class EditController {
     @RequestMapping(value = {"/edit"}, method = RequestMethod.GET, params = "error")
     public String indexWithError(@ModelAttribute("id") int id, Model model, @RequestParam("error") String err) {
         addIndexForm(model,id);
-        model.addAttribute("error", "Неправильное заполнение. Поля не могут быть пустыми");
+        model.addAttribute("error", "Неправильное заполнение или некоторые поля пустые");
         return "edit";
     }
 
