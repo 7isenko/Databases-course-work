@@ -8,9 +8,12 @@ import io.github._7isenko.SCP1985.model.repositories.*;
 import io.github._7isenko.SCP1985.model.utils.PersonnelHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -41,7 +44,12 @@ public class MainController {
     }
 
     @RequestMapping(value = {"/main" }, method = RequestMethod.POST)
-    public String save(@ModelAttribute("priming") PrimingForm priming){
+    public String save(@ModelAttribute("priming") PrimingForm priming, BindingResult result){
+
+        if (priming.getScp_object().equals("") || priming.getPersonnel().equals("") ||
+                priming.getEquipment().equals("")){
+            return "redirect:main?error";
+        }
         int scp_id = Integer.parseInt(priming.getScp_object().substring(4));
         int personnel_id = 0;
         String personnel_name = priming.getPersonnel().split(" ")[1];
@@ -70,7 +78,20 @@ public class MainController {
     }
 
     @RequestMapping(value = {"/main" }, method = RequestMethod.GET)
-    public String index(Model model) {
+    public String priming(Model model) {
+        addPrimingForm(model);
+        return "main";
+    }
+
+    @RequestMapping(value = {"/main" }, method = RequestMethod.GET, params = "error")
+    public String primingWithError(Model model, @RequestParam("error") String err) {
+        addPrimingForm(model);
+
+        model.addAttribute("error", "Неправильное заполнение. Поля не могут быть пустыми");
+        return "main";
+    }
+
+    private void addPrimingForm(Model model){
         List<ScpObjectEntity> scpEntities = scpObjectEntityRepository.findAllOrderById();
         model.addAttribute("scpEntities", scpEntities);
         personnelEntities = PersonnelHelper.getAllowedPersonnel(personnelEntityRepository.findAll());
@@ -79,7 +100,6 @@ public class MainController {
         model.addAttribute("equipmentEntities", equipmentEntities);
         PrimingForm primingForm = new PrimingForm();
         model.addAttribute("priming", primingForm);
-        return "main";
     }
 
 }

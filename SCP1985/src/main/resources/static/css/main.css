@@ -389,3 +389,9 @@ p {
     float:right;
     display: block;
 }
+
+.error {
+    font-weight: bold;
+    font-size: 18px;
+    color: red;
+}
