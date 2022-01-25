@@ -4,6 +4,7 @@ import io.github._7isenko.SCP1985.model.misc.PostgreSQLEnumType;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -40,6 +41,8 @@ public class ExcursionLogType {
     private Classification classification;
     private String personnel_name;
     private Timestamp return_to_reality;
+
+    @Nullable
     private Timestamp return_to_foundation;
     private Boolean succeed;
     private String mobile_group;

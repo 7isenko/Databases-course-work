@@ -36,3 +36,9 @@
     background-color: #b6b4b4;
 }
 
+.error {
+    font-weight: bold;
+    font-size: 18px;
+    color: red;
+}
+
